@@ -1,6 +1,6 @@
 import { registerPlugin } from "@yank-note/runtime-api"
 
-const pluginName = 'extension-math-editor-markdown-math-env'
+const pluginName = 'extension-math.markdown.math-env'
 
 export default () => {
 	registerPlugin({

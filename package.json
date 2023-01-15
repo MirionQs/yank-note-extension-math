@@ -6,7 +6,7 @@
   "author": "Mirion",
   "license": "MIT",
   "keywords": [],
-  "homepage": "https://github.com/purocean/yn",
+  "homepage": "https://github.com/MirionQs/yank-note-extension-math",
   "main": "./dist/index.js",
   "icon": "./icon.png",
   "engines": {

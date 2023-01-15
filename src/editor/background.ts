@@ -1,11 +1,10 @@
 import { registerPlugin } from '@yank-note/runtime-api'
 
-declare const nodeRequire: any
 const fs = nodeRequire('fs-extra')
 
-const pluginName = 'extension-math-editor-background'
-const pluginKeyPath = 'plugin.math.background-path'
-const pluginKeyOpacity = 'plugin.math.background-opacity'
+const pluginName = 'extension-math.editor.background'
+const pluginKeyPath = 'extension-math.background-path'
+const pluginKeyOpacity = 'extension-math.background-opacity'
 
 export default () => {
 	registerPlugin({
@@ -35,22 +34,22 @@ export default () => {
 
 			ctx.setting.changeSchema(schema => {
 				schema.properties[pluginKeyPath] = {
-					type: 'string',
 					title: '背景图路径',
-					defaultValue: '',
 					group: 'appearance',
+					type: 'string',
 					required: true,
+					defaultValue: '',
 					validator: (_schema, value, path) => {
 						return value === '' || fs.pathExistsSync(value) && fs.statSync(value).isFile() ?
-							[] : [{ property: pluginKeyPath, path, message: '路径不存在或者不是文件' }]
+							[] : [{ property: pluginKeyPath, path, message: '路径无效' }]
 					}
 				}
 				schema.properties[pluginKeyOpacity] = {
-					type: 'number',
 					title: '背景图不透明度',
-					defaultValue: '0.5',
 					group: 'appearance',
+					type: 'number',
 					required: true,
+					defaultValue: 0.5,
 					minimum: 0,
 					maximum: 1
 				}

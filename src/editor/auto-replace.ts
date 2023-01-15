@@ -1,20 +1,21 @@
 import { registerPlugin } from "@yank-note/runtime-api"
 
-const pluginName = 'extension-math-editor-auto-replace'
-const pluginKey = 'plugin.math.auto-replace'
+const pluginName = 'extension-math.editor.auto-replace'
+const pluginKey = 'extension-math.auto-replace'
 
 export default () => {
 	registerPlugin({
 		name: pluginName,
 		register: ctx => {
+			// TODO: 多光标、选中区域，保存两次？
 			ctx.setting.changeSchema(schema => {
 				schema.properties[pluginKey] = {
+					title: '自动替换中文标点',
+					group: 'editor',
 					type: 'boolean',
 					format: 'checkbox',
-					title: '自动替换中文标点',
-					defaultValue: true,
-					group: 'editor',
-					required: true
+					required: true,
+					defaultValue: true
 				}
 			})
 
@@ -48,7 +49,6 @@ export default () => {
 					text: content,
 				}])
 				editor.setPosition({ lineNumber, column })
-				// TODO: 多光标、选中区域，保存两次？
 			})
 		}
 	})
