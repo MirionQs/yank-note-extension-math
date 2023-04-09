@@ -1,72 +1,57 @@
 import { registerPlugin } from "@yank-note/runtime-api"
 
-const path = nodeRequire('path')
 const fs = nodeRequire('fs-extra')
+const path = nodeRequire('path')
 
-const pluginName = 'extension-math.markdown.katex'
-const pluginKey = 'extension-math.katex-config-path'
+const name = 'extension-math.markdown.katex'
+const actionOpen = 'extension-math.open-config'
 
 export default () => {
 	registerPlugin({
-		name: pluginName,
+		name,
 		register: async ctx => {
-
 			const constant = await ctx.api.rpc('return require("./constant")')
-
-			const defaultPath = path.join(constant.USER_DIR, 'katex-config.json')
-			const configPath = ctx.setting.getSetting(pluginKey, defaultPath)
+			const configPath = path.join(constant.USER_DIR, 'katex-config.json')
 
 			fs.ensureFileSync(configPath)
 
-			ctx.setting.changeSchema(schema => {
-				schema.properties[pluginKey] = {
-					title: 'KaTeX 配置文件路径',
-					group: 'other',
-					type: 'string',
-					required: true,
-					defaultValue: defaultPath,
-					validator: (_schema, value, path) => {
-						return fs.pathExistsSync(value) && fs.statSync(value).isFile() ?
-							[] : [{ property: pluginKey, path, message: '路径无效' }]
-					}
-				}
-			})
-
-			const readConfig = (p: string) => {
-				if (!path.isAbsolute(p)) {
-					p = path.join(path.dirname(ctx.store.state.currentFile!.absolutePath), p)
+			const readConfig = (filePath: string) => {
+				if (!path.isAbsolute(filePath)) {
+					filePath = path.join(path.dirname(ctx.store.state.currentFile!.absolutePath), filePath)
 				}
 				try {
-					return fs.readJsonSync(p)
+					return fs.readJsonSync(filePath)
 				}
 				catch {
-					console.error(`[${pluginName}] KaTeX 配置文件读取失败，位于 ${p}`)
+					console.error(`[${name}] KaTeX 配置文件读取失败，位于 ${filePath}`)
 					return {}
 				}
 			}
 
-			const options: any = {
-				throwOnError: false,
-				globalGroup: true,
-				output: 'html',
-				trust: true
-			}
+			let options
 
 			ctx.registerHook('MARKDOWN_BEFORE_RENDER', ({ env }) => {
-				Object.assign(options, readConfig(configPath))
+				options = Object.assign({
+					throwOnError: false,
+					errorColor: '#f00',
+					globalGroup: true,
+					trust: true,
+					output: 'html',
+					strict: false,
+				}, readConfig(configPath))
 				const macros = options.macros ?? {}
 
-				const fmOptions = env.attributes?.katex ?? {}
-				if (fmOptions.import instanceof Array) {
-					for (const p of fmOptions.import) {
-						const impOptions = readConfig(p)
-						Object.assign(options, impOptions)
-						Object.assign(macros, impOptions.macros)
+				const fmopts = env.attributes?.katex ?? {}
+				if (fmopts.import instanceof Array) {
+					for (const filePath of fmopts.import) {
+						const opts = readConfig(filePath)
+						Object.assign(options, opts)
+						Object.assign(macros, opts.macros)
 					}
 				}
 
-				Object.assign(options, fmOptions)
-				options.macros = Object.assign(macros, fmOptions.macros)
+				Object.assign(options, fmopts)
+				options.macros = Object.assign(macros, fmopts.macros)
 			})
 
 			ctx.registerHook('PLUGIN_HOOK', ({ plugin, type, payload }) => {
@@ -78,8 +63,17 @@ export default () => {
 				}
 			})
 
-			ctx.view.refresh() // 清除初始渲染的缓存
+			ctx.editor.whenEditorReady().then(({ editor }) => {
+				editor.addAction({
+					id: actionOpen,
+					label: 'math: 打开 KaTeX 配置文件',
+					run: () => {
+						ctx.base.openPath(configPath)
+					}
+				})
+			})
 
+			ctx.view.refresh()
 		}
 	})
 }
