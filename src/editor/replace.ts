@@ -9,16 +9,18 @@ export default () => {
 		register: ctx => {
 			const replace = () => {
 				const editor = ctx.editor.getEditor()
-				const content = editor.getValue()
-					.replace(/ *， */g, ', ')
-					.replace(/ *。 */g, '. ')
-					.replace(/ *？ */g, '? ')
-					.replace(/ *！ */g, '! ')
-					.replace(/ *； */g, '; ')
-					.replace(/ *： */g, ': ')
-					.replace(/ *（ */g, ' (')
-					.replace(/ *） */g, ') ')
-					.replace(/ *$/mg, '')
+				let content = editor.getValue();
+				[
+					['，', ', '],
+					['。', '. '],
+					['？', '? '],
+					['！', '! '],
+					['；', '; '],
+					['：', ': '],
+					['（', ' ('],
+					['）', ') '],
+					[/(?<=\S) +/g, ' ']
+				].forEach(([s, r]) => content = content.replaceAll(s, r as string))
 				editor.executeEdits('replace', [{
 					range: editor.getModel()!.getFullModelRange(),
 					text: content,
