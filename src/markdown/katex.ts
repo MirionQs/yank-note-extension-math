@@ -28,30 +28,32 @@ export default () => {
 				}
 			}
 
+			const defaultOptions = {
+				throwOnError: false,
+				errorColor: '#f00',
+				globalGroup: true,
+				trust: true,
+				output: 'html',
+				strict: false,
+			}
+
 			let options
 
 			ctx.registerHook('MARKDOWN_BEFORE_RENDER', ({ env }) => {
-				options = Object.assign({
-					throwOnError: false,
-					errorColor: '#f00',
-					globalGroup: true,
-					trust: true,
-					output: 'html',
-					strict: false,
-				}, readConfig(configPath))
+				options = Object.assign(defaultOptions, readConfig(configPath))
 				const macros = options.macros ?? {}
 
-				const fmopts = env.attributes?.katex ?? {}
-				if (fmopts.import instanceof Array) {
-					for (const filePath of fmopts.import) {
+				const fmOpts = env.attributes?.katex ?? {}
+				if (fmOpts.import instanceof Array) {
+					for (const filePath of fmOpts.import) {
 						const opts = readConfig(filePath)
 						Object.assign(options, opts)
 						Object.assign(macros, opts.macros)
 					}
 				}
 
-				Object.assign(options, fmopts)
-				options.macros = Object.assign(macros, fmopts.macros)
+				Object.assign(options, fmOpts)
+				options.macros = Object.assign(macros, fmOpts.macros)
 			})
 
 			ctx.registerHook('PLUGIN_HOOK', ({ plugin, type, payload }) => {

@@ -15,16 +15,16 @@
   },
   "themes": [
     {
-      "name": "color-book",
-      "css": "./themes/color-book.css"
+      "name": "LaTeX",
+      "css": "./themes/latex.css"
     },
     {
-      "name": "mint",
-      "css": "./themes/mint.css"
+      "name": "Banana Space",
+      "css": "./themes/banana-space.css"
     },
     {
-      "name": "zj",
-      "css": "./themes/zj.css"
+      "name": "Cyb's Note",
+      "css": "./themes/cyb's-note.css"
     }
   ],
   "files": [

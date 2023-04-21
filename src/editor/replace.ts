@@ -23,7 +23,7 @@ export default () => {
 				].forEach(([s, r]) => content = content.replaceAll(s, r as string))
 				editor.executeEdits('replace', [{
 					range: editor.getModel()!.getFullModelRange(),
-					text: content,
+					text: content
 				}])
 			}
 
