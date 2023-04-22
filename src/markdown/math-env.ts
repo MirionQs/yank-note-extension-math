@@ -204,11 +204,24 @@ export default () => {
     registerPlugin({
         name,
         register: async ctx => {
-            const style = await ctx.theme.addStyles('')
+            const style = await ctx.view.addStyles('')
+            const styleNumber: string[] = [] // 'counter(h2counter)"."counter(h3counter)"."...'
+            let template: string
+
             let presetEnvironment: Environments
             let environment: Environments
-            let template: string
+
             let debug: boolean
+
+            console.log(style) // debug
+
+            // 生成固定样式
+            for (let level = 1; level <= 6; ++level) {
+                styleNumber[level] = ''
+                for (let l = 2; l <= level; ++l) {
+                    styleNumber[level] += `counter(h${l}counter)"."`
+                }
+            }
 
             /**
              * 打印错误信息
@@ -339,10 +352,30 @@ export default () => {
              * @param envs 要应用的环境
              */
             const updateCSS = (envs: Environments) => {
-                style
-                envs
-                template
-                // TODO
+                const levels: string[][] = [[], [], ['h2counter'], ['h3counter'], ['h4counter'], ['h5counter'], ['h6counter']]
+
+                const toStyle = (counters: string[]) => {
+                    return [...new Set(counters)].join(' ')
+                }
+
+                for (const name in envs) {
+                    const { level, identifier } = envs[name].counter
+
+                    if (level !== 0) {
+                        levels[level!].push(identifier!)
+                        envs[name].number = styleNumber[level!] + `counter(${identifier})"."`
+                        style.innerHTML += Function('name', 'attr', `return \`${template}\``)(name, envs[name])
+                    }
+                    else {
+                        envs[name].number = ''
+                    }
+                }
+
+                style.innerHTML += `.markdown-body{counter-reset:${toStyle(levels.flat())}}`
+
+                for (let l = 2; l <= 6; ++l) {
+                    style.innerHTML += `h${l}{counter-reset:${toStyle(levels.slice(l + 1).flat())}}h${l}::before{counter-increment:${toStyle(levels[l])}}`
+                }
             }
 
             const command: Commands = {
@@ -351,20 +384,15 @@ export default () => {
                  * @args `\newtheorem{name}[counter]{text}[level][attrs]`
                  */
                 '\\newtheorem': {
-                    form: [1, '', 1, '', '{}'],
+                    form: [1, '', 1, '0', '{}'],
                     run: (args, data) => {
-                        let [name, identifier, label, level, attrs] = args.map(i => i.trim()) as any
+                        let [name, identifier, text, level, attrs] = args.map(i => i.trim()) as any
 
                         if (identifier === '') {
                             identifier = undefined
                         }
 
-                        if (level === '') {
-                            level = undefined
-                        }
-                        else {
-                            level = parseInt(level)
-                        }
+                        level = parseInt(level)
 
                         try {
                             attrs = JSON.parse(attrs)
@@ -375,7 +403,7 @@ export default () => {
 
                         let envs: Environments = {}
                         envs[name] = {
-                            label,
+                            text,
                             counter: {
                                 identifier,
                                 level
@@ -386,10 +414,6 @@ export default () => {
                         if (!normalizeEnvAttributes(envs)) {
                             printErrorMessage('\\newtheorem', '存在非法的环境属性', data.start)
                             return false
-                        }
-
-                        if (data.silent) {
-                            return true
                         }
 
                         environment[name] = envs[name]
@@ -424,10 +448,6 @@ export default () => {
                             return false
                         }
 
-                        if (data.silent) {
-                            return true
-                        }
-
                         data.state.env.mathEnv = name
 
                         if (label !== '') {
@@ -457,10 +477,6 @@ export default () => {
                         if (data.state.env.mathEnv !== name) {
                             printErrorMessage('\\end', `开始环境 "${data.state.env.mathEnv}" 与结束环境 "${name}" 不匹配`, data.start)
                             return false
-                        }
-
-                        if (data.silent) {
-                            return true
                         }
 
                         delete data.state.env.mathEnv
@@ -493,7 +509,6 @@ export default () => {
                     }
                     const cmd = parser.matchCommand()
                     if (cmd === null) {
-                        printErrorMessage('匹配命令', '命令匹配失败', start)
                         return false
                     }
                     if (command[cmd] === undefined) {
@@ -514,10 +529,14 @@ export default () => {
                         return false
                     }
 
+                    if (silent) {
+                        return true
+                    }
+
                     // 执行命令
                     end = start + 1 // 命令都被限制在了一行内所以这里可以直接+1，以后可能会取消这个限制……
 
-                    if (!command[cmd].run(args, { state, start, end, silent })) {
+                    if (!command[cmd].run(args, { state, start, end })) {
                         printErrorMessage(cmd, '命令执行失败', start)
                         return false
                     }
