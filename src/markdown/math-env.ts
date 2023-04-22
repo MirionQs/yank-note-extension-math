@@ -208,6 +208,7 @@ export default () => {
             let presetEnvironment: Environments
             let environment: Environments
             let template: string
+            let debug: boolean
 
             /**
              * 打印错误信息
@@ -216,6 +217,10 @@ export default () => {
              * @param location 位置，为数字时则代表行数，打印时会自动+1，为字符串时则代表所在项，会直接输出
              */
             const printErrorMessage = (title: string, content: string, location?: number | string) => {
+                if (!debug) {
+                    return
+                }
+
                 let message = ''
                 if (title !== '') {
                     message = `${title}: `
@@ -227,6 +232,7 @@ export default () => {
                 else if (typeof location === 'string') {
                     message += `, 位于项 ${location}`
                 }
+
                 console.error(message)
             }
 
@@ -326,8 +332,6 @@ export default () => {
                 }
 
                 updateCSS(presetEnvironment)
-
-                console.log({ presetEnvironment, template }) // debug
             }
 
             /**
@@ -337,6 +341,7 @@ export default () => {
             const updateCSS = (envs: Environments) => {
                 style
                 envs
+                template
                 // TODO
             }
 
@@ -383,11 +388,13 @@ export default () => {
                             return false
                         }
 
+                        if (data.silent) {
+                            return true
+                        }
+
                         environment[name] = envs[name]
 
                         updateCSS(environment)
-
-                        console.log({ environment }) // debug
 
                         return true
                     }
@@ -417,6 +424,10 @@ export default () => {
                             return false
                         }
 
+                        if (data.silent) {
+                            return true
+                        }
+
                         data.state.env.mathEnv = name
 
                         if (label !== '') {
@@ -426,7 +437,7 @@ export default () => {
                         pushToken(data.state, 'math-env-outer-div-open', 'div', 1,
                             [data.start, data.end], [['math-env-type', nameWoStar]])
                         pushToken(data.state, 'math-env-title-open', 'span', 1,
-                            [data.start, data.end], isUnnumbered ? [['class', 'unnumbered']] : [])
+                            [data.start, data.end], isUnnumbered ? [['class', 'skip-number']] : [])
                         pushToken(data.state, 'inline', '', 0,
                             [data.start, data.end], null, data.state.md.parseInline(label, data.state.env))
                         pushToken(data.state, 'math-env-title-close', 'span', -1)
@@ -448,6 +459,10 @@ export default () => {
                             return false
                         }
 
+                        if (data.silent) {
+                            return true
+                        }
+
                         delete data.state.env.mathEnv
 
                         pushToken(data.state, 'math-env-outer-div-close', 'div', -1)
@@ -463,12 +478,13 @@ export default () => {
                 }
             })
 
-            ctx.registerHook('MARKDOWN_BEFORE_RENDER', () => {
+            ctx.registerHook('MARKDOWN_BEFORE_RENDER', ({ env }) => {
                 environment = JSON.parse(JSON.stringify(presetEnvironment))
+                debug = env.attributes?.mathEnvDebug ?? false
             })
 
             ctx.markdown.registerPlugin(md => {
-                md.block.ruler.before('paragraph', 'math-env', (state, start) => {
+                md.block.ruler.before('paragraph', 'math-env', (state, start, end, silent) => {
                     const parser = new Parser(state.src, state.bMarks[start] + state.tShift[start])
 
                     // 匹配命令
@@ -499,11 +515,9 @@ export default () => {
                     }
 
                     // 执行命令
-                    const end = parser.getLineNumber() + 1
+                    end = start + 1 // 命令都被限制在了一行内所以这里可以直接+1，以后可能会取消这个限制……
 
-                    console.log({ args, state, start, end }) // debug
-
-                    if (!command[cmd].run(args, { state, start, end })) {
+                    if (!command[cmd].run(args, { state, start, end, silent })) {
                         printErrorMessage(cmd, '命令执行失败', start)
                         return false
                     }
@@ -511,8 +525,7 @@ export default () => {
                     ++state.line
 
                     return true
-                })
-
+                }, { alt: ['paragraph'] })
             })
 
             readPreset()
