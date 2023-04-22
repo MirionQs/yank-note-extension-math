@@ -14,7 +14,7 @@ type Command = {
 
 type Environment = {
     text: string,
-    counter: {
+    counter?: {
         identifier?: string,
         level?: number
     },
@@ -213,14 +213,10 @@ export default () => {
 
             let debug: boolean
 
-            console.log(style) // debug
-
             // 生成固定样式
-            for (let level = 1; level <= 6; ++level) {
-                styleNumber[level] = ''
-                for (let l = 2; l <= level; ++l) {
-                    styleNumber[level] += `counter(h${l}counter)"."`
-                }
+            styleNumber[1] = ''
+            for (let l = 2; l <= 6; ++l) {
+                styleNumber[l] = styleNumber[l - 1] + `counter(h${l}counter)"."`
             }
 
             /**
@@ -264,8 +260,8 @@ export default () => {
                         continue
                     }
 
-                    const identifier = envs[name].counter.identifier ?? name
-                    const level = envs[name].counter.level ?? envs[identifier]?.counter?.level ?? 0
+                    const identifier = envs[name].counter?.identifier ?? name
+                    const level = envs[name].counter?.level ?? envs[identifier]?.counter?.level ?? 0
 
                     if (!/[a-zA-Z-]+/.test(identifier) ||
                         !(Number.isInteger(level) && 0 <= level && level <= 6)) {
@@ -344,37 +340,35 @@ export default () => {
                     printErrorMessage('读取预设环境', '存在非法环境')
                 }
 
-                updateCSS(presetEnvironment)
+                updateStyle(presetEnvironment)
             }
 
             /**
-             * 更新 CSS
-             * @param envs 要应用的环境
+             * 更新样式
+             * @param envs 使用的环境
              */
-            const updateCSS = (envs: Environments) => {
+            const updateStyle = (envs: Environments) => {
                 const levels: string[][] = [[], [], ['h2counter'], ['h3counter'], ['h4counter'], ['h5counter'], ['h6counter']]
 
                 const toStyle = (counters: string[]) => {
                     return [...new Set(counters)].join(' ')
                 }
 
-                for (const name in envs) {
-                    const { level, identifier } = envs[name].counter
+                style.innerHTML = ''
 
-                    if (level !== 0) {
-                        levels[level!].push(identifier!)
-                        envs[name].number = styleNumber[level!] + `counter(${identifier})"."`
-                        style.innerHTML += Function('name', 'attr', `return \`${template}\``)(name, envs[name])
-                    }
-                    else {
-                        envs[name].number = ''
-                    }
+                for (const name in envs) {
+                    const { level, identifier } = envs[name].counter!
+                    const number = level! === 0 ? '"."' : `" "${styleNumber[level!]}counter(${identifier})"."`
+
+                    levels[level!].push(identifier!)
+
+                    style.innerHTML += `[math-env-type="${name}"]>span:first-child::before{counter-increment:${identifier};content:"${envs[name].text}"${number}}` + Function('name', 'attr', `return \`${template}\``)(name, envs[name])
                 }
 
-                style.innerHTML += `.markdown-body{counter-reset:${toStyle(levels.flat())}}`
+                style.innerHTML += `.markdown-body{counter-reset:${toStyle(levels.flat())} !important}`
 
-                for (let l = 2; l <= 6; ++l) {
-                    style.innerHTML += `h${l}{counter-reset:${toStyle(levels.slice(l + 1).flat())}}h${l}::before{counter-increment:${toStyle(levels[l])}}`
+                for (let l = 2; l <= 5; ++l) {
+                    style.innerHTML += `h${l}{counter-reset:${toStyle(levels.slice(l).flat())} !important}`
                 }
             }
 
@@ -418,7 +412,7 @@ export default () => {
 
                         environment[name] = envs[name]
 
-                        updateCSS(environment)
+                        updateStyle(environment)
 
                         return true
                     }

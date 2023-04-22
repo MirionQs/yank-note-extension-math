@@ -4,6 +4,18 @@
 
 /* MathEnv Environment
 {
+	"axiom": {
+		"text": "公理",
+		"counter": {
+			"level": 1
+		}
+	},
+	"definition": {
+		"text": "定义",
+		"counter": {
+			"level": 2
+		}
+	},
 	"theorem": {
 		"text": "定理",
 		"counter": {
@@ -15,6 +27,60 @@
 		"counter": {
 			"identifier": "theorem"
 		}
+	},
+	"lemma": {
+		"text": "引理",
+		"counter": {
+			"identifier": "theorem"
+		}
+	},
+	"corollary": {
+		"text": "推论",
+		"counter": {
+			"identifier": "theorem"
+		}
+	},
+	"property": {
+		"text": "性质",
+		"counter": {
+			"identifier": "theorem"
+		}
+	},
+	"problem": {
+		"text": "问题",
+		"counter": {
+			"level": 3
+		}
+	},
+	"example": {
+		"text": "例",
+		"counter": {
+			"level": 3
+		}
+	},
+	"exercise": {
+		"text": "练习",
+		"counter": {
+			"level": 3
+		}
+	},
+	"note": {
+		"text": "笔记"
+	},
+	"conclusion": {
+		"text": "结论"
+	},
+	"assumption": {
+		"text": "假设"
+	},
+	"remark": {
+		"text": "注"
+	},
+	"solution": {
+		"text": "解"
+	},
+	"proof": {
+		"text": "证明"
 	}
 }
 */
