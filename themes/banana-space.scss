@@ -244,7 +244,7 @@ return attr.hue === undefined ? `
 ` : `
 [math-env="${name}"] {
 	border-left: 3px solid hsl(${attr.hue}, 100%, 75%);
-	background-color: hsla(${attr.hue}, 100%, 90%, 20%);
+	background-color: hsla(${attr.hue}, 100%, 90%, 25%);
 }
 
 [math-env-title="${name}"] {
