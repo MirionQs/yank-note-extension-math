@@ -1,5 +1,256 @@
-/* MathEnv Template
+@font-face {
+    font-family: PunctCJK;
+    src: url(./fonts/PunctCJK.woff2);
+}
 
+@font-face {
+    font-family: PunctCJK;
+    font-style: italic;
+    src: url(./fonts/PunctCJK-Italic.woff2);
+}
+
+@font-face {
+    font-family: PunctCJK;
+    font-weight: bold;
+    src: url(./fonts/PunctCJK-Bold.woff2);
+}
+
+@font-face {
+    font-family: PunctCJK;
+    font-weight: bold;
+    font-style: italic;
+    src: url(./fonts/PunctCJK-BoldItalic.woff2);
+}
+
+@font-face {
+    font-family: NotoSans;
+    src: url(./fonts/NotoSans-Regular.woff2);
+}
+
+@font-face {
+    font-family: NotoSans;
+    font-style: italic;
+    src: url(./fonts/NotoSans-Italic.woff2);
+}
+
+@font-face {
+    font-family: NotoSans;
+    font-weight: bold;
+    src: url(./fonts/NotoSans-Bold.woff2);
+}
+
+@font-face {
+    font-family: NotoSans;
+    font-weight: bold;
+    font-style: italic;
+    src: url(./fonts/NotoSans-BoldItalic.woff2);
+}
+
+.markdown-body {
+    font-size: 18px;
+    font-family: PunctCJK, NotoSans;
+    line-height: 1.8;
+    letter-spacing: 0.015em;
+
+    .skip-number:not([math-env-title])::before {
+        display: none !important;
+    }
+
+    h1 {
+        font-size: 2.2em;
+        font-weight: normal;
+    }
+
+    h2 {
+        font-size: 1.8em;
+        font-weight: normal;
+
+        &::before {
+            content: counter(h2counter) !important;
+            font-weight: bold;
+            border-bottom: 4px solid #ffd000;
+            margin-right: 0.75em;
+            padding: 4px 6px;
+        }
+    }
+
+    h3 {
+        font-size: 1.4em;
+        @extend .skip-number;
+    }
+
+    h4 {
+        font-size: 1.2em;
+        @extend .skip-number;
+    }
+
+    mark {
+        padding: 3px 3px 1px;
+    }
+
+    code {
+        font-family: 'Cascadia Code';
+        font-size: 0.9em;
+        padding: 1px 3px;
+        background-color: var(--g-color-96) !important;
+        color: var(--g-color-20);
+    }
+
+    .katex {
+        font-family: KaTeX_Main, NotoSans;
+        font-size: 1.1em;
+        line-height: 1.2;
+        letter-spacing: normal;
+
+        .cjk_fallback {
+            font-size: 0.909091em;
+        }
+    }
+
+    a {
+        color: #1088c8 !important;
+        text-decoration: none;
+        padding-bottom: 0.1em;
+
+        &:hover {
+            border-bottom: 1.5px solid rgba(#1088c8, 0.314);
+        }
+
+        &::after {
+            margin-left: 0.2em;
+            vertical-align: 0.1em !important;
+        }
+    }
+
+    li::marker {
+        font-family: initial;
+    }
+
+    hr.footnote-sep {
+        display: none;
+    }
+
+    .footnotes {
+        font-size: 0.75em;
+
+        .footnote-backref {
+            vertical-align: 0 !important;
+        }
+    }
+
+    pre {
+        font-size: 0.9em;
+        padding: 0.5em;
+
+        .p-mcc-language {
+            top: -5px !important;
+            right: -5px !important;
+            font-family: 'Cascadia Code';
+        }
+
+        .p-mcc-copy-btn {
+            position: absolute !important;
+            top: -8px !important;
+            right: -8px !important;
+            display: block !important;
+            line-height: 1;
+            text-indent: 0.5px;
+        }
+
+        code {
+            font-family: 'Cascadia Code' !important;
+            padding: initial;
+        }
+    }
+
+    img {
+        width: 100%;
+    }
+
+    table:not([data-lang]) {
+        border-collapse: collapse;
+        line-height: normal;
+
+        th,
+        td {
+            padding: 0.5em;
+            border: 0.5px solid var(--g-color-60) !important;
+            background-color: var(--g-color-97);
+        }
+
+        th {
+            font-weight: normal;
+            text-align: center !important;
+        }
+
+        tr td:first-child::before {
+            font-family: 'Cascadia Code' !important;
+            line-height: 1.4;
+        }
+    }
+
+    hr {
+        border: initial;
+        border-bottom: 1px solid;
+    }
+}
+
+[math-env] {
+    padding: 0.8em 1.2em;
+
+    > [math-env-title] {
+
+        &::before,
+        &::after {
+            font-weight: bold;
+        }
+
+        &::after {
+            content: '. ' !important;
+        }
+
+        + p {
+            display: inline;
+        }
+    }
+
+    ol,
+    ul {
+        margin: 0;
+    }
+
+    ol {
+        counter-reset: li;
+
+        li {
+            counter-increment: li;
+
+            &::marker {
+                content: '(' counter(li) '). ';
+            }
+        }
+    }
+}
+
+// text         hsb(h, 0.9, 0.8)
+// border       hsb(h, 0.5, 1)
+// background   hsb(h, 0.05, 1)
+
+/* MathEnv Template
+return attr.hue === undefined ? `
+[math-env="${name}"] {
+    padding: 0;
+}
+` : `
+[math-env="${name}"] {
+	border-left: 3px solid hsl(${attr.hue}, 100%, 75%);
+	background-color: hsla(${attr.hue}, 100%, 90%, 20%);
+}
+
+[math-env-title="${name}"] {
+	color: hsl(${attr.hue}, 82%, 44%);
+}
+`
 */
 
 /* MathEnv Environment
@@ -8,73 +259,87 @@
 		"text": "公理",
 		"counter": {
 			"level": 1
-		}
+		},
+		"hue": 0
 	},
 	"definition": {
 		"text": "定义",
 		"counter": {
 			"level": 2
-		}
+		},
+		"hue": 30
 	},
 	"theorem": {
 		"text": "定理",
 		"counter": {
 			"level": 3
-		}
+		},
+		"hue": 200
 	},
-	"propsition": {
+	"proposition": {
 		"text": "命题",
 		"counter": {
 			"identifier": "theorem"
-		}
+		},
+		"hue": 200
 	},
 	"lemma": {
 		"text": "引理",
 		"counter": {
 			"identifier": "theorem"
-		}
+		},
+		"hue": 200
 	},
 	"corollary": {
 		"text": "推论",
 		"counter": {
 			"identifier": "theorem"
-		}
+		},
+		"hue": 200
 	},
 	"property": {
 		"text": "性质",
 		"counter": {
 			"identifier": "theorem"
-		}
+		},
+		"hue": 200
 	},
 	"problem": {
 		"text": "问题",
 		"counter": {
 			"level": 3
-		}
+		},
+		"hue": 120
 	},
 	"example": {
 		"text": "例",
 		"counter": {
 			"level": 3
-		}
+		},
+		"hue": 120
 	},
 	"exercise": {
 		"text": "练习",
 		"counter": {
 			"level": 3
-		}
+		},
+		"hue": 120
 	},
 	"note": {
-		"text": "笔记"
+		"text": "笔记",
+		"hue": 120
 	},
 	"conclusion": {
-		"text": "结论"
+		"text": "结论",
+		"hue": 120
 	},
 	"assumption": {
-		"text": "假设"
+		"text": "假设",
+		"hue": 120
 	},
 	"remark": {
-		"text": "注"
+		"text": "注",
+		"hue": 120
 	},
 	"solution": {
 		"text": "解"

@@ -348,27 +348,35 @@ export default () => {
              * @param envs 使用的环境
              */
             const updateStyle = (envs: Environments) => {
-                const levels: string[][] = [[], [], ['h2counter'], ['h3counter'], ['h4counter'], ['h5counter'], ['h6counter']]
+                const levels: string[][] = [[], ['h2counter'], ['h3counter'], ['h4counter'], ['h5counter'], ['h6counter'], []]
 
                 const toStyle = (counters: string[]) => {
                     return [...new Set(counters)].join(' ')
                 }
 
-                style.innerHTML = ''
+                // 初始样式
+                style.innerHTML = '[math-env]{margin:1em 0}[math-env-title]::after{content:"."}'
 
                 for (const name in envs) {
                     const { level, identifier } = envs[name].counter!
-                    const number = level! === 0 ? '"."' : `" "${styleNumber[level!]}counter(${identifier})"."`
 
                     levels[level!].push(identifier!)
 
-                    style.innerHTML += `[math-env-type="${name}"]>span:first-child::before{counter-increment:${identifier};content:"${envs[name].text}"${number}}` + Function('name', 'attr', `return \`${template}\``)(name, envs[name])
+                    // 计数器增加
+                    let number = ''
+                    if (level! > 0) {
+                        number = `" "${styleNumber[level!]}counter(${identifier})`
+                        style.innerHTML += `[math-env-title="${name}"].skip-number::before{content:"${envs[name].text}"}`
+                    }
+                    style.innerHTML += `[math-env-title="${name}"]::before{counter-increment:${identifier};content:"${envs[name].text}"${number}}`
+
+                    // 应用样式模板
+                    style.innerHTML += Function('name', 'attr', template)(name, envs[name])
                 }
 
-                style.innerHTML += `.markdown-body{counter-reset:${toStyle(levels.flat())} !important}`
-
-                for (let l = 2; l <= 5; ++l) {
-                    style.innerHTML += `h${l}{counter-reset:${toStyle(levels.slice(l).flat())} !important}`
+                // 计数器重置
+                for (let l = 1; l <= 5; ++l) {
+                    style.innerHTML += `.markdown-view h${l}{counter-reset:${toStyle(levels.slice(l).flat())} !important}`
                 }
             }
 
@@ -448,10 +456,15 @@ export default () => {
                             label = ` (${label})`
                         }
 
+                        const attr: [string, string][] = [['math-env-title', nameWoStar]]
+                        if (isUnnumbered) {
+                            attr.push(['class', 'skip-number'])
+                        }
+
                         pushToken(data.state, 'math-env-outer-div-open', 'div', 1,
-                            [data.start, data.end], [['math-env-type', nameWoStar]])
+                            [data.start, data.end], [['math-env', nameWoStar]])
                         pushToken(data.state, 'math-env-title-open', 'span', 1,
-                            [data.start, data.end], isUnnumbered ? [['class', 'skip-number']] : [])
+                            [data.start, data.end], attr)
                         pushToken(data.state, 'inline', '', 0,
                             [data.start, data.end], null, data.state.md.parseInline(label, data.state.env))
                         pushToken(data.state, 'math-env-title-close', 'span', -1)
@@ -490,7 +503,14 @@ export default () => {
 
             ctx.registerHook('MARKDOWN_BEFORE_RENDER', ({ env }) => {
                 environment = JSON.parse(JSON.stringify(presetEnvironment))
-                debug = env.attributes?.mathEnvDebug ?? false
+                const fm = env.attributes
+                if (fm !== undefined) {
+                    debug = fm.mathEnvDebug ?? false
+
+                    // 默认启用编号、代码换行
+                    fm.headingNumber = fm.headingNumber ?? true
+                    fm.wrapCode = fm.wrapCode ?? true
+                }
             })
 
             ctx.markdown.registerPlugin(md => {
