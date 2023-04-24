@@ -366,9 +366,8 @@ export default () => {
                     let number = ''
                     if (level! > 0) {
                         number = `" "${styleNumber[level!]}counter(${identifier})`
-                        style.innerHTML += `[math-env-title="${name}"].skip-number::before{content:"${envs[name].text}"}`
                     }
-                    style.innerHTML += `[math-env-title="${name}"]::before{counter-increment:${identifier};content:"${envs[name].text}"${number}}`
+                    style.innerHTML += `[math-env-title="${name}"].skip-number::before{content:"${envs[name].text}"}[math-env-title="${name}"]:not(.skip-number)::before{content:"${envs[name].text}"${number};counter-increment:${identifier}}`
 
                     // 应用样式模板
                     style.innerHTML += Function('name', 'attr', template)(name, envs[name])

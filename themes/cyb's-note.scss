@@ -1,0 +1,105 @@
+
+
+// background   hsb(h, 0.07, 1)
+
+/* MathEnv Template
+return attr.hue === undefined ? `
+[math-env="${name}"] {
+    padding: 0;
+}
+` : `
+[math-env="${name}"] {
+	background-color: hsla(${attr.hue}, 100%, 86%, 25%);
+}
+`
+*/
+
+/* MathEnv Environment
+{
+	"axiom": {
+		"text": "公理",
+		"counter": {
+			"level": 1
+		},
+		"hue": 0
+	},
+	"definition": {
+		"text": "定义",
+		"counter": {
+			"level": 2
+		},
+		"hue": 120
+	},
+	"theorem": {
+		"text": "定理",
+		"counter": {
+			"level": 3
+		},
+		"hue": 18
+	},
+	"proposition": {
+		"text": "命题",
+		"counter": {
+			"identifier": "theorem"
+		},
+		"hue": 220
+	},
+	"lemma": {
+		"text": "引理",
+		"counter": {
+			"identifier": "theorem"
+		},
+		"hue": 45
+	},
+	"corollary": {
+		"text": "推论",
+		"counter": {
+			"identifier": "theorem"
+		},
+		"hue": 45
+	},
+	"property": {
+		"text": "性质",
+		"counter": {
+			"identifier": "theorem"
+		},
+		"hue": 240
+	},
+	"problem": {
+		"text": "问题",
+		"counter": {
+			"level": 3
+		}
+	},
+	"example": {
+		"text": "例",
+		"counter": {
+			"level": 3
+		}
+	},
+	"exercise": {
+		"text": "练习",
+		"counter": {
+			"level": 3
+		}
+	},
+	"note": {
+		"text": "笔记"
+	},
+	"conclusion": {
+		"text": "结论"
+	},
+	"assumption": {
+		"text": "假设"
+	},
+	"remark": {
+		"text": "注"
+	},
+	"solution": {
+		"text": "解"
+	},
+	"proof": {
+		"text": "证明"
+	}
+}
+*/

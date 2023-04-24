@@ -56,6 +56,15 @@
         display: none !important;
     }
 
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 1em 0;
+    }
+
     h1 {
         font-size: 2.2em;
         font-weight: normal;
@@ -81,6 +90,16 @@
 
     h4 {
         font-size: 1.2em;
+        @extend .skip-number;
+    }
+
+    h5 {
+        font-size: 1.1em;
+        @extend .skip-number;
+    }
+
+    h6 {
+        font-size: 1em;
         @extend .skip-number;
     }
 
@@ -119,11 +138,8 @@
         &::after {
             margin-left: 0.2em;
             vertical-align: 0.1em !important;
+            filter: brightness(0) invert(39%) sepia(59%) saturate(1671%) hue-rotate(174deg) brightness(90%) contrast(87%);
         }
-    }
-
-    li::marker {
-        font-family: initial;
     }
 
     hr.footnote-sep {
@@ -157,14 +173,27 @@
             text-indent: 0.5px;
         }
 
-        code {
+        > code {
             font-family: 'Cascadia Code' !important;
             padding: initial;
         }
     }
 
-    img {
-        width: 100%;
+    li::marker {
+        font-family: initial;
+    }
+
+    .task-list-item-checkbox {
+        outline: 1px solid var(--g-color-60);
+        width: 1em;
+        height: 1em;
+        margin-right: 0.2em;
+        vertical-align: -0.15em;
+        accent-color: var(--g-color-96);
+
+        &:not(:checked) {
+            appearance: none;
+        }
     }
 
     table:not([data-lang]) {
@@ -175,7 +204,7 @@
         td {
             padding: 0.5em;
             border: 0.5px solid var(--g-color-60) !important;
-            background-color: var(--g-color-97);
+            background-color: var(--g-color-96);
         }
 
         th {
@@ -189,9 +218,79 @@
         }
     }
 
+    img {
+        width: 100%;
+    }
+
     hr {
         border: initial;
         border-bottom: 1px solid;
+    }
+
+    .custom-container {
+        padding: 1em !important;
+        margin: 1em 0 !important;
+        line-height: normal;
+
+        > .custom-container-title {
+            margin: 0 0 0.5em !important;
+        }
+
+        &.has-title > :nth-child(2),
+        &:not(.has-title) > :first-child {
+            margin-top: 0;
+        }
+
+        > :last-child {
+            margin-bottom: 0;
+        }
+
+        &.details {
+
+            &.has-title > :nth-child(2),
+            &:not(.has-title) > :first-child {
+                margin-top: 0.5em !important;
+            }
+        }
+
+        &.row {
+            border: none !important;
+            padding: 0 !important;
+
+            &.has-title {
+                padding-top: 1.8em !important;
+            }
+
+            > .custom-container-title {
+                top: 0 !important;
+                padding-left: 0 !important;
+                text-indent: 8px;
+            }
+
+            > .col {
+                margin: 0 !important;
+            }
+        }
+
+        &.group {
+            padding: 0 !important;
+
+            > .custom-container-title {
+                margin: 0 !important;
+            }
+
+            > .group-item-content {
+                padding: 1em !important;
+
+                > :first-child {
+                    margin-top: 0;
+                }
+
+                > :last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
     }
 }
 
@@ -243,12 +342,22 @@ return attr.hue === undefined ? `
 }
 ` : `
 [math-env="${name}"] {
-	border-left: 3px solid hsl(${attr.hue}, 100%, 75%);
-	background-color: hsla(${attr.hue}, 100%, 90%, 25%);
+    border-left: 3px solid hsl(${attr.hue}, 100%, 75%);
+    background-color: hsla(${attr.hue}, 100%, 88%, 20%);
 }
 
 [math-env-title="${name}"] {
-	color: hsl(${attr.hue}, 82%, 44%);
+    color: hsl(${attr.hue}, 82%, 44%);
+}
+
+html[app-theme="dark"] [math-env-title="${name}"] {
+    color: hsl(${attr.hue}, 82%, 56%);
+}
+
+@media (prefers-color-scheme: dark) {
+    html[app-theme=system] [math-env-title="${name}"] {
+        color: hsl(${attr.hue}, 82%, 56%);
+    }
 }
 `
 */
