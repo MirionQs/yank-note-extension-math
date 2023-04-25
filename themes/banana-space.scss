@@ -296,6 +296,7 @@
 
 [math-env] {
     padding: 0.8em 1.2em;
+    position: relative;
 
     > [math-env-title] {
 
@@ -321,7 +322,7 @@
     ol {
         counter-reset: li;
 
-        li {
+        > li {
             counter-increment: li;
 
             &::marker {
@@ -329,14 +330,26 @@
             }
         }
     }
+
+    &::after {
+        border: 1px solid;
+        width: 0.9em;
+        height: 0.9em;
+        display: block;
+        position: absolute;
+        right: 0;
+        bottom: 0.5em;
+    }
 }
+
+// TODO 换个icon
 
 // text         hsb(h, 0.9, 0.8)
 // border       hsb(h, 0.5, 1)
 // background   hsb(h, 0.05, 1)
 
 /* MathEnv Template
-return attr.hue === undefined ? `
+return (attr.hue === undefined ? `
 [math-env="${name}"] {
     padding: 0;
 }
@@ -359,7 +372,11 @@ html[app-theme="dark"] [math-env-title="${name}"] {
         color: hsl(${attr.hue}, 82%, 56%);
     }
 }
-`
+`) + (attr.proof ? `
+[math-env="${name}"]::after {
+    content: "";
+}
+` : '')
 */
 
 /* MathEnv Environment
@@ -451,10 +468,12 @@ html[app-theme="dark"] [math-env-title="${name}"] {
 		"hue": 120
 	},
 	"solution": {
-		"text": "解"
+		"text": "解",
+        "proof": true
 	},
 	"proof": {
-		"text": "证明"
+		"text": "证明",
+        "proof": true
 	}
 }
 */
