@@ -200,6 +200,7 @@
     table:not([data-lang]) {
         border-collapse: collapse;
         line-height: normal;
+        width: 100%;
 
         th,
         td {
