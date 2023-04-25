@@ -1,57 +1,26 @@
 @font-face {
-    font-family: PunctCJK;
-    src: url(./fonts/PunctCJK.woff2);
+    font-family: FandolKaiMixed;
+    src: local(FandolKai);
 }
 
 @font-face {
-    font-family: PunctCJK;
-    font-style: italic;
-    src: url(./fonts/PunctCJK-Italic.woff2);
+    font-family: FandolKaiMixed;
+    src: local(FandolSong);
+    unicode-range: U+00-52F, U+1E00-1FFF, U+2200-22FF;
 }
 
 @font-face {
-    font-family: PunctCJK;
+    font-family: FandolKaiMixed;
     font-weight: bold;
-    src: url(./fonts/PunctCJK-Bold.woff2);
-}
-
-@font-face {
-    font-family: PunctCJK;
-    font-weight: bold;
-    font-style: italic;
-    src: url(./fonts/PunctCJK-BoldItalic.woff2);
-}
-
-@font-face {
-    font-family: NotoSans;
-    src: url(./fonts/NotoSans-Regular.woff2);
-}
-
-@font-face {
-    font-family: NotoSans;
-    font-style: italic;
-    src: url(./fonts/NotoSans-Italic.woff2);
-}
-
-@font-face {
-    font-family: NotoSans;
-    font-weight: bold;
-    src: url(./fonts/NotoSans-Bold.woff2);
-}
-
-@font-face {
-    font-family: NotoSans;
-    font-weight: bold;
-    font-style: italic;
-    src: url(./fonts/NotoSans-BoldItalic.woff2);
+    src: local(FandolSong-Bold);
 }
 
 .markdown-body {
-    font-size: 18px;
-    font-family: PunctCJK, NotoSans;
+    font-size: 12pt;
+    font-family: FandolSong;
     line-height: 1.8;
-    letter-spacing: 0.015em;
     text-align: justify;
+    max-width: 17cm !important;
 
     .skip-number:not([math-env-title])::before {
         display: none !important;
@@ -64,99 +33,129 @@
     h5,
     h6 {
         margin: 1em 0;
+
+        &::before {
+            margin-right: 1em;
+        }
     }
 
     h1 {
-        font-size: 2.2em;
-        font-weight: normal;
+        font-size: 20.7pt;
+        text-align: center;
+
+        + p {
+            font-size: 14.4pt;
+            text-align: center;
+            line-height: 2.3;
+        }
     }
 
     h2 {
-        font-size: 1.8em;
-        font-weight: normal;
+        font-size: 17.2pt;
+        text-align: center;
 
         &::before {
             content: counter(h2counter) !important;
-            font-weight: bold;
-            border-bottom: 4px solid #ffd000;
-            margin-right: 0.75em;
-            padding: 4px 6px;
         }
 
         &.reference {
-            @extend .skip-number
+            @extend .skip-number;
         }
     }
 
     h3 {
-        font-size: 1.4em;
-        @extend .skip-number;
+        font-size: 14.4pt;
+        background-color: #ff73ff40; // #ffdcff
+        margin-left: -0.5em;
+        padding-left: 0.5em;
+
+        &::before {
+            content: counter(h2counter) '.' counter(h3counter) !important;
+        }
     }
 
     h4 {
-        font-size: 1.2em;
-        @extend .skip-number;
+        font-size: 13.5pt;
+
+        &::before {
+            content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter) !important;
+        }
     }
 
     h5 {
-        font-size: 1.1em;
-        @extend .skip-number;
+        font-size: 13pt;
+
+        &::before {
+            content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter) '.' counter(h5counter) !important;
+        }
     }
 
     h6 {
-        font-size: 1em;
-        @extend .skip-number;
+        font-size: 12.5pt;
+
+        &::before {
+            content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter) '.' counter(h5counter) '.' counter(h6counter) !important;
+        }
     }
 
-    mark {
-        padding: 3px 3px 1px;
+    .table-of-contents {
+
+        &::before {
+            @extend h2;
+            content: '目录' !important;
+            display: block;
+            font-weight: bold;
+            margin-right: 0;
+        }
+
+        a {
+            color: var(--g-color-0);
+        }
+    }
+
+    html .markdown-view & mark {
+        background-color: yellow !important;
     }
 
     code {
-        font-family: 'Cascadia Code';
+        font-family: Consolas, FandolSong;
         font-size: 0.9em;
         padding: 1px 3px;
         background-color: var(--g-color-96) !important;
-        color: var(--g-color-20);
     }
 
     .katex {
-        font-family: KaTeX_Main, NotoSans;
-        font-size: 1.1em;
-        line-height: 1.2;
-        letter-spacing: normal;
-
-        .cjk_fallback {
-            font-size: 0.909091em;
-        }
+        font-family: KaTeX_Main, FandolSong;
+        font-size: 1em;
     }
 
     a {
-        color: #1088c8 !important;
         text-decoration: none;
-        padding-bottom: 0.1em;
+
+        [app-theme="light"] & {
+            color: blue !important;
+        }
+
+        @media (prefers-color-scheme: light) {
+            html[app-theme=system] & {
+                color: blue !important;
+            }
+        }
 
         &:hover {
-            border-bottom: 1.5px solid #{'#1088c850'};
+            text-decoration: underline;
         }
 
         &::after {
-            margin-left: 0.2em;
-            vertical-align: 0.1em !important;
-            // #1088c8
-            filter: brightness(0) invert(39%) sepia(59%) saturate(1671%) hue-rotate(174deg) brightness(90%) contrast(87%);
+            display: none !important;
         }
-    }
-
-    hr.footnote-sep {
-        display: none;
     }
 
     .footnotes {
         font-size: 0.75em;
 
         .footnote-backref {
-            vertical-align: 0 !important;
+            display: none;
         }
     }
 
@@ -167,7 +166,7 @@
         .p-mcc-language {
             top: -5px !important;
             right: -5px !important;
-            font-family: 'Cascadia Code';
+            font-family: Consolas, FandolSong;
         }
 
         .p-mcc-copy-btn {
@@ -180,22 +179,18 @@
         }
 
         > code {
-            font-family: 'Cascadia Code' !important;
+            font-family: Consolas, FandolSong !important;
             padding: initial;
         }
     }
 
-    li::marker {
-        font-family: initial;
-    }
-
     .task-list-item-checkbox {
-        outline: 1px solid var(--g-color-60);
+        outline: 1px solid var(--g-color-0);
         width: 1em;
         height: 1em;
         margin-right: 0.2em;
-        vertical-align: -0.15em;
-        accent-color: var(--g-color-96);
+        vertical-align: -0.2em;
+        accent-color: var(--g-background-color);
 
         &:not(:checked) {
             appearance: none;
@@ -209,20 +204,19 @@
         th,
         td {
             padding: 0.5em;
-            border: 0.5px solid var(--g-color-60) !important;
+            border: 0.5px solid var(--g-color-0) !important;
         }
 
         tr {
-            background-color: var(--g-color-96);
+            background-color: transparent !important;
         }
 
         th {
-            font-weight: normal;
             text-align: center !important;
         }
 
         tr td:first-child::before {
-            font-family: 'Cascadia Code' !important;
+            font-family: Consolas, FandolSong !important;
             line-height: 1.4;
         }
     }
@@ -233,16 +227,18 @@
 
     hr {
         border: initial;
-        border-bottom: 1px solid;
+        border-bottom: 1px solid var(--g-color-0) !important;
     }
 
     .custom-container {
         padding: 1em !important;
         margin: 1em 0 !important;
         line-height: normal;
+        border-radius: 0 !important;
 
         > .custom-container-title {
             margin: 0 0 0.5em !important;
+            border-radius: 0 !important;
         }
 
         &.has-title > :nth-child(2),
@@ -288,8 +284,13 @@
                 margin: 0 !important;
             }
 
+            > .group-item-label {
+                border-radius: 0 !important;
+            }
+
             > .group-item-content {
                 padding: 1em !important;
+                border-radius: 0 !important;
 
                 > :first-child {
                     margin-top: 0;
@@ -304,10 +305,13 @@
 }
 
 [math-env] {
-    padding: 0.8em 1.2em;
+    padding: 0.2em 0.5em;
     position: relative;
+    font-family: FandolKaiMixed;
 
     > [math-env-title] {
+        word-spacing: -0.1em;
+        font-family: FandolSong;
 
         &::before,
         &::after {
@@ -323,12 +327,15 @@
         }
     }
 
-    ol,
-    ul {
+    > * {
         margin: 0;
     }
 
-    ol {
+    > p {
+        text-indent: 1em;
+    }
+
+    > ol {
         counter-reset: li;
 
         > li {
@@ -342,18 +349,16 @@
 
     &::after {
         border: 1px solid;
-        width: 0.9em;
-        height: 0.9em;
+        width: 0.8em;
+        height: 0.8em;
         display: block;
         position: absolute;
         right: 0;
-        bottom: 0.5em;
+        bottom: 0.4em;
     }
 }
 
-// text         hsv(h, 0.9, 0.8)
-// border       hsv(h, 0.5, 1)
-// background   hsv(h, 0.05, 1)
+// background hsv(h, 0.07, 1)
 
 /* MathEnv Template
 return (attr.hue === undefined ? `
@@ -362,26 +367,21 @@ return (attr.hue === undefined ? `
 }
 ` : `
 [math-env="${name}"] {
-    border-left: 3px solid hsl(${attr.hue}, 100%, 75%);
-    background-color: hsla(${attr.hue}, 100%, 88%, 20%);
-}
-
-[math-env-title="${name}"] {
-    color: hsl(${attr.hue}, 82%, 44%);
-}
-
-html[app-theme="dark"] [math-env-title="${name}"] {
-    color: hsl(${attr.hue}, 82%, 56%);
-}
-
-@media (prefers-color-scheme: dark) {
-    html[app-theme=system] [math-env-title="${name}"] {
-        color: hsl(${attr.hue}, 82%, 56%);
-    }
+	background-color: hsla(${attr.hue}, 100%, 86%, 25%);
 }
 `) + (attr.proof ? `
 [math-env="${name}"]::after {
     content: "";
+}
+
+[math-env="${name}"] {
+    font-family: FandolSong;
+}
+
+[math-env-title="${name}"]::before,
+[math-env-title="${name}"]::after {
+    font-family: FandolKaiMixed;
+    font-weight: normal !important;
 }
 ` : '')
 */
@@ -400,79 +400,72 @@ html[app-theme="dark"] [math-env-title="${name}"] {
 		"counter": {
 			"level": 2
 		},
-		"hue": 30
+		"hue": 120
 	},
 	"theorem": {
 		"text": "定理",
 		"counter": {
 			"level": 3
 		},
-		"hue": 200
+		"hue": 18
 	},
 	"proposition": {
 		"text": "命题",
 		"counter": {
 			"identifier": "theorem"
 		},
-		"hue": 200
+		"hue": 220
 	},
 	"lemma": {
 		"text": "引理",
 		"counter": {
 			"identifier": "theorem"
 		},
-		"hue": 200
+		"hue": 45
 	},
 	"corollary": {
 		"text": "推论",
 		"counter": {
 			"identifier": "theorem"
 		},
-		"hue": 200
+		"hue": 45
 	},
 	"property": {
 		"text": "性质",
 		"counter": {
 			"identifier": "theorem"
 		},
-		"hue": 200
+		"hue": 250
 	},
 	"problem": {
 		"text": "问题",
 		"counter": {
 			"level": 3
-		},
-		"hue": 120
+		}
 	},
 	"example": {
 		"text": "例",
 		"counter": {
 			"level": 3
-		},
-		"hue": 120
+		}
 	},
 	"exercise": {
 		"text": "练习",
 		"counter": {
 			"level": 3
-		},
-		"hue": 120
+		}
 	},
 	"note": {
-		"text": "笔记",
-		"hue": 120
+		"text": "笔记"
 	},
 	"conclusion": {
-		"text": "结论",
-		"hue": 120
+		"text": "结论"
 	},
 	"assumption": {
-		"text": "假设",
-		"hue": 120
+		"text": "假设"
 	},
 	"remark": {
-		"text": "注",
-		"hue": 120
+		"text": "注"
 	},
 	"solution": {
 		"text": "解",
