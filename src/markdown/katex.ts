@@ -47,10 +47,9 @@ export default () => {
              * @param source 合并源
              */
             const mergeOptions = (target: any, source: any) => {
-                if (source.macros !== undefined) {
-                    Object.assign(source.macros, target.macros)
-                }
+                const macros = Object.assign(target.macros, source.macros)
                 Object.assign(target, source)
+                target.macros = macros
             }
 
             // 渲染前读取配置

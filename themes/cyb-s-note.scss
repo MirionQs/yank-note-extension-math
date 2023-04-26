@@ -16,7 +16,15 @@
 }
 
 @mixin skip-number {
-    display: none !important;
+    &::before {
+        display: none !important;
+    }
+}
+
+@media print {
+    @page {
+        margin: 2.5cm 2cm;
+    }
 }
 
 .markdown-body {
@@ -25,6 +33,7 @@
     line-height: 1.8;
     text-align: justify;
     max-width: 17cm !important;
+    margin: auto;
 
     h1,
     h2,
@@ -38,7 +47,7 @@
             margin-right: 1em;
         }
 
-        &:not(.show-number, .table-of-contents)::before {
+        &:not(.show-number) {
             @include skip-number;
         }
     }
@@ -57,6 +66,7 @@
     h2 {
         font-size: 17.2pt;
         text-align: center;
+        page-break-before: always;
 
         &::before {
             content: counter(h2counter) !important;
@@ -64,6 +74,19 @@
 
         &.reference {
             @include skip-number;
+
+            + ol {
+                counter-reset: li;
+
+                > li {
+                    counter-increment: li;
+                    margin: 1em 0;
+
+                    &::marker {
+                        content: '[' counter(li) ']    ';
+                    }
+                }
+            }
         }
     }
 
@@ -105,11 +128,11 @@
     .table-of-contents {
 
         &::before {
-            @extend h2;
             content: '目录' !important;
             display: block;
+            font-size: 17.2pt;
             font-weight: bold;
-            margin-right: 0;
+            text-align: center;
         }
 
         a {
@@ -220,7 +243,7 @@
             text-align: center !important;
         }
 
-        tr td:first-child::before {
+        tr > td:first-child::before {
             font-family: Consolas, FandolSong !important;
             line-height: 1.4;
         }
@@ -240,6 +263,7 @@
         margin: 1em 0 !important;
         line-height: normal;
         border-radius: 0 !important;
+        page-break-inside: avoid;
 
         > .custom-container-title {
             margin: 0 0 0.5em !important;
@@ -313,6 +337,7 @@
     padding: 0.2em 0.5em;
     position: relative;
     font-family: FandolKaiMixed;
+    page-break-inside: avoid;
 
     > [math-env-title] {
         word-spacing: -0.1em;
@@ -371,12 +396,13 @@ return (attr.hue === undefined ? `
 	background-color: hsla(${attr.hue}, 100%, 86%, 25%);
 }
 `) + (attr.proof ? `
-[math-env="${name}"]::after {
-    content: "";
-}
-
 [math-env="${name}"] {
     font-family: FandolSong;
+    page-break-inside: auto;
+}
+
+[math-env="${name}"]::after {
+    content: "";
 }
 
 [math-env-title="${name}"]::before,

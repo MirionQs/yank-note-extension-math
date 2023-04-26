@@ -47,7 +47,15 @@
 }
 
 @mixin skip-number {
-    display: none !important;
+    &::before {
+        display: none !important;
+    }
+}
+
+@media print {
+    @page {
+        margin: 2.5cm 2cm;
+    }
 }
 
 .markdown-body {
@@ -56,6 +64,7 @@
     line-height: 1.8;
     letter-spacing: 0.015em;
     text-align: justify;
+    margin: auto;
 
     h1,
     h2,
@@ -65,7 +74,7 @@
     h6 {
         margin: 1em 0;
 
-        &:not(.show-number)::before {
+        &:not(.show-number) {
             @include skip-number;
         }
     }
@@ -78,6 +87,7 @@
     h2 {
         font-size: 1.8em;
         font-weight: normal;
+        page-break-before: always;
 
         &::before {
             content: counter(h2counter) !important;
@@ -225,7 +235,7 @@
             text-align: center !important;
         }
 
-        tr td:first-child::before {
+        tr > td:first-child::before {
             font-family: 'Cascadia Code' !important;
             line-height: 1.4;
         }
@@ -244,6 +254,7 @@
         padding: 1em !important;
         margin: 1em 0 !important;
         line-height: normal;
+        page-break-inside: avoid;
 
         > .custom-container-title {
             margin: 0 0 0.5em !important;
@@ -310,6 +321,7 @@
 [math-env] {
     padding: 0.8em 1.2em;
     position: relative;
+    page-break-inside: avoid;
 
     > [math-env-title] {
 
@@ -323,12 +335,15 @@
         }
     }
 
-    ol,
-    ul {
+    > * {
         margin: 0;
     }
 
-    ol {
+    > p {
+        text-indent: 1em;
+    }
+
+    > ol {
         counter-reset: li;
 
         > li {
@@ -380,6 +395,10 @@ html[app-theme="dark"] [math-env-title="${name}"] {
     }
 }
 `) + (attr.proof ? `
+[math-env="${name}"] {
+    page-break-inside: auto;
+}
+
 [math-env="${name}"]::after {
     content: "";
 }
