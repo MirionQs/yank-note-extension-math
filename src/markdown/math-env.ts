@@ -215,7 +215,7 @@ export default () => {
             // 生成固定样式
             styleNumber[1] = ''
             for (let l = 2; l <= 6; ++l) {
-                styleNumber[l] = styleNumber[l - 1] + `counter(h${l}counter)'.'`
+                styleNumber[l] = styleNumber[l - 1] + `counter(h${l}counter) '.'`
             }
 
             /**
@@ -516,6 +516,34 @@ export default () => {
                         delete data.state.env.mathEnv
 
                         pushToken(data.state, 'math-env-close', 'div', -1)
+
+                        return true
+                    }
+                },
+
+                /**
+                 * 重设计数器
+                 * @args `\setcounter{counter}{number}`
+                 */
+                '\\setcounter': {
+                    form: 2,
+                    run: (args, data) => {
+                        let [identifier, number] = args.map(i => i.trim()) as any
+
+                        if (!/[a-zA-Z-]+/.test(identifier)) {
+                            printErrorMessage('\\setcounter', `计数器标识 '${identifier}' 不合法`, data.start)
+                            return false
+                        }
+
+                        number = parseInt(number)
+
+                        if (!Number.isInteger(number)) {
+                            printErrorMessage('\\setcounter', `重设的数值 '${number}' 不合法`, data.start)
+                            return false
+                        }
+
+                        pushToken(data.state, '', 'div', 1, [data.start, data.end], [['style', `counter-reset: ${identifier} ${number - 1}`]])
+                        pushToken(data.state, '', 'div', -1)
 
                         return true
                     }
