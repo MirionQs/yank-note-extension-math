@@ -259,7 +259,7 @@ export default () => {
                         continue
                     }
 
-                    const identifier = envs[name].counter?.identifier ?? name
+                    const identifier = (envs[name].counter?.identifier ?? name).replaceAll('@', '-')
                     const level = envs[name].counter?.level ?? envs[identifier]?.counter?.level ?? 0
 
                     if (!/[a-zA-Z-]+/.test(identifier) ||
@@ -384,7 +384,7 @@ export default () => {
                     // 计数器增加
                     let number = ''
                     if (level! > 0) {
-                        number = `' '${styleNumber[level!]}counter(${identifier})`
+                        number = `' ' ${styleNumber[level!]} counter(${identifier})`
                     }
                     style.innerHTML += `
                         [math-env-title='${name}'].skip-number::before {
