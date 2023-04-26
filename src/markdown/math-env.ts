@@ -354,10 +354,6 @@ export default () => {
             const updateStyle = (envs: Environments) => {
                 const levels: string[][] = [[], ['h2counter'], ['h3counter'], ['h4counter'], ['h5counter'], ['h6counter'], []]
 
-                const toStyle = (counters: string[]) => {
-                    return [...new Set(counters)].join(' ')
-                }
-
                 style.innerHTML = `
                     .skip-number:not([math-env-title])::before {
                         display: none !important;
@@ -405,7 +401,7 @@ export default () => {
                 for (let l = 1; l <= 5; ++l) {
                     style.innerHTML += `
                         .markdown-view h${l} {
-                            counter-reset: ${toStyle(levels.slice(l).flat())} !important
+                            counter-reset: ${[...new Set(levels.slice(l).flat())].join(' ')} !important
                         }
                     `
                 }

@@ -6,15 +6,21 @@ export default () => {
     registerPlugin({
         name,
         register: ctx => {
-            // const children = []
 
             // ctx.markdown.registerPlugin(md => {
-            //     const defaultHeading
-            //     const defaultLHeading
+            //     // TOC 应该是 block 语法而不是 inline 语法
+            //     md.block.ruler.before('paragraph', 'toc', (state, start, end) => {
+            //         const pos = state.bMarks[start] + state.blkIndent[start]
 
-            //     md.block.ruler.at('heading', (state, start, end, silent) => {
-            //         const result = defaultHeading(state, start, end, silent)
+            //         if (state.src[pos] !== '[') {
+            //             return false
+            //         }
 
+            //         if (!state.src.startsWith('[toc]', pos)) {
+            //             return false
+            //         }
+
+            //         return true
             //     })
             // })
         }

@@ -46,7 +46,7 @@
     src: url(./fonts/NotoSans-BoldItalic.woff2);
 }
 
-@mixin skip-number() {
+@mixin skip-number {
     display: none !important;
 }
 
