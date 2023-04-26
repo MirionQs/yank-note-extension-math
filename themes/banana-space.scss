@@ -64,6 +64,10 @@
     h5,
     h6 {
         margin: 1em 0;
+
+        &:not(.show-number)::before {
+            @include skip-number;
+        }
     }
 
     h1 {

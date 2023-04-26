@@ -41,6 +41,10 @@
         &::before {
             margin-right: 1em;
         }
+
+        &:not(.show-number)::before {
+            @include skip-number;
+        }
     }
 
     h1 {
