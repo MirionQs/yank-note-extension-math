@@ -491,8 +491,8 @@ export default () => {
                         }
 
                         pushToken(data.state, 'math-env-open', 'div', 1, [data.start, data.end], [['math-env', nameWoStar]])
-                        pushToken(data.state, 'math-env-title-open', 'span', 1, [data.start, data.end], attr)
-                        pushToken(data.state, 'inline', '', 0, [data.start, data.end]).content = label
+                        pushToken(data.state, 'math-env-title-open', 'span', 1, null, attr)
+                        pushToken(data.state, 'inline', '', 0).content = label
                         pushToken(data.state, 'math-env-title-close', 'span', -1)
 
                         return true
