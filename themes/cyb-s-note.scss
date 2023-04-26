@@ -322,6 +322,10 @@
         &::after {
             font-weight: bold;
         }
+
+        &::after {
+            margin-right: 0.5em;
+        }
     }
 
     > * {

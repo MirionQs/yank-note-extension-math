@@ -363,12 +363,16 @@ export default () => {
                         margin: 1em 0;
                     }
 
-                    [math-env-title]::after {
-                        content: '. ';
+                    [math-env-title] {
+                        display: inline-block;
                     }
 
                     [math-env-title] + p {
                         display: inline;
+                    }
+
+                    [math-env-title]::after {
+                        content: '.';
                     }
                 `
 
