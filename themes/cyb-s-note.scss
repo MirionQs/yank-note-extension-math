@@ -15,6 +15,10 @@
     src: local(FandolSong-Bold);
 }
 
+@mixin skip-number() {
+    display: none !important;
+}
+
 .markdown-body {
     font-size: 12pt;
     font-family: FandolSong;
@@ -59,7 +63,7 @@
         }
 
         &.reference {
-            @extend .skip-number;
+            @include skip-number;
         }
     }
 
@@ -317,14 +321,6 @@
         &::before,
         &::after {
             font-weight: bold;
-        }
-
-        &::after {
-            content: '. ' !important;
-        }
-
-        + p {
-            display: inline;
         }
     }
 

@@ -6,9 +6,17 @@ export default () => {
     registerPlugin({
         name,
         register: ctx => {
-            ctx.markdown.registerPlugin(md => {
-                // md.block.ruler.getRules('heading')
-            })
+            // const children = []
+
+            // ctx.markdown.registerPlugin(md => {
+            //     const defaultHeading
+            //     const defaultLHeading
+
+            //     md.block.ruler.at('heading', (state, start, end, silent) => {
+            //         const result = defaultHeading(state, start, end, silent)
+
+            //     })
+            // })
         }
     })
 }

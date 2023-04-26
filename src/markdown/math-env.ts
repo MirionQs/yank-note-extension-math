@@ -1,4 +1,4 @@
-import { registerPlugin } from "@yank-note/runtime-api"
+import { registerPlugin } from '@yank-note/runtime-api'
 
 const fs = nodeRequire('fs-extra')
 const path = nodeRequire('path')
@@ -22,9 +22,9 @@ type Environment = {
 }
 
 type Commands = Record<string, Command>
-
 type Environments = Record<string, Environment>
 
+// MathEnv 解析器
 class Parser {
     src: string
     pos: number
@@ -85,7 +85,7 @@ class Parser {
      */
     find(char) {
         let str = this.src.slice(this.pos)
-        str = str.slice(0, str.search(/\n|$/)).replace(/\\[!"#$%&'()*+,-./:;<=>?@\[\\\]^_`{|}~]/g, '  ') // 去除转义字符
+        str = str.slice(0, str.search(/\n|$/)).replace(/\\[!'#$%&'()*+,-./:;<=>?@\[\\\]^_`{|}~]/g, '  ') // 去除转义字符
         let env = ''
         let offset = 0
         for (const c of str) {
@@ -204,19 +204,18 @@ export default () => {
     registerPlugin({
         name,
         register: async ctx => {
+            const constant = await ctx.api.rpc('return require("./constant")')
             const style = await ctx.view.addStyles('')
-            const styleNumber: string[] = [] // 'counter(h2counter)"."counter(h3counter)"."...'
-            let template: string
-
+            const styleNumber: string[] = [] // 'counter(h2counter)'.'counter(h3counter)'.'...'
             let presetEnvironment: Environments
             let environment: Environments
-
+            let template: string
             let debug: boolean
 
             // 生成固定样式
             styleNumber[1] = ''
             for (let l = 2; l <= 6; ++l) {
-                styleNumber[l] = styleNumber[l - 1] + `counter(h${l}counter)"."`
+                styleNumber[l] = styleNumber[l - 1] + `counter(h${l}counter)'.'`
             }
 
             /**
@@ -277,8 +276,15 @@ export default () => {
             }
 
             /**
-             * 推入一个 token
-             * @returns 推入的 token
+             * 推入一个标记
+             * @param state 解析器状态
+             * @param type 标记类型
+             * @param tag HTML 标签
+             * @param nesting 标签开闭
+             * @param map 源码范围
+             * @param attrs HTML 属性
+             * @param content HTML 内容
+             * @returns 推入的标记
              */
             const pushToken = (
                 state: any,
@@ -287,12 +293,12 @@ export default () => {
                 nesting: -1 | 0 | 1,
                 map: [number, number] | null = null,
                 attrs: [string, string][] | null = null,
-                children: any[] = []
             ) => {
                 const token = state.push(type, tag, nesting)
-                token.map = map
-                token.attrs = attrs
-                token.children = children
+                Object.assign(token, { map, attrs })
+                if (type === 'inline') {
+                    token.children = []
+                }
                 return token
             }
 
@@ -301,8 +307,6 @@ export default () => {
              */
             const readPreset = async () => {
                 // 读取样式文件
-                const constant = await ctx.api.rpc('return require("./constant")')
-
                 let themePath = ctx.setting.getSetting('custom-css')!
                 if (themePath.startsWith('extension:')) {
                     themePath = path.join(constant.USER_EXTENSION_DIR, themePath.slice(10))
@@ -354,8 +358,23 @@ export default () => {
                     return [...new Set(counters)].join(' ')
                 }
 
-                // 初始样式
-                style.innerHTML = '[math-env]{margin:1em 0}[math-env-title]::after{content:"."}'
+                style.innerHTML = `
+                    .skip-number:not([math-env-title])::before {
+                        display: none !important;
+                    }
+
+                    [math-env] {
+                        margin: 1em 0;
+                    }
+
+                    [math-env-title]::after {
+                        content: '. ';
+                    }
+
+                    [math-env-title] + p {
+                        display: inline;
+                    }
+                `
 
                 for (const name in envs) {
                     const { level, identifier } = envs[name].counter!
@@ -365,9 +384,18 @@ export default () => {
                     // 计数器增加
                     let number = ''
                     if (level! > 0) {
-                        number = `" "${styleNumber[level!]}counter(${identifier})`
+                        number = `' '${styleNumber[level!]}counter(${identifier})`
                     }
-                    style.innerHTML += `[math-env-title="${name}"].skip-number::before{content:"${envs[name].text}"}[math-env-title="${name}"]:not(.skip-number)::before{content:"${envs[name].text}"${number};counter-increment:${identifier}}`
+                    style.innerHTML += `
+                        [math-env-title='${name}'].skip-number::before {
+                            content: '${envs[name].text}';
+                        }
+
+                        [math-env-title='${name}']:not(.skip-number)::before {
+                            content: '${envs[name].text}' ${number};
+                            counter-increment: ${identifier};
+                        }
+                    `
 
                     // 应用样式模板
                     style.innerHTML += Function('name', 'attr', template)(name, envs[name])
@@ -375,11 +403,16 @@ export default () => {
 
                 // 计数器重置
                 for (let l = 1; l <= 5; ++l) {
-                    style.innerHTML += `.markdown-view h${l}{counter-reset:${toStyle(levels.slice(l).flat())} !important}`
+                    style.innerHTML += `
+                        .markdown-view h${l} {
+                            counter-reset: ${toStyle(levels.slice(l).flat())} !important
+                        }
+                    `
                 }
             }
 
             const command: Commands = {
+
                 /**
                  * 新增定理类环境
                  * @args `\newtheorem{name}[counter]{text}[level][attrs]`
@@ -424,6 +457,7 @@ export default () => {
                         return true
                     }
                 },
+
                 /**
                  * 环境开始
                  * @args `\begin{name}[label]`
@@ -445,7 +479,7 @@ export default () => {
                         }
 
                         if (environment[nameWoStar] === undefined) {
-                            printErrorMessage('\\begin', `未知环境 "${nameWoStar}"`, data.start)
+                            printErrorMessage('\\begin', `未知环境 '${nameWoStar}'`, data.start)
                             return false
                         }
 
@@ -460,17 +494,15 @@ export default () => {
                             attr.push(['class', 'skip-number'])
                         }
 
-                        pushToken(data.state, 'math-env-outer-div-open', 'div', 1,
-                            [data.start, data.end], [['math-env', nameWoStar]])
-                        pushToken(data.state, 'math-env-title-open', 'span', 1,
-                            [data.start, data.end], attr)
-                        pushToken(data.state, 'inline', '', 0,
-                            [data.start, data.end], null, data.state.md.parseInline(label, data.state.env))
+                        pushToken(data.state, 'math-env-open', 'div', 1, [data.start, data.end], [['math-env', nameWoStar]])
+                        pushToken(data.state, 'math-env-title-open', 'span', 1, [data.start, data.end], attr)
+                        pushToken(data.state, 'inline', '', 0, [data.start, data.end]).content = label
                         pushToken(data.state, 'math-env-title-close', 'span', -1)
 
                         return true
                     }
                 },
+
                 /**
                  * 环境结束
                  * @args `\end{name}`
@@ -481,37 +513,42 @@ export default () => {
                         const name = args[0].trim()
 
                         if (data.state.env.mathEnv !== name) {
-                            printErrorMessage('\\end', `开始环境 "${data.state.env.mathEnv}" 与结束环境 "${name}" 不匹配`, data.start)
+                            printErrorMessage('\\end', `开始环境 '${data.state.env.mathEnv}' 与结束环境 '${name}' 不匹配`, data.start)
                             return false
                         }
 
                         delete data.state.env.mathEnv
 
-                        pushToken(data.state, 'math-env-outer-div-close', 'div', -1)
+                        pushToken(data.state, 'math-env-close', 'div', -1)
 
                         return true
                     }
                 }
+
             }
 
+            // 更改样式时重新读取预设
             ctx.registerHook('SETTING_CHANGED', ({ changedKeys }) => {
                 if (changedKeys.includes('custom-css')) {
                     readPreset()
                 }
             })
 
+            // 渲染前初始化相关变量
             ctx.registerHook('MARKDOWN_BEFORE_RENDER', ({ env }) => {
-                environment = JSON.parse(JSON.stringify(presetEnvironment))
+                environment = Object.assign({}, presetEnvironment)
+
                 const fm = env.attributes
                 if (fm !== undefined) {
                     debug = fm.mathEnvDebug ?? false
 
                     // 默认启用编号、代码换行
-                    fm.headingNumber = fm.headingNumber ?? true
-                    fm.wrapCode = fm.wrapCode ?? true
+                    fm.headingNumber ??= true
+                    fm.wrapCode ??= true
                 }
             })
 
+            // 添加 MathEnv 语法
             ctx.markdown.registerPlugin(md => {
                 md.block.ruler.before('paragraph', 'math-env', (state, start, end, silent) => {
                     const parser = new Parser(state.src, state.bMarks[start] + state.tShift[start])
@@ -525,7 +562,7 @@ export default () => {
                         return false
                     }
                     if (command[cmd] === undefined) {
-                        printErrorMessage('匹配命令', `未知命令 "${cmd}"`, start)
+                        printErrorMessage('匹配命令', `未知命令 '${cmd}'`, start)
                         return false
                     }
                     parser.skipSpaces()

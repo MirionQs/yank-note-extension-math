@@ -46,16 +46,16 @@
     src: url(./fonts/NotoSans-BoldItalic.woff2);
 }
 
+@mixin skip-number() {
+    display: none !important;
+}
+
 .markdown-body {
     font-size: 18px;
     font-family: PunctCJK, NotoSans;
     line-height: 1.8;
     letter-spacing: 0.015em;
     text-align: justify;
-
-    .skip-number:not([math-env-title])::before {
-        display: none !important;
-    }
 
     h1,
     h2,
@@ -84,28 +84,28 @@
         }
 
         &.reference {
-            @extend .skip-number
+            @include skip-number;
         }
     }
 
     h3 {
         font-size: 1.4em;
-        @extend .skip-number;
+        @include skip-number;
     }
 
     h4 {
         font-size: 1.2em;
-        @extend .skip-number;
+        @include skip-number;
     }
 
     h5 {
         font-size: 1.1em;
-        @extend .skip-number;
+        @include skip-number;
     }
 
     h6 {
         font-size: 1em;
-        @extend .skip-number;
+        @include skip-number;
     }
 
     mark {
@@ -312,14 +312,6 @@
         &::before,
         &::after {
             font-weight: bold;
-        }
-
-        &::after {
-            content: '. ' !important;
-        }
-
-        + p {
-            display: inline;
         }
     }
 
