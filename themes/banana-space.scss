@@ -143,6 +143,11 @@
         .cjk_fallback {
             font-size: 0.909091em;
         }
+
+        &::before,
+        &::after {
+            content: ' ';
+        }
     }
 
     a {
