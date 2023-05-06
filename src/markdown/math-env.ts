@@ -459,7 +459,7 @@ export default () => {
                 },
 
                 /**
-                 * 环境开始
+                 * 开始环境
                  * @args `\begin{name}[label]`
                  */
                 '\\begin': {
@@ -504,7 +504,7 @@ export default () => {
                 },
 
                 /**
-                 * 环境结束
+                 * 结束环境
                  * @args `\end{name}`
                  */
                 '\\end': {
@@ -527,7 +527,7 @@ export default () => {
 
                 /**
                  * 重设计数器
-                 * @args `\setcounter{counter}{number}`
+                 * @args `\setcounter{counter}{value}`
                  */
                 '\\setcounter': {
                     form: 2,
