@@ -66,9 +66,15 @@
 - 一级标题后尾随的段落具有独特样式.
 - 附有 `.reference` 属性的二级标题具有独特样式.
 
-Banana Space 主题示例 ([样式测试文件](./Style%20Test.md)) :
+样式测试文件参见: Style Test.md.
 
-![](./example.png)
+Banana Space 主题示例:
+
+![](https://pic2.imgdb.cn/item/64586b980d2dde5777557ea5.png)
+
+Cyb's Note 主题示例:
+
+![](https://pic2.imgdb.cn/item/64586b980d2dde5777557e4a.png)
 
 ## TODO 列表
 
