@@ -47,7 +47,7 @@ export default () => {
              * @param source 合并源
              */
             const mergeOptions = (target: any, source: any) => {
-                const macros = Object.assign(target.macros, source.macros)
+                const macros = Object.assign({}, target.macros, source.macros)
                 Object.assign(target, source)
                 target.macros = macros
             }
