@@ -569,10 +569,7 @@ export default () => {
                 const fm = env.attributes
                 if (fm !== undefined) {
                     debug = fm.mathEnvDebug ?? false
-
-                    // 默认启用编号、代码换行
-                    fm.headingNumber ??= true
-                    fm.wrapCode ??= true
+                    fm.wrapCode ??= true // 默认启用代码换行
                 }
             })
 
