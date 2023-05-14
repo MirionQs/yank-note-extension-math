@@ -246,7 +246,7 @@
         }
     }
 
-    img {
+    img:not([width]) {
         width: 100%;
     }
 
