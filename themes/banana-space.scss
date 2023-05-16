@@ -144,9 +144,13 @@
             font-size: 0.909091em;
         }
 
-        &::before,
-        &::after {
-            content: ' ';
+        &,
+        .cjk_fallback {
+
+            &::before,
+            &::after {
+                content: ' ';
+            }
         }
     }
 

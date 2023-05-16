@@ -155,9 +155,13 @@
         font-family: KaTeX_Main, FandolSong;
         font-size: 1em;
 
-        &::before,
-        &::after {
-            content: ' ';
+        &,
+        .cjk_fallback {
+
+            &::before,
+            &::after {
+                content: ' ';
+            }
         }
     }
 
