@@ -122,6 +122,16 @@
         @include skip-number;
     }
 
+    .table-of-contents {
+        page-break-before: always;
+
+        &::before {
+            content: '目录' !important;
+            display: block;
+            font-size: 1.8em;
+        }
+    }
+
     mark {
         padding: 3px 3px 1px;
     }

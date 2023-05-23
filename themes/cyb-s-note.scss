@@ -126,6 +126,7 @@
     }
 
     .table-of-contents {
+        page-break-before: always;
 
         &::before {
             content: '目录' !important;
