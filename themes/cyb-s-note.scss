@@ -1,4 +1,21 @@
 @font-face {
+    font-family: FandolSongMixed;
+    src: local(FandolSong);
+}
+
+@font-face {
+    font-family: FandolSongMixed;
+    src: local('Times New Roman');
+    unicode-range: U+400-52F; // 西里尔字母
+}
+
+@font-face {
+    font-family: FandolSongMixed;
+    font-weight: bold;
+    src: local(FandolSong-Bold);
+}
+
+@font-face {
     font-family: FandolKaiMixed;
     src: local(FandolKai);
 }
@@ -6,7 +23,13 @@
 @font-face {
     font-family: FandolKaiMixed;
     src: local(FandolSong);
-    unicode-range: U+00-52F, U+1E00-1FFF, U+2200-22FF;
+    unicode-range: U+000-3FF, U+1E00-1FFF; // 拉丁、希腊字母
+}
+
+@font-face {
+    font-family: FandolKaiMixed;
+    src: local('Times New Roman');
+    unicode-range: U+400-52F; // 西里尔字母
 }
 
 @font-face {
@@ -29,7 +52,7 @@
 
 .markdown-body {
     font-size: 12pt;
-    font-family: FandolSong;
+    font-family: FandolSongMixed;
     line-height: 1.8;
     text-align: justify;
     max-width: 17cm !important;
@@ -146,14 +169,14 @@
     }
 
     code {
-        font-family: Consolas, FandolSong;
+        font-family: Consolas, FandolSongMixed;
         font-size: 0.9em;
         padding: 1px 3px;
         background-color: var(--g-color-96) !important;
     }
 
     .katex {
-        font-family: KaTeX_Main, FandolSong;
+        font-family: KaTeX_Main, FandolSongMixed;
         font-size: 1em;
 
         &,
@@ -203,7 +226,7 @@
         .p-mcc-language {
             top: -5px !important;
             right: -5px !important;
-            font-family: Consolas, FandolSong;
+            font-family: Consolas, FandolSongMixed;
         }
 
         .p-mcc-copy-btn {
@@ -216,7 +239,7 @@
         }
 
         > code {
-            font-family: Consolas, FandolSong !important;
+            font-family: Consolas, FandolSongMixed !important;
             padding: initial;
         }
     }
@@ -254,7 +277,7 @@
         }
 
         tr > td:first-child::before {
-            font-family: Consolas, FandolSong !important;
+            font-family: Consolas, FandolSongMixed !important;
             line-height: 1.4;
         }
     }
@@ -351,7 +374,7 @@
 
     > [math-env-title] {
         word-spacing: -0.1em;
-        font-family: FandolSong;
+        font-family: FandolSongMixed;
 
         &::before,
         &::after {
@@ -407,7 +430,7 @@ return (attr.hue === undefined ? `
 }
 `) + (attr.proof ? `
 [math-env="${name}"] {
-    font-family: FandolSong;
+    font-family: FandolSongMixed;
     page-break-inside: auto;
 }
 
