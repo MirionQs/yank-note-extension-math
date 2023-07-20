@@ -6,7 +6,7 @@
 @font-face {
     font-family: FandolSongMixed;
     src: local('Times New Roman');
-    unicode-range: U+400-52F; // 西里尔字母
+    unicode-range: U+80-52F;
 }
 
 @font-face {
@@ -19,7 +19,7 @@
     font-family: FandolSongMixed;
     font-weight: bold;
     src: local('Times New Roman');
-    unicode-range: U+400-52F; // 西里尔字母
+    unicode-range: U+80-52F;
 }
 
 @font-face {
@@ -30,13 +30,13 @@
 @font-face {
     font-family: FandolKaiMixed;
     src: local(FandolSong);
-    unicode-range: U+000-3FF, U+1E00-1FFF; // 拉丁、希腊字母
+    unicode-range: U+00-7F;
 }
 
 @font-face {
     font-family: FandolKaiMixed;
     src: local('Times New Roman');
-    unicode-range: U+400-52F; // 西里尔字母
+    unicode-range: U+80-52F;
 }
 
 @font-face {
@@ -49,7 +49,7 @@
     font-family: FandolKaiMixed;
     font-weight: bold;
     src: local('Times New Roman');
-    unicode-range: U+400-52F; // 西里尔字母
+    unicode-range: U+80-52F;
 }
 
 @mixin skip-number {
