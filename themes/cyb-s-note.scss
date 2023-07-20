@@ -16,6 +16,13 @@
 }
 
 @font-face {
+    font-family: FandolSongMixed;
+    font-weight: bold;
+    src: local('Times New Roman');
+    unicode-range: U+400-52F; // 西里尔字母
+}
+
+@font-face {
     font-family: FandolKaiMixed;
     src: local(FandolKai);
 }
@@ -36,6 +43,13 @@
     font-family: FandolKaiMixed;
     font-weight: bold;
     src: local(FandolSong-Bold);
+}
+
+@font-face {
+    font-family: FandolKaiMixed;
+    font-weight: bold;
+    src: local('Times New Roman');
+    unicode-range: U+400-52F; // 西里尔字母
 }
 
 @mixin skip-number {
