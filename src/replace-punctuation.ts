@@ -1,10 +1,11 @@
 import { registerPlugin } from "@yank-note/runtime-api"
 
-const name = 'extension-math.editor.replace'
-const actionReplace = 'extension-math.replace'
+const pluginName = 'extension-math.replace-punctuation'
+const idReplace = 'extension-math.replace-punctuation'
 
 const replaceList: [string | RegExp, string][] = [
     ['，', ', '],
+    ['、', ', '],
     ['。', '. '],
     ['？', '? '],
     ['！', '! '],
@@ -17,14 +18,13 @@ const replaceList: [string | RegExp, string][] = [
 
 export default () => {
     registerPlugin({
-        name,
+        name: pluginName,
         register: ctx => {
             // 命令面板
             ctx.editor.whenEditorReady().then(({ editor, monaco }) => {
                 editor.addAction({
-                    id: actionReplace,
-                    contextMenuGroupId: 'extension-math',
-                    label: 'math: 替换中文标点为英文标点',
+                    id: idReplace,
+                    label: 'math: 将中文标点替换为英文标点',
                     keybindings: [monaco.KeyMod.Shift | monaco.KeyMod.Alt | monaco.KeyCode.KeyR],
                     run: editor => {
                         let content = editor.getValue();

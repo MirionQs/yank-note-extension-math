@@ -1,21 +1,13 @@
-import editorBackground from './editor/background'
-import editorHotkey from './editor/hotkey'
-import editorReplace from './editor/replace'
-import markdownCite from './markdown/cite'
-import markdownKatex from './markdown/katex'
-import markdownMathEnv from './markdown/math-env'
-import markdownTable from './markdown/table'
-import markdownTikzjax from './markdown/tikzjax'
-import markdownToc from './markdown/toc'
+import background from './background'
+import replacePunctuation from './replace-punctuation'
+import hotkey from './hotkey'
+import markdownKatex from './markdown-katex'
+import markdownMathEnv from './markdown-math-env'
 
 [
-    editorReplace,
-    editorHotkey,
-    editorBackground,
-    markdownCite,
+    replacePunctuation,
+    hotkey,
+    background,
     markdownKatex,
     markdownMathEnv,
-    markdownTable,
-    markdownTikzjax,
-    markdownToc
 ].forEach(plugin => plugin())

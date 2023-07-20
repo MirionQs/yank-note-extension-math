@@ -1,12 +1,11 @@
 import { registerPlugin } from "@yank-note/runtime-api"
 
-const name = 'extension-math.editor.hotkey'
+const pluginName = 'extension-math.hotkey'
 
 export default () => {
     registerPlugin({
-        name,
+        name: pluginName,
         register: ctx => {
-
         }
     })
 }

@@ -3,99 +3,105 @@
 - 实用功能
   - 自定义背景图
   - 中文标点替换
-  - 语法快捷键
+  - 快捷键支持
 - 语法增强
-  - 引用语法
-  - 公式语法增强
-  - 数学环境语法
-  - 合并单元格语法
-  - TikzJax 语法
-  - 目录语法增强
+  - 引用
+  - 数学环境
+  - TikZJax
+  - 表格增强
+  - 目录增强
+  - KaTeX 增强
 - 主题样式
   - Banana Space
   - Cyb's Note
   - LaTeX
 
-本扩展添加了一些实用功能, 主要面向数学笔记用户.
-
-小提示: 按下 `F1` 键可以打开命令面板.
-
 ## 实用功能
 
-## 自定义背景图
+### 自定义背景图
 
-现在你也可以像 VS Code 一样给 Yank Note 添加自己喜爱的背景图了! 同时添加了相应的快捷键方便截图.
+- 外观设置中添加了 `背景图路径`、`背景图不透明度` 选项
+- 命令面板中添加了 `math: 启用/禁用背景图` (`Shift+Alt+B`) 选项
 
-- 外观设置中添加了 `背景图路径`、`背景图不透明度` 选项.
+### 中文标点替换
 
-- 命令面板中添加了 `math: 启用/禁用背景图` (`Shift+Alt+B`) 选项.
+- 命令面板中添加了 `math: 将中文标点替换为英文标点` (`Shift+Alt+R`) 选项。
 
-## 中文标点替换
-
-数学书籍中往往使用英文标点而不是中文标点, 因此添加了相应的快捷键一键替换.
-
-- 命令面板中添加了 `math: 中文标点替换为英文标点` (`Shift+Alt+R`) 选项.
+### 快捷键支持
 
 ## 语法增强
 
-## KaTeX 增强
+### 引用
 
-虽然 Yank Note 在前言语法 (`---`) 中提供了 `katex` 项供用户自定义 KaTeX, 但对于有着自己宏库的用户来言显得有些繁复了. 因此添加了默认配置文件和导入配置文件的功能, 同时提供了其它配置项使得更为便捷.
+### 数学环境
 
-> 关于 KaTeX 的配置项可以参考 [KaTeX 官网](https://katex.org/docs/options.html) . 额外添加了 `keepDisplayMode`、`import` 项, 前者设置为 `true` 可以使行内公式以行间模式渲染, 后者可以导入外部配置文件.
+#### 命令列表
 
-- 命令面板中添加了 `math: 打开 KaTeX 配置文件` 选项.
+- `\begin{env}[label]`
+  `env`：环境名，要求符合正则表达式 `[a-zA-Z@]+\*?`
+  `label`：标签
+  开始一个环境
+- `\end{env}`
+  `env`：环境名，要求符合正则表达式 `[a-zA-Z@]+\*?`
+  结束一个环境
+- `\setcounter{counter}{value}`
+  `counter`：计数器标识，要求符合正则表达式 `[a-zA-Z-]+`
+  `value`：要设置的值，要求是一个整数
+  重设计数器
+- `\newtheorem{name}[counter]{text}[level][attrs]`
+  `name`：环境名，要求符合正则表达式 `[a-zA-Z@]+`
+  `counter`：计数器标识，要求符合正则表达式 `[a-zA-Z-]+`
+  `text`：显示文本
+  `level`：计数器层级，要求是 0-6 的整数
+  `attrs`：环境属性，要求是合法的 JSON 表达式
+  新增定理类环境
+- `\addstyles{css}`
+  `css`：CSS 样式
+  添加样式
 
-## 数学环境语法
+#### 调试
 
-对于数学笔记用户而言, 各类诸如命题、定理的数学环境是必不可少的, 本扩展则提供了类似 LaTeX 的语法实现了这个需求:
+- 设置 `mathEnvDebug: true` 启用控制台错误信息
+- 默认启用代码换行，即 `wrapCode: true` ，可覆盖
+- 数学环境的动态样式来自于样式文件中的注释块 `MathEnv Template` 和 `MathEnv Environment`
 
-- `\begin{name}[label]` : 开始环境, `name` 末尾添加 `*` 可跳过编号.
-- `\end{name}` : 结束环境, `name` 末尾添加 `*` 可跳过编号.
-- `\setcounter{counter}{value}` : 重设计数器.
-- `\newtheorem{name}[counter]{text}[level][attrs]` : 新增定理类环境.
+### TikZJax
 
-其中,
+### 表格增强
 
-- 环境名 `name` 要求符合正则表达式 `[a-zA-Z@]+`.
-- 计数器标识 `counter` 要求符合正则表达式 `[a-zA-Z-]+` (`-`对应`@`) .
-- 计数器层级 `level` 要求为 0-6 的整数 (`0`表示不编号) .
-- 环境属性 `attrs` 要求为合法的 JSON 表达式.
-- 重设的数值 `value` 要求为一个整数.
+### 目录增强
 
-此外,
+### KaTeX 增强
 
-- 前言 (`---`) 中设置 `mathEnvDebug` 为 `true` , 再右键 Yank Note 托盘菜单打开控制台即可看到报错信息.
-- 默认启用 `wrapCode` , 即代码换行, 你以然可以将其设置为 `false` 以禁用.
-- 数学环境的样式是动态的 (支持自定义环境) , 这通过样式文件中的注释块 `MathEnv Template` 和 `MathEnv Environment` 达成, 因此存在安全问题.
+- 命令面板中添加了 `math: 打开 KaTeX 配置文件` 选项
+- 添加了 KaTeX 配置项 `keepDisplayMode` ，设置为 `true` 将统一以行间模式渲染
 
-## 附带主题
+> 关于 KaTeX 的配置项可以参考 [官方文档](https://katex.org/docs/options.html)
 
-附带主题可在外观设置中启用.
+## 主题样式
 
-- Banana Space: 仿香蕉空间主题.
-- Cyb's Note: 仿 Cyb 的笔记的主题 (Fandol 字体需自行下载安装) .
+### Banana Space [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557ea5.png)
 
-额外功能:
+- 仿香蕉空间主题
+- 支持数学环境
+- 支持暗色主题
+- 行内公式两侧自动添加空格
+- 附有 `.skip-number` 属性的标题将跳过编号
 
-- 支持数学环境.
-- 支持暗色模式.
-- 行内公式两侧自动添加空格.
-- 附有 `.skip-number` 属性的标题跳过编号.
-- 一级标题后尾随的段落具有独特样式.
-- 附有 `.reference` 属性的二级标题具有独特样式.
+### Cyb's Note [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557e4a.png)
 
-样式测试文件参见: Style Test.md.
+- 仿 Cyb 的笔记主题
+- 需要自行下载安装 Fandol 系列字体
+- 支持数学环境
+- 支持暗色主题
+- 行内公式两侧自动添加空格
+- 附有 `.skip-number` 属性的标题将跳过编号
+- 一级标题后尾随的段落具有独特样式
+- 附有 `.reference` 属性的二级标题具有独特样式
 
-Banana Space 主题示例:
+### LaTeX
 
-![](https://pic2.imgdb.cn/item/64586b980d2dde5777557ea5.png)
-
-Cyb's Note 主题示例:
-
-![](https://pic2.imgdb.cn/item/64586b980d2dde5777557e4a.png)
-
-## TODO 列表
+## TODO
 
 - 添加 **表格单元格合并语法**
 - 添加 **引用语法**
@@ -105,5 +111,6 @@ Cyb's Note 主题示例:
 - 使用 `vm2` 解决动态样式的安全性问题
 - 添加设置选项启用/禁用各模块功能
 - 添加加粗、倾斜等快捷键
-- 增加 `tikzjax` 支持
+- 增加 `TikZJax` 支持
 - 自动将加粗、倾斜语法应用到数学公式
+- 添加命令 `\addstyles` 来插入样式
