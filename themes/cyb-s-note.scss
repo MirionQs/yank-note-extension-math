@@ -1,55 +1,55 @@
 @font-face {
-    font-family: FandolSongMixed;
-    src: local(FandolSong);
+    font-family: CMUSerif;
+    src: url(./fonts/CMUSerif.woff2);
 }
 
 @font-face {
-    font-family: FandolSongMixed;
-    src: local('Times New Roman');
-    unicode-range: U+80-52F;
-}
-
-@font-face {
-    font-family: FandolSongMixed;
+    font-family: CMUSerif;
     font-weight: bold;
-    src: local(FandolSong-Bold);
+    src: url(./fonts/CMUSerif-Bold.woff2);
 }
 
 @font-face {
-    font-family: FandolSongMixed;
+    font-family: CMUSerif;
+    font-style: italic;
+    src: url(./fonts/CMUSerif-Italic.woff2);
+}
+
+@font-face {
+    font-family: CMUSerif;
     font-weight: bold;
-    src: local('Times New Roman');
-    unicode-range: U+80-52F;
+    font-style: italic;
+    src: url(./fonts/CMUSerif-BoldItalic.woff2);
 }
 
 @font-face {
-    font-family: FandolKaiMixed;
-    src: local(FandolKai);
+    font-family: CMUTypewriter;
+    src: url(./fonts/CMUTypewriter.woff2);
 }
 
 @font-face {
-    font-family: FandolKaiMixed;
-    src: local(FandolSong);
-    unicode-range: U+00-7F;
-}
-
-@font-face {
-    font-family: FandolKaiMixed;
-    src: local('Times New Roman');
-    unicode-range: U+80-52F;
-}
-
-@font-face {
-    font-family: FandolKaiMixed;
+    font-family: CMUTypewriter;
     font-weight: bold;
-    src: local(FandolSong-Bold);
+    src: url(./fonts/CMUTypewriter-Bold.woff2);
 }
 
 @font-face {
-    font-family: FandolKaiMixed;
+    font-family: CMUTypewriter;
+    font-style: italic;
+    src: url(./fonts/CMUTypewriter-Italic.woff2);
+}
+
+@font-face {
+    font-family: CMUTypewriter;
     font-weight: bold;
-    src: local('Times New Roman');
-    unicode-range: U+80-52F;
+    font-style: italic;
+    src: url(./fonts/CMUTypewriter-BoldItalic.woff2);
+}
+
+@font-face {
+    font-family: SourceHanSerif;
+    font-weight: 100 900;
+    src: url(./fonts/SourceHanSerifSC-VF.otf); // woff2 格式会读取出错
 }
 
 @mixin skip-number {
@@ -64,9 +64,17 @@
     }
 }
 
+.outline-toc {
+
+    > .skip-number,
+    > .reference {
+        @include skip-number;
+    }
+}
+
 .markdown-body {
     font-size: 12pt;
-    font-family: FandolSongMixed;
+    font-family: CMUSerif, SourceHanSerif;
     line-height: 1.8;
     text-align: justify;
     max-width: 17cm !important;
@@ -176,6 +184,11 @@
         a {
             color: var(--g-color-0);
         }
+
+        li::before {
+            content: counters(ol-number, '.') !important;
+            margin-right: 0.5em;
+        }
     }
 
     html .markdown-view & mark {
@@ -183,14 +196,13 @@
     }
 
     code {
-        font-family: Consolas, FandolSongMixed;
-        font-size: 0.9em;
-        padding: 1px 3px;
+        font-family: CMUTypewriter, SourceHanSerif;
+        padding: 3px 3px 0;
         background-color: var(--g-color-96) !important;
     }
 
     .katex {
-        font-family: KaTeX_Main, FandolSongMixed;
+        font-family: KaTeX_Main, SourceHanSerif;
         font-size: 1em;
 
         &,
@@ -234,13 +246,12 @@
     }
 
     pre {
-        font-size: 0.9em;
         padding: 0.5em;
 
         .p-mcc-language {
             top: -5px !important;
             right: -5px !important;
-            font-family: Consolas, FandolSongMixed;
+            font-family: CMUTypewriter, SourceHanSerif;
         }
 
         .p-mcc-copy-btn {
@@ -253,7 +264,7 @@
         }
 
         > code {
-            font-family: Consolas, FandolSongMixed !important;
+            font-family: CMUTypewriter, SourceHanSerif !important;
             padding: initial;
         }
     }
@@ -291,7 +302,7 @@
         }
 
         tr > td:first-child::before {
-            font-family: Consolas, FandolSongMixed !important;
+            font-family: CMUTypewriter, SourceHanSerif !important;
             line-height: 1.4;
         }
     }
@@ -383,12 +394,12 @@
 [math-env] {
     padding: 0.2em 0.5em;
     position: relative;
-    font-family: FandolKaiMixed;
+    font-family: CMUSerif, KaiTi;
     page-break-inside: avoid;
 
     > [math-env-title] {
         word-spacing: -0.1em;
-        font-family: FandolSongMixed;
+        font-family: CMUSerif, SourceHanSerif;
 
         &::before,
         &::after {
@@ -409,13 +420,13 @@
     }
 
     > ol {
-        counter-reset: li;
+        counter-reset: ol-number;
 
         > li {
-            counter-increment: li;
+            counter-increment: ol-number;
 
             &::marker {
-                content: '(' counter(li) '). ';
+                content: '(' counter(ol-number) '). ';
             }
         }
     }
@@ -444,7 +455,7 @@ return (attr.hue === undefined ? `
 }
 `) + (attr.proof ? `
 [math-env="${name}"] {
-    font-family: FandolSongMixed;
+    font-family: CMUSerif, SourceHanSerif;
     page-break-inside: auto;
 }
 
@@ -454,7 +465,7 @@ return (attr.hue === undefined ? `
 
 [math-env-title="${name}"]::before,
 [math-env-title="${name}"]::after {
-    font-family: FandolKaiMixed;
+    font-family: CMUSerif, KaiTi;
     font-weight: normal !important;
 }
 ` : '')

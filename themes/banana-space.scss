@@ -373,13 +373,13 @@
     }
 
     > ol {
-        counter-reset: li;
+        counter-reset: ol-number;
 
         > li {
-            counter-increment: li;
+            counter-increment: ol-number;
 
             &::marker {
-                content: '(' counter(li) '). ';
+                content: '(' counter(ol-number) '). ';
             }
         }
     }
