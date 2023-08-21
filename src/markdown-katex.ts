@@ -6,7 +6,7 @@ const path = nodeRequire('path')
 const pluginName = 'extension-math.markdown-katex'
 const idOpenConfig = 'extension-math.open-katex-config'
 
-const defaultConfig = {
+const defaultOpts = {
     throwOnError: false,
     errorColor: '#f00',
     strict: false,
@@ -25,12 +25,11 @@ export default () => {
 
             // 渲染前读取配置
             ctx.registerHook('MARKDOWN_BEFORE_RENDER', ({ env }) => {
-                options = Object.assign(
-                    {},
-                    defaultConfig,
-                    fs.readJsonSync(configPath, { throw: false }) ?? {},
-                    env.attributes?.katex ?? {}
-                )
+                const configOpts = fs.readJsonSync(configPath, { throw: false }) ?? {}
+                const fmOpts = env.attributes?.katex ?? {}
+                const macros = Object.assign({}, configOpts.macros, fmOpts.macros)
+
+                options = Object.assign({}, defaultOpts, configOpts, fmOpts, { macros })
             })
 
             // 插入自定义配置
