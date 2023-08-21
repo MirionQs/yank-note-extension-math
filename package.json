@@ -1,6 +1,6 @@
 {
   "name": "yank-note-extension-math",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "数学扩展",
   "description": "Yank Note 数学扩展",
   "author": "Mirion",
@@ -14,10 +14,6 @@
     "yank-note": ">=3.54.0"
   },
   "themes": [
-    {
-      "name": "LaTeX",
-      "css": "./themes/latex.css"
-    },
     {
       "name": "Banana Space",
       "css": "./themes/banana-space.css"
