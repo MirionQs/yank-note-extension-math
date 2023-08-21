@@ -24,8 +24,13 @@ export default () => {
             let options: any
 
             // 渲染前读取配置
-            ctx.registerHook('MARKDOWN_BEFORE_RENDER', () => {
-                options = Object.assign({}, defaultConfig, fs.readJsonSync(configPath, { throw: false }) ?? {})
+            ctx.registerHook('MARKDOWN_BEFORE_RENDER', ({ env }) => {
+                options = Object.assign(
+                    {},
+                    defaultConfig,
+                    fs.readJsonSync(configPath, { throw: false }) ?? {},
+                    env.attributes?.katex ?? {}
+                )
             })
 
             // 插入自定义配置
