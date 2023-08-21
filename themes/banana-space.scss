@@ -23,27 +23,9 @@
 }
 
 @font-face {
-    font-family: NotoSans;
-    src: url(./fonts/NotoSans-Regular.woff2);
-}
-
-@font-face {
-    font-family: NotoSans;
-    font-style: italic;
-    src: url(./fonts/NotoSans-Italic.woff2);
-}
-
-@font-face {
-    font-family: NotoSans;
-    font-weight: bold;
-    src: url(./fonts/NotoSans-Bold.woff2);
-}
-
-@font-face {
-    font-family: NotoSans;
-    font-weight: bold;
-    font-style: italic;
-    src: url(./fonts/NotoSans-BoldItalic.woff2);
+    font-family: SourceHanSans;
+    font-weight: 100 900;
+    src: url(./fonts/SourceHanSansSC-VF.woff2);
 }
 
 @mixin skip-number {
@@ -58,9 +40,17 @@
     }
 }
 
+.outline-toc {
+
+    > .skip-number,
+    > .reference {
+        @include skip-number;
+    }
+}
+
 .markdown-body {
     font-size: 18px;
-    font-family: PunctCJK, NotoSans;
+    font-family: PunctCJK, SourceHanSans;
     line-height: 1.8;
     letter-spacing: 0.015em;
     text-align: justify;
@@ -74,7 +64,7 @@
     h6 {
         margin: 1em 0;
 
-        &:not(.show-number) {
+        &.skip-number {
             @include skip-number;
         }
     }
@@ -82,6 +72,11 @@
     h1 {
         font-size: 2.2em;
         font-weight: normal;
+
+        + p {
+            font-size: 1.2em;
+            margin-top: -1em;
+        }
     }
 
     h2 {
@@ -104,7 +99,11 @@
 
     h3 {
         font-size: 1.4em;
-        @include skip-number;
+
+        &::before {
+            content: counter(h2counter) '.' counter(h3counter) !important;
+            margin-right: 1em;
+        }
     }
 
     h4 {
@@ -124,11 +123,29 @@
 
     .table-of-contents {
         page-break-before: always;
+        background-color: var(--g-color-96);
+        padding: 1em 1.2em;
+        width: fit-content;
 
         &::before {
             content: '目录' !important;
             display: block;
-            font-size: 1.8em;
+            font-size: 1.6em;
+        }
+
+
+        > ul,
+        > ol {
+            margin-bottom: 0;
+
+            li {
+                margin: 0;
+
+                &::before {
+                    content: counters(ol-number, '.') !important;
+                    margin-right: 0.5em;
+                }
+            }
         }
     }
 
@@ -145,7 +162,7 @@
     }
 
     .katex {
-        font-family: KaTeX_Main, NotoSans;
+        font-family: KaTeX_Main, SourceHanSans;
         font-size: 1.1em;
         line-height: 1.2;
         letter-spacing: normal;
@@ -174,10 +191,7 @@
         }
 
         &::after {
-            margin-left: 0.2em;
-            vertical-align: 0.1em !important;
-            // #1088c8
-            filter: brightness(0) invert(39%) sepia(59%) saturate(1671%) hue-rotate(174deg) brightness(90%) contrast(87%);
+            display: none !important;
         }
     }
 
@@ -216,10 +230,6 @@
             font-family: 'Cascadia Code' !important;
             padding: initial;
         }
-    }
-
-    li::marker {
-        font-family: initial;
     }
 
     .task-list-item-checkbox {
