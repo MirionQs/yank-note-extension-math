@@ -1,13 +1,13 @@
 import background from './background'
-import replacePunctuation from './replace-punctuation'
-import hotkey from './hotkey'
 import markdownKatex from './markdown-katex'
 import markdownMathEnv from './markdown-math-env'
+import replacePunctuation from './replace-punctuation'
+import refresh from './refresh'
 
 [
-    replacePunctuation,
-    hotkey,
     background,
+    replacePunctuation,
     markdownKatex,
     markdownMathEnv,
+    refresh
 ].forEach(plugin => plugin())

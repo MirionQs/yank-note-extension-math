@@ -21,6 +21,7 @@ export default () => {
         register: async ctx => {
             const constant = await ctx.api.rpc('return require("./constant")')
             const configPath = path.join(constant.USER_DIR, 'katex-config.json')
+
             let options: any
 
             // 渲染前读取配置
@@ -53,8 +54,8 @@ export default () => {
                 })
             })
 
-            fs.ensureFileSync(configPath) // 确保配置文件存在
-            ctx.view.refresh() // 首次渲染不应用扩展，需要刷新
+            // 确保配置文件存在
+            fs.ensureFileSync(configPath)
         }
     })
 }
