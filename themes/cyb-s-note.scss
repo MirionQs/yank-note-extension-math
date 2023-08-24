@@ -52,6 +52,18 @@
     src: url(./fonts/SourceHanSerifSC-VF.otf); // woff2 格式会读取出错
 }
 
+@font-face {
+    font-family: KaiTi;
+    font-weight: normal;
+    src: local(KaiTi)
+}
+
+@font-face {
+    font-family: KaiTi;
+    font-weight: bold;
+    src: url(./fonts/SourceHanSerifSC-VF.otf);
+}
+
 @mixin skip-number {
     &::before {
         display: none !important;
@@ -218,7 +230,7 @@
     a {
         text-decoration: none;
 
-        [app-theme="light"] & {
+        [app-theme=light] & {
             color: blue !important;
         }
 
