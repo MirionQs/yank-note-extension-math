@@ -56,6 +56,8 @@ export default () => {
 
             // 确保配置文件存在
             fs.ensureFileSync(configPath)
+            // 刷新视图
+            ctx.view.refresh()
         }
     })
 }
