@@ -403,6 +403,16 @@
             }
         }
     }
+
+    [app-theme=dark] .auto-invert {
+        filter: invert(1) !important;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .auto-invert {
+            filter: invert(1) !important;
+        }
+    }
 }
 
 [math-env] {
