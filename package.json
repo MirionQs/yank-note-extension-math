@@ -5,13 +5,12 @@
   "description": "Yank Note 数学扩展",
   "author": "Mirion",
   "license": "MIT",
-  "keywords": [],
   "homepage": "https://github.com/MirionQs/yank-note-extension-math",
   "main": "./dist/index.js",
   "icon": "./icon.png",
   "engines": {
-    "node": ">=14.6.0",
-    "yank-note": ">=3.54.0"
+    "node": ">=18.20.2",
+    "yank-note": ">=3.73.1"
   },
   "themes": [
     {
@@ -44,17 +43,17 @@
     "@vitejs/plugin-vue": "^3.2.0",
     "@vue/eslint-config-standard": "^6.1.0",
     "@vue/eslint-config-typescript": "^10.0.0",
-    "@yank-note/runtime-api": "^3.54.0",
+    "@yank-note/runtime-api": "^3.73.1",
     "conventional-changelog-cli": "^2.2.2",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^8.7.1",
+    "terser": "^5.31.3",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
     "vue": "^3.2.33",
-    "vue-tsc": "^0.34.11",
-    "terser": "^5.19.1"
+    "vue-tsc": "^0.34.11"
   }
 }
