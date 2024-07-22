@@ -6,13 +6,13 @@ by Mirion
 
 ### 自定义背景图
 
-外观设置中添加 `背景图路径` 和 `背景图不透明度` 选项. 
+外观设置中添加 `背景图路径` 和 `背景图不透明度` 选项.
 
-命令面板中添加 `math: 切换背景图 (Shift+Alt+B)` 选项. 
+命令面板中添加 `math: 切换背景图 (Shift+Alt+B)` 选项.
 
 ### 中文标点替换
 
-命令面板中添加 `math: 替换标点符号 (Shift+Alt+F)` 选项. 
+命令面板中添加 `math: 替换标点符号 (Shift+Alt+F)` 选项.
 
 ## 语法增强
 
@@ -20,27 +20,27 @@ by Mirion
 
 添加以下仿 LaTeX 命令
 
-`\begin{env}[info]`, 开始环境. 
+`\begin{env}[info]`, 开始环境.
 
-- `env`, 环境名, 要求存在. 末尾加 `*` 跳过编号. 
-- `info`, 附加信息. 
+- `env`, 环境名, 要求存在. 末尾加 `*` 跳过编号.
+- `info`, 附加信息.
 
-`\end{env}`, 结束环境. 
+`\end{env}`, 结束环境.
 
-- `env`, 环境名, 要求存在. 末尾加 `*` 跳过编号. 
+- `env`, 环境名, 要求存在. 末尾加 `*` 跳过编号.
 
-`\newtheorem{env}[shared]{text}[level]`, 新增定理环境. 
+`\newtheorem{env}[shared]{text}[level]`, 新增定理环境.
 
-- `env`, 环境名, 要求符合正则表达式 `[a-zA-Z@]+`. 
-- `shared`, 要共享计数器的环境名, 要求存在或为空. 默认为空, 代表不共享; 若非空, 则优先于 `level`. 
-- `text`, 显示文本. 
-- `level`, 编号层级, 要求为 0-6 的整数. 默认为 0, 代表不编号. 
-- 命令末尾加 `*` 不编号, 优先于 `shared` 和 `level`. 
+- `env`, 环境名, 要求符合正则表达式 `[a-zA-Z@]+`.
+- `shared`, 要共享计数器的环境名, 要求存在或为空. 默认为空, 代表不共享; 若非空, 则优先于 `level`.
+- `text`, 显示文本.
+- `level`, 编号层级, 要求为 0-6 的整数. 默认为 0, 代表不编号.
+- 命令末尾加 `*` 不编号, 优先于 `shared` 和 `level`.
 
-`\theoremprop{env}{prop}`, 设置定理属性. 
+`\theoremprop{env}{prop}`, 设置定理属性.
 
-- `env`, 环境名, 要求存在. 
-- `prop`, 要设置的属性, 要求为合法的 JSON 表达式. 
+- `env`, 环境名, 要求存在.
+- `prop`, 要设置的属性, 要求为合法的 JSON 表达式.
 
 如果参数要跨行, 则需按以下格式指定限定符
 
@@ -50,7 +50,7 @@ by Mirion
 <限定符>}{...}
 ```
 
-添加前言配置项 `theoremDebug: Boolean`, 设置为 `true` 启用相关报错信息. 
+添加前言配置项 `theoremDebug: Boolean`, 设置为 `true` 启用相关报错信息.
 
 ### ~~TikZJax~~
 
@@ -66,17 +66,17 @@ by Mirion
 
 ### KaTeX 增强
 
-命令面板中添加 `math: 打开 KaTeX 配置文件` 和 ~~`math: 嵌入/移除嵌入的 KaTeX 配置`~~ 选项. 
+命令面板中添加 `math: 打开 KaTeX 配置文件` 和 ~~`math: 嵌入/移除嵌入的 KaTeX 配置`~~ 选项.
 
-添加 KaTeX 配置项 `keepDisplayMode: Boolean`, 设置为 `true` 统一以行间模式渲染. 其它配置项参见[官方文档](https://katex.org/docs/options.html). 
+添加 KaTeX 配置项 `keepDisplayMode: Boolean`, 设置为 `true` 统一以行间模式渲染. 其它配置项参见[官方文档](https://katex.org/docs/options.html).
 
-~~支持来自 Markdown 语法的加粗, 倾斜~~. 
+~~支持来自 Markdown 语法的加粗, 倾斜~~.
 
 ## 主题样式
 
 ### Banana Space [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557ea5.png)
 
-仿[香蕉空间](bananaspace.org)主题, 支持暗色模式, 定理环境
+仿[香蕉空间](https://www.bananaspace.org/)主题, 支持暗色模式, 定理环境
 
 添加下列样式
 
