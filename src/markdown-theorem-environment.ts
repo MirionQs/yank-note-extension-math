@@ -56,7 +56,7 @@ export default class Environment {
             left += 4
             right = css.indexOf('*/', left)
 
-            const match = css.slice(left, right).match(/^\s*(\d+)/)
+            const match = css.slice(left, right).match(/^\s*(\w+)/)
             if (match === null) {
                 continue
             }
