@@ -18,7 +18,7 @@ by Mirion
 
 ### 定理环境
 
-添加以下仿 LaTeX 命令
+添加下列仿 LaTeX 命令
 
 `\begin{env}[info]`, 开始环境.
 
@@ -27,30 +27,32 @@ by Mirion
 
 `\end{env}`, 结束环境.
 
-- `env`, 环境名, 要求存在. 末尾加 `*` 跳过编号.
+- `env`, 环境名, 要求与最近的 `\begin` 一致, 包括 `*`.
 
 `\newtheorem{env}[shared]{text}[level]`, 新增定理环境.
 
-- `env`, 环境名, 要求符合正则表达式 `[a-zA-Z@]+`.
-- `shared`, 要共享计数器的环境名, 要求存在或为空. 默认为空, 代表不共享; 若非空, 则优先于 `level`.
+- `env`, 环境名, 要求满足正则表达式 `[a-zA-Z@]+`.
+- `shared`, 要共享计数器的环境名, 要求为空或存在且计数器非共享. 默认为空, 代表不共享. 若非空, 则优先于 `level`.
 - `text`, 显示文本.
 - `level`, 编号层级, 要求为 0-6 的整数. 默认为 0, 代表不编号.
-- 命令末尾加 `*` 不编号, 优先于 `shared` 和 `level`.
 
-`\theoremprop{env}{prop}`, 设置定理属性.
+`\setcounter{env}{number}`, 设置计数器.
+
+- `env`, 环境名, 要求存在且计数器非共享.
+- `number`, 要设置的数值, 要求是整数.
+
+`\settheorem{env}{data}`, 设置环境属性.
 
 - `env`, 环境名, 要求存在.
-- `prop`, 要设置的属性, 要求为合法的 JSON 表达式.
+- `data`, 要设置的属性, 要求是合法的 JSON 表达式, 省略外层大括号, 不含 `text` 和 `counter` 项.
 
-如果参数要跨行, 则需按以下格式指定限定符
+若参数跨行, 则需按以下格式指定限定符, 限定符不能为空.
 
 ```latex
 \command{...}{<限定符>
 ...
 <限定符>}{...}
 ```
-
-添加前言配置项 `theoremDebug: Boolean`, 设置为 `true` 启用相关报错信息.
 
 ### ~~TikZJax~~
 
@@ -68,7 +70,7 @@ by Mirion
 
 命令面板中添加 `math: 打开 KaTeX 配置文件` 和 ~~`math: 嵌入/移除嵌入的 KaTeX 配置`~~ 选项.
 
-添加 KaTeX 配置项 `keepDisplayMode: Boolean`, 设置为 `true` 统一以行间模式渲染. 其它配置项参见[官方文档](https://katex.org/docs/options.html).
+添加 KaTeX 配置项 `keepDisplayMode: boolean`, 设置为 `true` 统一以行间模式渲染. 其它配置项参见[官方文档](https://katex.org/docs/options.html).
 
 ~~支持来自 Markdown 语法的加粗, 倾斜~~.
 
@@ -84,7 +86,7 @@ by Mirion
 | :--: | -- |
 | `.skip-number` | 跳过编号 |
 | `.auto-invert` | 暗色模式下反色 |
-| `h1 + p` | 独特样式 |
+| `h1 + p` | 署名等附加信息 |
 
 ### Cyb's Note [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557e4a.png)
 
@@ -96,5 +98,5 @@ by Mirion
 | :--: | -- |
 | `.skip-number` | 跳过编号 |
 | `.auto-invert` | 暗色模式下反色 |
-| `h1 + p` | 独特样式 |
-| `h2.reference` | 独特样式 |
+| `h1 + p` | 署名等附加信息 |
+| `h2.reference + ol` | 参考文献列表 |

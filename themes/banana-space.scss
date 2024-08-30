@@ -545,3 +545,114 @@ html[app-theme="dark"] [math-env-title="${name}"] {
 	}
 }
 */
+
+/*@@ template
+@if $hue
+    [math-env="$"] {
+        border-left: 3px solid hsl($hue, 100%, 75%);
+        background-color: hsla($hue, 100%, 88%, 20%);
+    }
+    [math-env-title="$"] {
+        color: hsl($hue, 82%, 44%);
+    }
+    html[app-theme="dark"] [math-env-title="$"] {
+        color: hsl($hue, 82%, 56%);
+    }
+    @media (prefers-color-scheme: dark) {
+        html[app-theme=system] [math-env-title="$"] {
+            color: hsl($hue, 82%, 56%);
+        }
+    }
+@else
+    [math-env="$"] {
+        padding: 0;
+    }
+@end
+@if $proof
+    [math-env="$"] {
+        page-break-inside: auto;
+    }
+    [math-env="$"]::after {
+        content: "";
+    }
+@end
+*/
+
+/*@@ data
+{
+    "axiom": {
+        "text": "公理",
+        "counter": 1,
+        "hue": 0
+    },
+    "definition": {
+        "text": "定义",
+        "counter": 2,
+        "hue": 30
+    },
+    "theorem": {
+        "text": "定理",
+        "counter": 3,
+        "hue": 200
+    },
+    "proposition": {
+        "text": "命题",
+        "counter": "theorem",
+        "hue": 200
+    },
+    "lemma": {
+        "text": "引理",
+        "counter": "theorem",
+        "hue": 200
+    },
+    "corollary": {
+        "text": "推论",
+        "counter": "theorem",
+        "hue": 200
+    },
+    "property": {
+        "text": "性质",
+        "counter": "theorem",
+        "hue": 200
+    },
+    "problem": {
+        "text": "问题",
+        "counter": 3,
+        "hue": 120
+    },
+    "example": {
+        "text": "例",
+        "counter": 3,
+        "hue": 120
+    },
+    "exercise": {
+        "text": "练习",
+        "counter": 3,
+        "hue": 120
+    },
+    "note": {
+        "text": "笔记",
+        "hue": 120
+    },
+    "conclusion": {
+        "text": "结论",
+        "hue": 120
+    },
+    "assumption": {
+        "text": "假设",
+        "hue": 120
+    },
+    "remark": {
+        "text": "注",
+        "hue": 120
+    },
+    "solution": {
+        "text": "解",
+        "proof": true
+    },
+    "proof": {
+        "text": "证明",
+        "proof": true
+    }
+}
+*/

@@ -4,8 +4,8 @@ const fs = nodeRequire('fs-extra')
 const path = nodeRequire('path')
 
 const pluginName = 'extension-math.markdown-katex'
-const cacheConfig = 'extension-math.config'
-const actionOpenConfig = 'extension-math.open-config'
+const actionOpenConfig = 'extension-math.open-katex-config'
+const cacheOptions = 'extension-math.katex-options'
 
 const defaultOpts = {
     throwOnError: false,
@@ -22,15 +22,18 @@ const pluginRegister = async (ctx: Ctx) => {
     let options
 
     // 渲染前读取配置
+    // 前言配置 > 文件配置 > 默认配置
     ctx.registerHook('MARKDOWN_BEFORE_RENDER', ({ env }) => {
-        const configOpts = ctx.renderer.getRenderCache(pluginName, cacheConfig, () => fs.readJsonSync(configPath, { throw: false }) ?? {})
+        const cache = ctx.renderer.getRenderCache(pluginName, cacheOptions, () => {
+            return Object.assign({}, defaultOpts, fs.readJsonSync(configPath, { throw: false }) ?? {})
+        })
         const fmOpts = env.attributes?.katex ?? {}
-        const macros = Object.assign({}, configOpts.macros, fmOpts.macros)
+        const macros = Object.assign({}, cache.macros, fmOpts.macros)
 
-        options = Object.assign({}, defaultOpts, configOpts, fmOpts, { macros })
+        options = Object.assign({}, cache, fmOpts, { macros })
     })
 
-    // 插入自定义配置
+    // 注入 LaTeX
     ctx.registerHook('PLUGIN_HOOK', ({ plugin, type, payload }) => {
         if (plugin === 'markdown-katex' && type === 'before-render') {
             Object.assign(payload.options, options)
@@ -46,12 +49,13 @@ const pluginRegister = async (ctx: Ctx) => {
             id: actionOpenConfig,
             label: 'math: 打开 KaTeX 配置文件',
             run: () => {
+                fs.ensureFileSync(configPath)
                 ctx.base.openPath(configPath)
             }
         })
     })
 
-    fs.ensureFileSync(configPath)
+    // 刷新 KaTeX 缓存
     ctx.view.refresh()
 }
 
