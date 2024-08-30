@@ -8,12 +8,12 @@ const actionOpenConfig = 'extension-math.open-katex-config'
 const cacheOptions = 'extension-math.katex-options'
 
 const defaultOpts = {
+    output: 'html',
     throwOnError: false,
     errorColor: '#f00',
     strict: false,
     trust: true,
     globalGroup: true,
-    output: 'html'
 }
 
 const pluginRegister = async (ctx: Ctx) => {
@@ -25,12 +25,9 @@ const pluginRegister = async (ctx: Ctx) => {
     // 前言配置 > 文件配置 > 默认配置
     ctx.registerHook('MARKDOWN_BEFORE_RENDER', ({ env }) => {
         const cache = ctx.renderer.getRenderCache(pluginName, cacheOptions, () => {
-            return Object.assign({}, defaultOpts, fs.readJsonSync(configPath, { throw: false }) ?? {})
+            return Object.assign({}, defaultOpts, fs.readJsonSync(configPath, { throw: false }))
         })
-        const fmOpts = env.attributes?.katex ?? {}
-        const macros = Object.assign({}, cache.macros, fmOpts.macros)
-
-        options = Object.assign({}, cache, fmOpts, { macros })
+        options = ctx.lib.lodash.merge({}, cache, env.attributes?.katex)
     })
 
     // 注入 LaTeX
