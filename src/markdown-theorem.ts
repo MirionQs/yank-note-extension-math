@@ -31,8 +31,7 @@ const pluginRegister = async (ctx: Ctx) => {
 
             return temp
         })
-
-        state = Object.assign({}, cache)
+        state = ctx.lib.lodash.cloneDeep(cache)
     })
 
     // 添加 LaTeX 语法

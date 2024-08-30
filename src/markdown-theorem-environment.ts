@@ -32,10 +32,9 @@ export default class Environment {
         data.text ??= ''
         data.counter ??= 0
         if (typeof data.counter === 'string' && this.data[data.counter] === undefined
-            || Number.isInteger(data.counter) && (data.counter as number < 0 || data.counter as number > 6)) {
+            || typeof data.counter === 'number' && (!Number.isInteger(data.counter) || data.counter < 0 || data.counter > 6)) {
             return false
         }
-
         this.data[env] = data
         return true
     }
