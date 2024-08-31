@@ -136,7 +136,7 @@ export default class Parser {
                 if (right === -1) {
                     return null
                 }
-                const arg = this.mdState.src.slice(this.pos + 1, right)
+                const arg = this.mdState.src.slice(this.pos, right)
                 this.pos = right + 1
                 return arg
             }
@@ -176,7 +176,7 @@ export default class Parser {
                 if (right === -1) {
                     return null
                 }
-                const arg = this.mdState.src.slice(this.pos + 1, right)
+                const arg = this.mdState.src.slice(this.pos, right)
                 this.pos = right + 1
                 return arg
             }
