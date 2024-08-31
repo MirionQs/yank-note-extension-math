@@ -5,6 +5,22 @@ export type EnvironmentData = {
 }
 
 const defaultStyle = `
+.theorem {
+    margin: 1em 0;
+}
+
+.theorem-info:not(.empty)::before {
+    content: "(";
+}
+
+.theorem-info:not(.empty)::after {
+    content: ") ";
+}
+
+.theorem-info + p {
+    display: inline-block;
+    margin: 0;
+}
 `
 
 const defaultData = {
@@ -74,15 +90,35 @@ const defaultData = {
     }
 }
 
-const defaultGenerator = (name: string, data: EnvironmentData) => {
-    const css = ''
-    return css
+const defaultGenerator = (env: Environment) => {
+    const counterTable = [
+        '',
+        'counter(h2counter) "." ',
+        'counter(h2counter) "." counter(h3counter) "."',
+        'counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." ',
+        'counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." counter(h5counter) "." ',
+        'counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." counter(h5counter) "." counter(h6counter) "."'
+    ]
+
+    env.style.innerHTML = defaultStyle
+    for (const name in env.data) {
+        const data = env.get(name)
+        const { id, level } = env.getCounter(name)
+
+        env.style.innerHTML += `
+.theorem[env-name="${name}"]::before {
+    content: "${data.text}" ${level === 0 ? '' : `" " ${counterTable[level - 1]} counter(${id})`} ". ";
+    font-weight: bold;
+    counter-increment: ${id};
+}
+`
+    }
 }
 
 export default class Environment {
     style: HTMLStyleElement
     data: Record<string, EnvironmentData>
-    generator: (name: string, data: EnvironmentData) => string
+    generator: (env: Environment) => void
 
     /**
      * 构造一个 Environment
@@ -92,6 +128,13 @@ export default class Environment {
         this.style = style
         this.data = defaultData
         this.generator = defaultGenerator
+    }
+
+    /**
+     * 应用当前环境
+     */
+    apply() {
+        this.generator(this)
     }
 
     /**
@@ -113,12 +156,18 @@ export default class Environment {
     }
 
     /**
-     * 应用当前环境
+     * 获取指定环境的计数器信息
+     * @param name 环境名
+     * @returns 计数器信息
      */
-    apply() {
-        this.style.innerHTML = defaultStyle
-        for (const name in this.data) {
-            this.style.innerHTML += this.generator(name, this.get(name))
+    getCounter(name: string) {
+        const counter = this.get(name).counter
+        return typeof counter === 'number' ? {
+            id: name.replaceAll('@', '-'),
+            level: counter
+        } : {
+            id: counter.replaceAll('@', '-'),
+            level: this.get(counter).counter as number
         }
     }
 }

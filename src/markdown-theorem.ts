@@ -29,12 +29,13 @@ const pluginRegister = async (ctx: Ctx) => {
                 temp.env.data = fs.readJSONSync(dataPath, { throw: false }) ?? {}
             }
             if (fs.pathExistsSync(genPath) && fs.statSync(genPath).isFile()) {
-                temp.env.generator = Function(fs.readFileSync(genPath).toString(), 'name', 'data') as any
+                temp.env.generator = Function('env', fs.readFileSync(genPath).toString()) as any
             }
 
             return temp
         })
         state = ctx.lib.lodash.cloneDeep(cache)
+        state.env.apply()
     })
 
     // 添加 LaTeX 语法
