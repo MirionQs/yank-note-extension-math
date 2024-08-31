@@ -37,8 +37,10 @@ const pluginRegister = async (ctx: Ctx) => {
             group: 'appearance',
             type: 'string',
             validator: (_schema, value, path) => {
-                return value === '' || fs.pathExistsSync(value) && fs.statSync(value).isFile()
-                    ? [] : [{ property: settingPath, path, message: '路径无效' }]
+                if (value !== '' && !(fs.pathExistsSync(value) && fs.statSync(value).isFile())) {
+                    [{ property: settingPath, path, message: '路径无效' }]
+                }
+                return []
             }
         }
         schema.properties[settingOpacity] = {
