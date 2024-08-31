@@ -9,17 +9,16 @@ const defaultStyle = `
     margin: 1em 0;
 }
 
+.theorem-info + p {
+    display: inline;
+}
+
 .theorem-info:not(.empty)::before {
     content: "(";
 }
 
 .theorem-info:not(.empty)::after {
     content: ") ";
-}
-
-.theorem-info + p {
-    display: inline-block;
-    margin: 0;
 }
 `
 
@@ -91,25 +90,35 @@ const defaultData = {
 }
 
 const defaultGenerator = (env: Environment) => {
-    const counterTable = [
-        '',
-        'counter(h2counter) "." ',
-        'counter(h2counter) "." counter(h3counter) "."',
-        'counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." ',
-        'counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." counter(h5counter) "." ',
-        'counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." counter(h5counter) "." counter(h6counter) "."'
-    ]
+    const counterContent = ['" " ']
+    const counterReset = ['']
+    for (let i = 2; i <= 6; ++i) {
+        counterContent.push(counterContent[i - 2] + `counter(h${i}counter) "." `)
+        counterReset.unshift(counterReset[0] + `h${8 - i}counter `)
+    }
 
     let css = defaultStyle
     for (const name in env.data) {
         const data = env.get(name)
-        const { id, level } = env.getCounter(name)
+        const { id, level, shared } = env.getCounter(name)
+
+        if (!shared) {
+            counterReset[level - 1] += name + ' '
+        }
 
         css += `
 .theorem[env-name="${name}"]::before {
-    content: "${data.text}" ${level === 0 ? '' : `" " ${counterTable[level - 1]} counter(${id})`} ". ";
+    content: "${data.text}" ${level === 0 ? '' : `${counterContent[level - 1]} counter(${id})`} ". ";
     font-weight: bold;
     counter-increment: ${id};
+}
+`
+    }
+
+    for (let i = 2; i <= 6; ++i) {
+        css += `
+.markdown-view .markdown-body h${i} {
+    counter-reset: ${counterReset[i - 1]} !important;
 }
 `
     }
@@ -156,10 +165,12 @@ export default class Environment {
         const counter = this.get(name).counter
         return typeof counter === 'number' ? {
             id: name.replaceAll('@', '-'),
-            level: counter
+            level: counter,
+            shared: false
         } : {
             id: counter.replaceAll('@', '-'),
-            level: this.get(counter).counter as number
+            level: this.get(counter).counter as number,
+            shared: true
         }
     }
 }
