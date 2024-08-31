@@ -41,7 +41,7 @@ const command: Record<string, CommandData> = {
                 info = ` (${info})`
             }
 
-            state.push('theorem-open', 'div', 1, state.range, [['env-name', name0], ['env-data', JSON.stringify(state.environment.env[name0])]])
+            state.push('theorem-open', 'div', 1, state.range, [['env-name', name0]])
             state.push('theorem-info-open', 'span', 1, null, skipped ? [['class', 'skip-number']] : [])
             state.push('inline', '', 0).content = info
             state.push('theorem-info-close', 'span', -1)
