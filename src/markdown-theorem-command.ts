@@ -31,8 +31,7 @@ const command: Record<string, CommandData> = {
 
             const skipped = name.slice(-1) === '*'
             const name0 = skipped ? name.slice(0, -1) : name
-
-            if (state.environment[name0] === undefined) {
+            if (state.environment.env[name0] === undefined) {
                 state.error('\\begin', `未知环境 '${name0}'`)
                 return false
             }
@@ -42,7 +41,7 @@ const command: Record<string, CommandData> = {
                 info = ` (${info})`
             }
 
-            state.push('theorem-open', 'div', 1, state.range, [['env-name', name0], ['env-data', JSON.stringify(state.environment[name0])]])
+            state.push('theorem-open', 'div', 1, state.range, [['env-name', name0], ['env-data', JSON.stringify(state.environment.env[name0])]])
             state.push('theorem-info-open', 'span', 1, null, skipped ? [['class', 'skip-number']] : [])
             state.push('inline', '', 0).content = info
             state.push('theorem-info-close', 'span', -1)
@@ -73,7 +72,7 @@ const command: Record<string, CommandData> = {
         execute: (args, state) => {
             let [name, number] = args.map(i => i.trim()) as any
 
-            if (state.environment[name] === undefined) {
+            if (state.environment.env[name] === undefined) {
                 state.error('\\setcounter', `未知环境 '${name}'`)
                 return false
             }
@@ -96,7 +95,7 @@ const command: Record<string, CommandData> = {
         execute: (args, state) => {
             let [name, data] = args.map(i => i.trim()) as any
 
-            if (state.environment[name] === undefined) {
+            if (state.environment.env[name] === undefined) {
                 state.error('\\settheorem', `未知环境 '${name}'`)
                 return false
             }
@@ -112,7 +111,7 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            Object.assign(state.environment[name], data)
+            Object.assign(state.environment.env[name], data)
 
             return true
         }
