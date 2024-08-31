@@ -10,7 +10,7 @@ const defaultStyle = `
 export default class Environment {
     style: HTMLStyleElement
     template: string
-    data: Record<string, EnvironmentData>
+    env: Record<string, EnvironmentData>
 
     /**
      * 构造一个 Environment
@@ -19,23 +19,23 @@ export default class Environment {
     constructor(style: HTMLStyleElement) {
         this.style = style
         this.template = ''
-        this.data = {}
+        this.env = {}
     }
 
     /**
      * 添加一个环境
-     * @param env 环境名
+     * @param name 环境名
      * @param data 环境属性
      * @returns 返回是否添加成功
      */
-    add(env: string, data: EnvironmentData) {
+    add(name: string, data: EnvironmentData) {
         data.text ??= ''
         data.counter ??= 0
-        if (typeof data.counter === 'string' && this.data[data.counter] === undefined
+        if (typeof data.counter === 'string' && this.env[data.counter] === undefined
             || typeof data.counter === 'number' && (!Number.isInteger(data.counter) || data.counter < 0 || data.counter > 6)) {
             return false
         }
-        this.data[env] = data
+        this.env[name] = data
         return true
     }
 
@@ -75,8 +75,8 @@ export default class Environment {
             right += 2
         }
         let flag = true
-        for (const env in data) {
-            flag &&= this.add(env, data[env])
+        for (const name in data) {
+            flag &&= this.add(name, data[name])
         }
         return flag
     }

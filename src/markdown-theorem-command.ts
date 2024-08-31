@@ -10,10 +10,10 @@ const command: Record<string, CommandData> = {
     '\\newtheorem': {
         pattern: [1, '', 1, '0'],
         execute: (args, state) => {
-            let [env, shared, text, level] = args.map(i => i.trim()) as any
+            let [name, shared, text, level] = args.map(i => i.trim()) as any
 
             const counter = shared !== '' ? shared : parseInt(level)
-            if (!state.environment.add(env, { text, counter })) {
+            if (!state.environment.add(name, { text, counter })) {
                 state.error('\\newtheorem', '添加环境失败')
                 return false
             }
@@ -27,22 +27,22 @@ const command: Record<string, CommandData> = {
     '\\begin': {
         pattern: [1, ''],
         execute: (args, state) => {
-            let [env, info] = args.map(i => i.trim()) as any
+            let [name, info] = args.map(i => i.trim()) as any
 
-            const skipped = env.slice(-1) === '*'
-            const env0 = skipped ? env.slice(0, -1) : env
+            const skipped = name.slice(-1) === '*'
+            const name0 = skipped ? name.slice(0, -1) : name
 
-            if (state.environment[env0] === undefined) {
-                state.error('\\begin', `未知环境 '${env0}'`)
+            if (state.environment[name0] === undefined) {
+                state.error('\\begin', `未知环境 '${name0}'`)
                 return false
             }
 
-            state.stack.push(env)
+            state.stack.push(name)
             if (info !== '') {
                 info = ` (${info})`
             }
 
-            state.push('theorem-open', 'div', 1, state.range, [['theorem-env', env0], ['theorem-data', JSON.stringify(state.environment[env0])]])
+            state.push('theorem-open', 'div', 1, state.range, [['env-name', name0], ['env-data', JSON.stringify(state.environment[name0])]])
             state.push('theorem-info-open', 'span', 1, null, skipped ? [['class', 'skip-number']] : [])
             state.push('inline', '', 0).content = info
             state.push('theorem-info-close', 'span', -1)
@@ -54,11 +54,11 @@ const command: Record<string, CommandData> = {
     '\\end': {
         pattern: 1,
         execute: (args, state) => {
-            let env = args[0].trim() as any
+            let name = args[0].trim() as any
 
             const last = state.stack.pop()
-            if (last !== env) {
-                state.error('\\end', `开始环境 '${last}' 与结束环境 '${env}' 不匹配`)
+            if (last !== name) {
+                state.error('\\end', `开始环境 '${last}' 与结束环境 '${name}' 不匹配`)
                 return false
             }
 
@@ -71,10 +71,10 @@ const command: Record<string, CommandData> = {
     '\\setcounter': {
         pattern: 2,
         execute: (args, state) => {
-            let [env, number] = args.map(i => i.trim()) as any
+            let [name, number] = args.map(i => i.trim()) as any
 
-            if (state.environment[env] === undefined) {
-                state.error('\\setcounter', `未知环境 '${env}'`)
+            if (state.environment[name] === undefined) {
+                state.error('\\setcounter', `未知环境 '${name}'`)
                 return false
             }
 
@@ -84,7 +84,7 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            state.push('', 'div', 1, state.range, [['style', `counter-reset: ${env.replaceAll('@', '-')} ${number - 1}`]])
+            state.push('', 'div', 1, state.range, [['style', `counter-reset: ${name.replaceAll('@', '-')} ${number - 1}`]])
             state.push('', 'div', -1)
 
             return true
@@ -94,10 +94,10 @@ const command: Record<string, CommandData> = {
     '\\settheorem': {
         pattern: 2,
         execute: (args, state) => {
-            let [env, data] = args.map(i => i.trim()) as any
+            let [name, data] = args.map(i => i.trim()) as any
 
-            if (state.environment[env] === undefined) {
-                state.error('\\settheorem', `未知环境 '${env}'`)
+            if (state.environment[name] === undefined) {
+                state.error('\\settheorem', `未知环境 '${name}'`)
                 return false
             }
 
@@ -112,7 +112,7 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            Object.assign(state.environment[env], data)
+            Object.assign(state.environment[name], data)
 
             return true
         }

@@ -20,30 +20,30 @@ by Mirion
 
 添加下列仿 LaTeX 命令
 
-`\begin{env}[info]`, 开始环境.
+`\begin{name}[info]`, 开始环境.
 
-- `env`, 环境名, 要求存在. 末尾加 `*` 跳过编号.
+- `name`, 环境名, 要求存在. 末尾加 `*` 跳过编号.
 - `info`, 附加信息.
 
-`\end{env}`, 结束环境.
+`\end{name}`, 结束环境.
 
-- `env`, 环境名, 要求与最近的 `\begin` 一致, 包括 `*`.
+- `name`, 环境名, 要求与最近的 `\begin` 一致, 包括 `*`.
 
-`\newtheorem{env}[shared]{text}[level]`, 新增定理环境.
+`\newtheorem{name}[shared]{text}[level]`, 新增定理环境.
 
-- `env`, 环境名, 要求满足正则表达式 `[a-zA-Z@]+`.
+- `name`, 环境名, 要求满足正则表达式 `[a-zA-Z@]+`.
 - `shared`, 要共享计数器的环境名, 要求为空或存在且计数器非共享. 默认为空, 代表不共享. 若非空, 则优先于 `level`.
 - `text`, 显示文本.
 - `level`, 编号层级, 要求为 0-6 的整数. 默认为 0, 代表不编号.
 
-`\setcounter{env}{number}`, 设置计数器.
+`\setcounter{name}{number}`, 设置计数器.
 
-- `env`, 环境名, 要求存在且计数器非共享.
+- `name`, 环境名, 要求存在且计数器非共享.
 - `number`, 要设置的数值, 要求是整数.
 
-`\settheorem{env}{data}`, 设置环境属性.
+`\settheorem{name}{data}`, 设置环境属性.
 
-- `env`, 环境名, 要求存在.
+- `name`, 环境名, 要求存在.
 - `data`, 要设置的属性, 要求是合法的 JSON 表达式, 省略外层大括号, 不含 `text` 和 `counter` 项.
 
 若参数跨行, 则需按以下格式指定限定符, 限定符不能为空.
