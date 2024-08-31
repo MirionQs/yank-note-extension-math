@@ -67,7 +67,7 @@ export default class Parser {
     }
 
     /**
-     * 查找字符首次出现的位置，忽略转义和行内公式
+     * 行内查找字符首次出现的位置，忽略转义和行内公式
      * @param char 指定字符
      * @returns 首次出现的位置，找不到返回 `-1`
      */
@@ -117,15 +117,16 @@ export default class Parser {
      * @returns 匹配到的命令参数，失败返回 `null`
      */
     matchArgument() {
+        const eol = this.getEOL()
         if (this.get() === '{') {
             ++this.pos
             if (this.get() === '{') {
-                const delimiter = this.mdState.src.slice(this.pos + 1, this.getEOL()).trim() + '}}'
-                const right = this.find(delimiter, this.getEOL())
+                const delimiter = this.mdState.src.slice(this.pos + 1, eol).trim() + '}}'
+                const right = this.find(delimiter, eol)
                 if (right === -1) {
                     return null
                 }
-                const arg = this.mdState.src.slice(this.getEOL(), right)
+                const arg = this.mdState.src.slice(eol, right)
                 this.pos = right + delimiter.length
                 this.line += arg.match(/\n/g)?.length ?? 0
                 return arg
@@ -141,10 +142,10 @@ export default class Parser {
             }
         }
         else {
-            const arg = this.get()
-            if (arg === undefined) {
+            if (this.pos === eol) {
                 return null
             }
+            const arg = this.get()
             ++this.pos
             return arg
         }
@@ -156,15 +157,16 @@ export default class Parser {
      * @returns 匹配到的可选命令参数，失败返回 `null`
      */
     matchOptionalArgument(defaultValue: string) {
+        const eol = this.getEOL()
         if (this.get() === '[') {
             ++this.pos
             if (this.get() === '[') {
-                const delimiter = this.mdState.src.slice(this.pos + 1, this.getEOL()).trim() + ']]'
-                const right = this.find(delimiter, this.getEOL())
+                const delimiter = this.mdState.src.slice(this.pos + 1, eol).trim() + ']]'
+                const right = this.find(delimiter, eol)
                 if (right === -1) {
                     return null
                 }
-                const arg = this.mdState.src.slice(this.getEOL(), right)
+                const arg = this.mdState.src.slice(eol, right)
                 this.pos = right + delimiter.length
                 this.line += arg.match(/\n/g)?.length ?? 0
                 return arg
