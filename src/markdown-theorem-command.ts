@@ -30,7 +30,18 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            state.env.data[name] = { text, counter: shared !== ' ' ? shared : level }
+            let counter = shared
+            if (shared === '') {
+                counter = level
+            }
+            else {
+                const sharedCounter = state.env.get(shared).counter
+                if (typeof sharedCounter === 'string') {
+                    counter = sharedCounter
+                }
+            }
+
+            state.env.data[name] = { text, counter }
             state.env.apply()
 
             return true

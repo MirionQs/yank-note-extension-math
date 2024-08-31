@@ -7,7 +7,7 @@ export type EnvironmentData = {
 const defaultStyle = `
 `
 
-const defaultEnv = {
+const defaultData = {
     axiom: {
         text: '公理',
         counter: 1
@@ -75,7 +75,8 @@ const defaultEnv = {
 }
 
 const defaultGenerator = (name: string, data: EnvironmentData) => {
-    return ''
+    const css = ''
+    return css
 }
 
 export default class Environment {
@@ -89,7 +90,7 @@ export default class Environment {
      */
     constructor(style: HTMLStyleElement) {
         this.style = style
-        this.data = defaultEnv
+        this.data = defaultData
         this.generator = defaultGenerator
     }
 
@@ -117,7 +118,7 @@ export default class Environment {
     apply() {
         this.style.innerHTML = defaultStyle
         for (const name in this.data) {
-            this.style.innerHTML += this.generator(name, this.data[name])
+            this.style.innerHTML += this.generator(name, this.get(name))
         }
     }
 }
