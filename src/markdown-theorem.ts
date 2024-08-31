@@ -49,7 +49,6 @@ const pluginRegister = async (ctx: Ctx) => {
             }
             const pattern = Command.getPattern(cmd)
             if (pattern === null) {
-                console.error(`未知命令 '${cmd}'`)
                 return false
             }
             state.parser.skipSpaces()
