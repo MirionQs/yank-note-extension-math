@@ -50,12 +50,19 @@ const command: Record<string, CommandData> = {
             }
 
             state.stack.push(name)
-            if (info !== '') {
-                info = ` (${info})`
+
+            let classDiv = 'theorem'
+            if (skipped) {
+                classDiv += ' skip-number'
             }
 
-            state.push('theorem-open', 'div', 1, state.range, [['env-name', name0]])
-            state.push('theorem-info-open', 'span', 1, null, skipped ? [['class', 'skip-number']] : [])
+            let classInfo = 'theorem-info'
+            if (info === '') {
+                classInfo += ' empty'
+            }
+
+            state.push('theorem-open', 'div', 1, state.range, [['class', classDiv], ['env-name', name0]])
+            state.push('theorem-info-open', 'span', 1, null, [['class', classInfo]])
             state.push('inline', '', 0).content = info
             state.push('theorem-info-close', 'span', -1)
 

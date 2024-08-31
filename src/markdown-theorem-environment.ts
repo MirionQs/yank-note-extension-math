@@ -74,6 +74,10 @@ const defaultEnv = {
     }
 }
 
+const defaultGenerator = (name: string, data: EnvironmentData) => {
+    return ''
+}
+
 export default class Environment {
     style: HTMLStyleElement
     data: Record<string, EnvironmentData>
@@ -86,7 +90,7 @@ export default class Environment {
     constructor(style: HTMLStyleElement) {
         this.style = style
         this.data = defaultEnv
-        this.generator = () => ''
+        this.generator = defaultGenerator
     }
 
     /**
