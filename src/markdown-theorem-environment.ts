@@ -1,5 +1,3 @@
-import { ctx } from "@yank-note/runtime-api"
-
 export type EnvironmentData = {
     text: string,
     counter: number | string,
@@ -78,8 +76,8 @@ const defaultEnv = {
 
 export default class Environment {
     style: HTMLStyleElement
-    template: string
-    env: Record<string, EnvironmentData>
+    data: Record<string, EnvironmentData>
+    generator: (name: string, data: EnvironmentData) => string
 
     /**
      * 构造一个 Environment
@@ -87,67 +85,26 @@ export default class Environment {
      */
     constructor(style: HTMLStyleElement) {
         this.style = style
-        this.template = ''
-        this.env = defaultEnv
+        this.data = defaultEnv
+        this.generator = () => ''
     }
 
     /**
-     * 添加一个环境
+     * 获取指定环境
      * @param name 环境名
-     * @param data 环境属性
-     * @returns 返回是否添加成功
+     * @returns 环境，若不存在则返回 `undefined`
      */
-    add(name: string, data: EnvironmentData) {
-        data.text ??= ''
-        data.counter ??= 0
-        if (typeof data.counter === 'string' && this.env[data.counter] === undefined
-            || typeof data.counter === 'number' && (!Number.isInteger(data.counter) || data.counter < 0 || data.counter > 6)) {
-            return false
-        }
-        this.env[name] = data
-        return true
+    get(name: string) {
+        return this.data[name]
     }
 
     /**
-     * 从CSS字符串加载环境
-     * @param css CSS字符串
-     * @returns 返回是否没遇到错误
+     * 查询是否存在指定环境
+     * @param name 环境名
+     * @returns 存在返回 `true` ，不存在则返回 `false`
      */
-    load(css: string) {
-        let left, right = 0
-        const data = {}
-        while (true) {
-            left = css.indexOf('/*@@', right)
-            if (left === -1) {
-                break
-            }
-            left += 4
-            right = css.indexOf('*/', left)
-
-            const match = css.slice(left, right).match(/^\s*(\w+)/)
-            if (match === null) {
-                continue
-            }
-            left += match[0].length
-
-            switch (match[1]) {
-                case 'template':
-                    this.template += css.slice(left, right)
-                    break
-                case 'data':
-                    try {
-                        ctx.lib.lodash.merge(data, JSON.parse(css.slice(left, right)))
-                    } catch { }
-                    break
-            }
-
-            right += 2
-        }
-        let flag = true
-        for (const name in data) {
-            flag &&= this.add(name, data[name])
-        }
-        return flag
+    contains(name: string) {
+        return this.get(name) !== undefined
     }
 
     /**
@@ -155,5 +112,8 @@ export default class Environment {
      */
     apply() {
         this.style.innerHTML = defaultStyle
+        for (const name in this.data) {
+            this.style.innerHTML += this.generator(name, this.data[name])
+        }
     }
 }

@@ -6,6 +6,7 @@ export default class Parser {
     mdState: StateBlock
     line: number
     pos: number
+    command: string
 
     /**
      * 构造一个 Parser
@@ -16,6 +17,7 @@ export default class Parser {
         this.mdState = state
         this.line = startLine
         this.pos = state.bMarks[startLine]
+        this.command = ''
     }
 
     /**
@@ -107,9 +109,9 @@ export default class Parser {
         if (match === null) {
             return null
         }
-        const cmd = match[0]
-        this.pos += cmd.length
-        return cmd
+        this.command = match[0]
+        this.pos += this.command.length
+        return this.command
     }
 
     /**

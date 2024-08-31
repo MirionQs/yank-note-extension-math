@@ -5,7 +5,7 @@ import Environment from "./markdown-theorem-environment"
 export default class State {
     mdState: StateBlock
     parser: Parser
-    environment: Environment
+    env: Environment
 
     stack: string[]
     range: [number, number]
@@ -15,7 +15,7 @@ export default class State {
      * @param style 样式元素
      */
     constructor(style: HTMLStyleElement) {
-        this.environment = new Environment(style)
+        this.env = new Environment(style)
         this.stack = []
     }
 
@@ -49,10 +49,9 @@ export default class State {
 
     /**
      * 打印错误信息
-     * @param title 标题
      * @param content 内容
      */
-    error(title: string, content: string) {
-        console.error(`${title}: ${content}, 位于行 ${this.parser.line + 1}`)
+    error(content: string) {
+        console.error(`${this.parser.command}: ${content}, 位于行 ${this.parser.line + 1}`)
     }
 }

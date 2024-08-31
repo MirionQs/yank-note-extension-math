@@ -14,8 +14,6 @@ const pluginRegister = async (ctx: Ctx) => {
     // 渲染前读取环境
     ctx.registerHook('MARKDOWN_BEFORE_RENDER', () => {
         const cache = ctx.renderer.getRenderCache(pluginName, cacheState, () => {
-            const temp = new State(style)
-
             let cssPath = ctx.setting.getSetting('custom-css')!
             if (cssPath.startsWith('extension:')) {
                 cssPath = ctx.utils.path.join(constant.USER_EXTENSION_DIR, cssPath.slice(10))
@@ -23,9 +21,16 @@ const pluginRegister = async (ctx: Ctx) => {
             else {
                 cssPath = ctx.utils.path.join(constant.USER_THEME_DIR, cssPath)
             }
+            const dataPath = cssPath.slice(0, -3) + 'json'
+            const genPath = cssPath.slice(0, -3) + 'js'
 
-            const css = fs.readFileSync(cssPath).toString().replaceAll('\r\n', '\n')
-            temp.environment.load(css)
+            const temp = new State(style)
+            if (fs.pathExistsSync(dataPath) && fs.statSync(dataPath).isFile()) {
+                temp.env.data = fs.readJSONSync(dataPath, { throw: false }) ?? {}
+            }
+            if (fs.pathExistsSync(genPath) && fs.statSync(genPath).isFile()) {
+                temp.env.generator = Function(fs.readFileSync(genPath).toString(), 'name', 'data') as any
+            }
 
             return temp
         })
@@ -44,7 +49,7 @@ const pluginRegister = async (ctx: Ctx) => {
             }
             const pattern = Command.getPattern(cmd)
             if (pattern === null) {
-                state.error('匹配命令', `未知命令 '${cmd}'`)
+                console.error(`未知命令 '${cmd}'`)
                 return false
             }
             state.parser.skipSpaces()
@@ -52,13 +57,11 @@ const pluginRegister = async (ctx: Ctx) => {
             // 匹配参数
             const args = state.parser.matchPattern(pattern)
             if (args === null) {
-                state.error(cmd, '参数匹配失败')
+                console.error(`命令 ${cmd} 参数匹配失败`)
                 return false
             }
-            state.parser.skipSpaces()
-
             if (!state.parser.isEOL()) {
-                state.error(cmd, '末尾存在多余字符')
+                console.error(`命令 ${cmd} 后存在多余字符`)
                 return false
             }
 
@@ -69,7 +72,7 @@ const pluginRegister = async (ctx: Ctx) => {
             // 执行命令
             state.range = [startLine, state.parser.line]
             if (!Command.execute(cmd, args, state)) {
-                state.error(cmd, '命令执行失败')
+                console.error(`命令 ${cmd} 执行失败`)
                 return false
             }
             mdState.line += state.parser.line - startLine + 1

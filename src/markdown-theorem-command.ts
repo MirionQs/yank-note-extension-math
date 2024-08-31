@@ -12,13 +12,26 @@ const command: Record<string, CommandData> = {
         execute: (args, state) => {
             let [name, shared, text, level] = args.map(i => i.trim()) as any
 
-            const counter = shared !== '' ? shared : parseInt(level)
-            if (!state.environment.add(name, { text, counter })) {
-                state.error('\\newtheorem', '添加环境失败')
+            if (state.env.contains(name)) {
+                state.error(`环境 ${name} 已存在`)
+                return false
+            }
+            if (!/[a-zA-Z@]+/.test(name)) {
+                state.error(`环境名 ${name} 必须满足正则表达式 [a-zA-Z@]+`)
+                return false
+            }
+            if (shared !== '' && state.env.contains(shared)) {
+                state.error(`要共享计数器的环境 ${shared} 必须存在`)
+                return false
+            }
+            level = parseInt(level)
+            if (!Number.isInteger(level) || level < 0 || level > 6) {
+                state.error(`编号层级 ${level} 必须为 0-6 的整数`)
                 return false
             }
 
-            state.environment.apply()
+            state.env.data[name] = { text, counter: shared !== ' ' ? shared : level }
+            state.env.apply()
 
             return true
         }
@@ -31,8 +44,8 @@ const command: Record<string, CommandData> = {
 
             const skipped = name.slice(-1) === '*'
             const name0 = skipped ? name.slice(0, -1) : name
-            if (state.environment.env[name0] === undefined) {
-                state.error('\\begin', `未知环境 '${name0}'`)
+            if (!state.env.contains(name0)) {
+                state.error(`未知环境 '${name0}'`)
                 return false
             }
 
@@ -57,7 +70,7 @@ const command: Record<string, CommandData> = {
 
             const last = state.stack.pop()
             if (last !== name) {
-                state.error('\\end', `开始环境 '${last}' 与结束环境 '${name}' 不匹配`)
+                state.error(`开始环境 '${last}' 与结束环境 '${name}' 不一致`)
                 return false
             }
 
@@ -72,14 +85,13 @@ const command: Record<string, CommandData> = {
         execute: (args, state) => {
             let [name, number] = args.map(i => i.trim()) as any
 
-            if (state.environment.env[name] === undefined) {
-                state.error('\\setcounter', `未知环境 '${name}'`)
+            if (!state.env.contains(name)) {
+                state.error(`未知环境 '${name}'`)
                 return false
             }
-
             number = parseInt(number)
             if (!Number.isInteger(number)) {
-                state.error('\\setcounter', `要设置的数值 '${number}' 必须是整数`)
+                state.error(`要设置的数值 '${number}' 必须是整数`)
                 return false
             }
 
@@ -95,23 +107,22 @@ const command: Record<string, CommandData> = {
         execute: (args, state) => {
             let [name, data] = args.map(i => i.trim()) as any
 
-            if (state.environment.env[name] === undefined) {
-                state.error('\\settheorem', `未知环境 '${name}'`)
+            if (!state.env.contains(name)) {
+                state.error(`未知环境 '${name}'`)
                 return false
             }
-
             try {
                 data = JSON.parse('{' + data + '}')
             } catch {
-                state.error('\\settheorem', `要设置的属性 '${data}' 必须是合法的 JSON 表达式`)
+                state.error(`要设置的属性 '${data}' 必须是合法的 JSON 表达式`)
                 return false
             }
             if (data.text !== undefined || data.counter !== undefined) {
-                state.error('\\settheorem', `要设置的属性 '${data}' 不能含有 text 和 counter 项`)
+                state.error(`要设置的属性 '${data}' 不能含有 text 或 counter 项`)
                 return false
             }
 
-            Object.assign(state.environment.env[name], data)
+            Object.assign(state.env.get(name), data)
 
             return true
         }
