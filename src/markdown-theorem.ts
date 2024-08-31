@@ -74,7 +74,7 @@ const pluginRegister = async (ctx: Ctx) => {
                 state.error(cmd, '命令执行失败')
                 return false
             }
-            mdState.line += state.parser.line - startLine
+            mdState.line += state.parser.line - startLine + 1
 
             return true
         }, { alt: ['paragraph'] })
