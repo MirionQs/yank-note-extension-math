@@ -1,3 +1,5 @@
+import { ctx } from "@yank-note/runtime-api"
+
 export type EnvironmentData = {
     text: string,
     counter: number | string,
@@ -134,7 +136,7 @@ export default class Environment {
                     break
                 case 'data':
                     try {
-                        Object.assign(data, JSON.parse(css.slice(left, right)))
+                        ctx.lib.lodash.merge(data, JSON.parse(css.slice(left, right)))
                     } catch { }
                     break
             }

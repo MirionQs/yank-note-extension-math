@@ -2,12 +2,11 @@ import { registerPlugin, Ctx } from '@yank-note/runtime-api'
 import Command from './markdown-theorem-command'
 import State from './markdown-theorem-state'
 
-const fs = nodeRequire('fs-extra')
-
 const pluginName = 'extension-math.markdown-theorem'
 const cacheState = 'extension-math.theorem-state'
 
 const pluginRegister = async (ctx: Ctx) => {
+    const fs = ctx.env.nodeRequire('fs-extra')
     const constant = await ctx.api.rpc('return require("./constant")')
     const style = await ctx.view.addStyles('')
     let state: State

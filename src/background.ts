@@ -1,7 +1,5 @@
 import { registerPlugin, Ctx } from '@yank-note/runtime-api'
 
-const fs = nodeRequire('fs-extra')
-
 const pluginName = 'extension-math.background'
 const settingPath = 'extension-math.background-path'
 const settingOpacity = 'extension-math.background-opacity'
@@ -29,6 +27,7 @@ const setBackground = (style: HTMLStyleElement, path: string, opacity: number) =
 }
 
 const pluginRegister = async (ctx: Ctx) => {
+    const fs = ctx.env.nodeRequire('fs-extra')
     const style = await ctx.theme.addStyles('')
 
     // 设置面板
