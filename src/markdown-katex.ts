@@ -1,7 +1,6 @@
 import { registerPlugin, Ctx } from "@yank-note/runtime-api"
 
 const fs = nodeRequire('fs-extra')
-const path = nodeRequire('path')
 
 const pluginName = 'extension-math.markdown-katex'
 const actionOpenConfig = 'extension-math.open-katex-config'
@@ -18,7 +17,7 @@ const defaultOpts = {
 
 const pluginRegister = async (ctx: Ctx) => {
     const constant = await ctx.api.rpc('return require("./constant")')
-    const configPath = path.join(constant.USER_DIR, 'katex-config.json')
+    const configPath = ctx.utils.path.join(constant.USER_DIR, 'katex-config.json')
     let options
 
     // 渲染前读取配置

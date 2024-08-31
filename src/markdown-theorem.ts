@@ -3,7 +3,6 @@ import Command from './markdown-theorem-command'
 import State from './markdown-theorem-state'
 
 const fs = nodeRequire('fs-extra')
-const path = nodeRequire('path')
 
 const pluginName = 'extension-math.markdown-theorem'
 const cacheState = 'extension-math.theorem-state'
@@ -20,10 +19,10 @@ const pluginRegister = async (ctx: Ctx) => {
 
             let cssPath = ctx.setting.getSetting('custom-css')!
             if (cssPath.startsWith('extension:')) {
-                cssPath = path.join(constant.USER_EXTENSION_DIR, cssPath.slice(10))
+                cssPath = ctx.utils.path.join(constant.USER_EXTENSION_DIR, cssPath.slice(10))
             }
             else {
-                cssPath = path.join(constant.USER_THEME_DIR, cssPath)
+                cssPath = ctx.utils.path.join(constant.USER_THEME_DIR, cssPath)
             }
 
             const css = fs.readFileSync(cssPath).toString().replaceAll('\r\n', '\n')
