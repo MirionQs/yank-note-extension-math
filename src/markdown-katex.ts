@@ -23,7 +23,7 @@ const pluginRegister = async (ctx: Ctx) => {
     // 前言配置 > 文件配置 > 默认配置
     ctx.registerHook('MARKDOWN_BEFORE_RENDER', ({ env }) => {
         const cache = ctx.renderer.getRenderCache(pluginName, cacheOptions, () => {
-            return Object.assign({}, defaultOpts, fs.readJsonSync(configPath, { throw: false }))
+            return ctx.lib.lodash.merge({}, defaultOpts, fs.readJsonSync(configPath, { throw: false }))
         })
         options = ctx.lib.lodash.merge({}, cache, env.attributes?.katex)
     })
@@ -31,7 +31,7 @@ const pluginRegister = async (ctx: Ctx) => {
     // 注入 LaTeX
     ctx.registerHook('PLUGIN_HOOK', ({ plugin, type, payload }) => {
         if (plugin === 'markdown-katex' && type === 'before-render') {
-            Object.assign(payload.options, options)
+            ctx.lib.lodash.merge(payload.options, options)
             if (payload.options.keepDisplayMode && !payload.options.displayMode) {
                 payload.latex = '\\displaystyle ' + payload.latex
             }
