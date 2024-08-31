@@ -30,7 +30,7 @@ const command: Record<string, CommandData> = {
             let [env, info] = args.map(i => i.trim()) as any
 
             const skipped = env.slice(-1) === '*'
-            const env0 = skipped ? env : env.slice(0, -1)
+            const env0 = skipped ? env.slice(0, -1) : env
 
             if (state.environment[env0] === undefined) {
                 state.error('\\begin', `未知环境 '${env0}'`)
