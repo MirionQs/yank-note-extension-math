@@ -100,12 +100,12 @@ const defaultGenerator = (env: Environment) => {
         'counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." counter(h5counter) "." counter(h6counter) "."'
     ]
 
-    env.style.innerHTML = defaultStyle
+    let css = defaultStyle
     for (const name in env.data) {
         const data = env.get(name)
         const { id, level } = env.getCounter(name)
 
-        env.style.innerHTML += `
+        css += `
 .theorem[env-name="${name}"]::before {
     content: "${data.text}" ${level === 0 ? '' : `" " ${counterTable[level - 1]} counter(${id})`} ". ";
     font-weight: bold;
@@ -113,28 +113,20 @@ const defaultGenerator = (env: Environment) => {
 }
 `
     }
+
+    return css
 }
 
 export default class Environment {
-    style: HTMLStyleElement
     data: Record<string, EnvironmentData>
-    generator: (env: Environment) => void
+    generator: (env: Environment) => string
 
     /**
      * 构造一个 Environment
-     * @param style 样式元素
      */
-    constructor(style: HTMLStyleElement) {
-        this.style = style
+    constructor() {
         this.data = defaultData
         this.generator = defaultGenerator
-    }
-
-    /**
-     * 应用当前环境
-     */
-    apply() {
-        this.generator(this)
     }
 
     /**

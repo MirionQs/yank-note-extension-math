@@ -3,10 +3,10 @@ import Parser from "./markdown-theorem-parser"
 import Environment from "./markdown-theorem-environment"
 
 export default class State {
+    style: HTMLStyleElement
+    env: Environment
     mdState: StateBlock
     parser: Parser
-    env: Environment
-
     stack: string[]
     range: [number, number]
 
@@ -15,7 +15,8 @@ export default class State {
      * @param style 样式元素
      */
     constructor(style: HTMLStyleElement) {
-        this.env = new Environment(style)
+        this.style = style
+        this.env = new Environment
         this.stack = []
     }
 
@@ -27,6 +28,13 @@ export default class State {
     bind(mdState: StateBlock, startLine: number) {
         this.mdState = mdState
         this.parser = new Parser(mdState, startLine)
+    }
+
+    /**
+     * 应用当前环境
+     */
+    apply() {
+        this.style.innerHTML = this.env.generator(this.env)
     }
 
     /**

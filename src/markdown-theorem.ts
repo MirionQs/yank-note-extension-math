@@ -26,7 +26,7 @@ const pluginRegister = async (ctx: Ctx) => {
 
             const temp = new State(style)
             if (fs.pathExistsSync(dataPath) && fs.statSync(dataPath).isFile()) {
-                temp.env.data = fs.readJSONSync(dataPath, { throw: false }) ?? {}
+                ctx.lib.lodash.merge(temp.env.data, fs.readJSONSync(dataPath, { throw: false }))
             }
             if (fs.pathExistsSync(genPath) && fs.statSync(genPath).isFile()) {
                 temp.env.generator = Function('env', fs.readFileSync(genPath).toString()) as any
@@ -35,7 +35,7 @@ const pluginRegister = async (ctx: Ctx) => {
             return temp
         })
         state = ctx.lib.lodash.cloneDeep(cache)
-        state.env.apply()
+        state.apply()
     })
 
     // 添加 LaTeX 语法

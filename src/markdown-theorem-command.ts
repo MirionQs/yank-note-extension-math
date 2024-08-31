@@ -42,7 +42,7 @@ const command: Record<string, CommandData> = {
             }
 
             state.env.data[name] = { text, counter }
-            state.env.apply()
+            state.apply()
 
             return true
         }
