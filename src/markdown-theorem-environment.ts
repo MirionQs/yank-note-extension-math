@@ -106,7 +106,7 @@ const defaultGenerator = (env: Environment) => {
         counterReset.unshift(counterReset[0] + `h${8 - i}counter `)
     }
 
-    let css = defaultStyle
+    let css = ''
     for (const name in env.data) {
         const data = env.get(name)
         const { id, level, shared } = env.getCounter(name)
@@ -187,5 +187,17 @@ export default class Environment {
             level: this.get(counter).counter as number,
             shared: true
         }
+    }
+
+    /**
+     * 生成 CSS
+     * @returns 生成的CSS
+     */
+    generate() {
+        const gen = this.generator
+        this.generator = defaultGenerator
+        const css = gen(this)
+        this.generator = gen
+        return defaultStyle + css
     }
 }

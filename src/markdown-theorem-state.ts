@@ -34,7 +34,7 @@ export default class State {
      * 应用当前环境
      */
     apply() {
-        this.style.innerHTML = this.env.generator(this.env)
+        this.style.innerHTML = this.env.generate()
     }
 
     /**
