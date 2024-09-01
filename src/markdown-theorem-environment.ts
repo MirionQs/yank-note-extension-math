@@ -14,10 +14,6 @@ const defaultStyle = `
     margin-right: .5em;
 }
 
-.theorem-info + p {
-    display: inline;
-}
-
 .theorem-info::before,
 .theorem-info::after {
     font-weight: bold;
@@ -27,12 +23,20 @@ const defaultStyle = `
     content: ".";
 }
 
-.theorem-info:not(.empty) > .content::before {
+.theorem-info > .content::before {
     content: " (";
 }
 
-.theorem-info:not(.empty) > .content::after {
+.theorem-info > .content::after {
     content: ")";
+}
+
+.theorem-info.empty > .content {
+    display: none;
+}
+
+.theorem-info + p {
+    display: inline;
 }
 `
 
