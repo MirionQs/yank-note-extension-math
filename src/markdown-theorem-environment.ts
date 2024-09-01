@@ -9,16 +9,25 @@ const defaultStyle = `
     margin: 1em 0;
 }
 
-.theorem-info + p {
+.theorem-info-before::after,
+.theorem-info-after::before {
+    font-weight: bold;
+}
+
+.theorem-info-after::before {
+    content: ". ";
+}
+
+.theorem-info-after + p {
     display: inline;
 }
 
 .theorem-info:not(.empty)::before {
-    content: "(";
+    content: " (";
 }
 
 .theorem-info:not(.empty)::after {
-    content: ") ";
+    content: ")";
 }
 `
 
@@ -90,7 +99,7 @@ const defaultData = {
 }
 
 const defaultGenerator = (env: Environment) => {
-    const counterContent = ['" " ']
+    const counterContent = ['']
     const counterReset = ['']
     for (let i = 2; i <= 6; ++i) {
         counterContent.push(counterContent[i - 2] + `counter(h${i}counter) "." `)
@@ -105,11 +114,17 @@ const defaultGenerator = (env: Environment) => {
         if (!shared) {
             counterReset[level - 1] += name + ' '
         }
+        css += level === 0 ? `
+.theorem[env-name="${name}"] > .theorem-info-before::after {
+    content: "${data.text}";
+}
+`: `
+.theorem.skip-number[env-name="${name}"] > .theorem-info-before::after {
+    content: "${data.text}";
+}
 
-        css += `
-.theorem[env-name="${name}"]::before {
-    content: "${data.text}" ${level === 0 ? '' : `${counterContent[level - 1]} counter(${id})`} ". ";
-    font-weight: bold;
+.theorem:not(.skip-number)[env-name="${name}"] > .theorem-info-before::after {
+    content: "${data.text} " ${counterContent[level - 1]} counter(${id});
     counter-increment: ${id};
 }
 `
