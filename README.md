@@ -76,7 +76,7 @@ by Mirion
 
 ## 主题样式
 
-### Banana Space [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557ea5.png)
+### 香蕉空间 [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557ea5.png)
 
 仿[香蕉空间](https://www.bananaspace.org/)主题, 支持暗色模式, 定理环境
 
@@ -90,9 +90,9 @@ by Mirion
 | `table.notation` | 记号表格 |
 | `ol.implies` | 蕴含列表 |
 
-### Cyb's Note [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557e4a.png)
+### 多彩笔记 [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557e4a.png)
 
-仿 Cyb 笔记主题, 支持暗色主题, 定理环境
+支持暗色主题, 定理环境
 
 添加下列样式
 

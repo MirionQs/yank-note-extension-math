@@ -278,6 +278,27 @@
         > code {
             font-family: CMUTypewriter, SourceHanSerif !important;
             padding: initial;
+
+            .hljs-ln-numbers {
+                box-shadow: none !important;
+            }
+        }
+    }
+
+    ol.implies {
+        counter-reset: ol-number ol-number1 1;
+
+        > li {
+            counter-increment: ol-number ol-number1;
+            margin-left: 3.5em;
+
+            &::marker {
+                content: '(' counter(ol-number) ') ⇒ (' counter(ol-number1) '). ';
+            }
+
+            &:last-child::marker {
+                content: '(' counter(ol-number) ') ⇒ (1). ';
+            }
         }
     }
 
@@ -317,12 +338,29 @@
             font-family: CMUTypewriter, SourceHanSerif !important;
             line-height: 1.4;
         }
+
+        &.notation td {
+            border: none !important;
+            padding: 0.15em 0.5em;
+        }
     }
 
-    img:not([width]) {
-        width: auto;
-        max-width: 100%;
-        margin: 1em 0;
+    img {
+        &:not([width]) {
+            width: auto;
+            max-width: 100%;
+            margin: 1em 0;
+        }
+
+        [app-theme=dark] &.auto-invert {
+            filter: invert(1) !important;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            [app-theme=system] &.auto-invert {
+                filter: invert(1) !important;
+            }
+        }
     }
 
     hr {
@@ -404,185 +442,45 @@
         }
     }
 
-    [app-theme=dark] & .auto-invert {
-        filter: invert(1) !important;
-    }
+    .theorem {
+        padding: 0.2em 0.5em;
+        position: relative;
+        font-family: CMUSerif, KaiTi;
+        page-break-inside: avoid;
 
-    @media (prefers-color-scheme: dark) {
-        [app-theme=system] & .auto-invert {
-            filter: invert(1) !important;
-        }
-    }
-}
-
-[math-env] {
-    padding: 0.2em 0.5em;
-    position: relative;
-    font-family: CMUSerif, KaiTi;
-    page-break-inside: avoid;
-
-    > [math-env-title] {
-        word-spacing: -0.1em;
-        font-family: CMUSerif, SourceHanSerif;
-
-        &::before,
-        &::after {
-            font-weight: bold;
+        > .theorem-info {
+            word-spacing: -0.1em;
+            font-family: CMUSerif, SourceHanSerif;
         }
 
-        &::after {
-            margin-right: 0.5em;
+        > :not(.theorem-info) {
+            margin: 0;
         }
-    }
 
-    > * {
-        margin: 0;
-    }
+        > p {
+            text-indent: 1em;
+        }
 
-    > p {
-        text-indent: 1em;
-    }
+        > ol:not(.implies) {
+            counter-reset: ol-number;
 
-    > ol {
-        counter-reset: ol-number;
+            > li {
+                counter-increment: ol-number;
 
-        > li {
-            counter-increment: ol-number;
-
-            &::marker {
-                content: '(' counter(ol-number) '). ';
+                &::marker {
+                    content: '(' counter(ol-number) '). ';
+                }
             }
         }
+
+        &::after {
+            border: 1px solid;
+            width: 0.8em;
+            height: 0.8em;
+            display: block;
+            position: absolute;
+            right: 0;
+            bottom: 0.4em;
+        }
     }
-
-    &::after {
-        border: 1px solid;
-        width: 0.8em;
-        height: 0.8em;
-        display: block;
-        position: absolute;
-        right: 0;
-        bottom: 0.4em;
-    }
 }
-
-// background hsv(h, 0.07, 1)
-
-/* MathEnv Template
-return (attr.hue === undefined ? `
-[math-env="${name}"] {
-    padding: 0;
-}
-` : `
-[math-env="${name}"] {
-	background-color: hsla(${attr.hue}, 100%, 86%, 25%);
-}
-`) + (attr.proof ? `
-[math-env="${name}"] {
-    font-family: CMUSerif, SourceHanSerif;
-    page-break-inside: auto;
-}
-
-[math-env="${name}"]::after {
-    content: "";
-}
-
-[math-env-title="${name}"]::before,
-[math-env-title="${name}"]::after {
-    font-family: CMUSerif, KaiTi;
-    font-weight: normal !important;
-}
-` : '')
-*/
-
-/* MathEnv Environment
-{
-	"axiom": {
-		"text": "公理",
-		"counter": {
-			"level": 1
-		},
-		"hue": 0
-	},
-	"definition": {
-		"text": "定义",
-		"counter": {
-			"level": 2
-		},
-		"hue": 120
-	},
-	"theorem": {
-		"text": "定理",
-		"counter": {
-			"level": 3
-		},
-		"hue": 18
-	},
-	"proposition": {
-		"text": "命题",
-		"counter": {
-			"identifier": "theorem"
-		},
-		"hue": 200
-	},
-	"lemma": {
-		"text": "引理",
-		"counter": {
-			"identifier": "theorem"
-		},
-		"hue": 45
-	},
-	"corollary": {
-		"text": "推论",
-		"counter": {
-			"identifier": "theorem"
-		},
-		"hue": 45
-	},
-	"property": {
-		"text": "性质",
-		"counter": {
-			"identifier": "theorem"
-		},
-		"hue": 250
-	},
-	"problem": {
-		"text": "问题",
-		"counter": {
-			"level": 3
-		}
-	},
-	"example": {
-		"text": "例",
-		"counter": {
-			"level": 3
-		}
-	},
-	"exercise": {
-		"text": "练习",
-		"counter": {
-			"level": 3
-		}
-	},
-	"note": {
-		"text": "笔记"
-	},
-	"conclusion": {
-		"text": "结论"
-	},
-	"assumption": {
-		"text": "假设"
-	},
-	"remark": {
-		"text": "注"
-	},
-	"solution": {
-		"text": "解",
-        "proof": true
-	},
-	"proof": {
-		"text": "证明",
-        "proof": true
-	}
-}
-*/

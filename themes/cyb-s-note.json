@@ -1,0 +1,29 @@
+{
+    "axiom": {
+        "hue": 0
+    },
+    "definition": {
+        "hue": 120
+    },
+    "theorem": {
+        "hue": 18
+    },
+    "proposition": {
+        "hue": 200
+    },
+    "lemma": {
+        "hue": 45
+    },
+    "corollary": {
+        "hue": 45
+    },
+    "property": {
+        "hue": 250
+    },
+    "solution": {
+        "proof": true
+    },
+    "proof": {
+        "proof": true
+    }
+}
