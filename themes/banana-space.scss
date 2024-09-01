@@ -230,6 +230,10 @@
         > code {
             font-family: 'Cascadia Code' !important;
             padding: initial;
+
+            .hljs-ln-numbers {
+                box-shadow: none !important;
+            }
         }
     }
 
@@ -420,39 +424,3 @@
         }
     }
 }
-
-// text         hsv(h, 0.9, 0.8)
-// border       hsv(h, 0.5, 1)
-// background   hsv(h, 0.05, 1)
-
-/*@@ template
-@if $hue
-    [math-env="$"] {
-        border-left: 3px solid hsl($hue, 100%, 75%);
-        background-color: hsla($hue, 100%, 88%, 20%);
-    }
-    [math-env-title="$"] {
-        color: hsl($hue, 82%, 44%);
-    }
-    html[app-theme="dark"] [math-env-title="$"] {
-        color: hsl($hue, 82%, 56%);
-    }
-    @media (prefers-color-scheme: dark) {
-        html[app-theme=system] [math-env-title="$"] {
-            color: hsl($hue, 82%, 56%);
-        }
-    }
-@else
-    [math-env="$"] {
-        padding: 0;
-    }
-@end
-@if $proof
-    [math-env="$"] {
-        page-break-inside: auto;
-    }
-    [math-env="$"]::after {
-        content: "";
-    }
-@end
-*/

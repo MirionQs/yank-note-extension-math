@@ -145,6 +145,7 @@ const command: Record<string, CommandData> = {
             }
 
             Object.assign(state.env.get(name), data)
+            state.apply()
 
             return true
         }
