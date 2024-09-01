@@ -87,6 +87,8 @@ by Mirion
 | `.skip-number` | 跳过编号 |
 | `.auto-invert` | 暗色模式下反色 |
 | `h1 + p` | 署名等附加信息 |
+| `table.notation` | 记号表格 |
+| `ol.implies` | 蕴含列表 |
 
 ### Cyb's Note [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557e4a.png)
 
@@ -100,3 +102,5 @@ by Mirion
 | `.auto-invert` | 暗色模式下反色 |
 | `h1 + p` | 署名等附加信息 |
 | `h2.reference + ol` | 参考文献列表 |
+| `table.notation` | 记号表格 |
+| `ol.implies` | 蕴含列表 |

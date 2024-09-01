@@ -1,0 +1,50 @@
+{
+    "axiom": {
+        "hue": 0
+    },
+    "definition": {
+        "hue": 30
+    },
+    "theorem": {
+        "hue": 200
+    },
+    "proposition": {
+        "hue": 200
+    },
+    "lemma": {
+        "hue": 200
+    },
+    "corollary": {
+        "hue": 200
+    },
+    "property": {
+        "hue": 200
+    },
+    "problem": {
+        "hue": 120
+    },
+    "example": {
+        "hue": 120
+    },
+    "exercise": {
+        "hue": 120
+    },
+    "note": {
+        "hue": 120
+    },
+    "conclusion": {
+        "hue": 120
+    },
+    "assumption": {
+        "hue": 120
+    },
+    "remark": {
+        "hue": 120
+    },
+    "solution": {
+        "proof": true
+    },
+    "proof": {
+        "proof": true
+    }
+}

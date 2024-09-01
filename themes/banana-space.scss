@@ -233,6 +233,23 @@
         }
     }
 
+    ol.implies {
+        counter-reset: ol-number ol-number1 1;
+
+        > li {
+            counter-increment: ol-number ol-number1;
+            margin-left: 3.5em;
+
+            &::marker {
+                content: '(' counter(ol-number) ') ⇒ (' counter(ol-number1) '). ';
+            }
+
+            &:last-child::marker {
+                content: '(' counter(ol-number) ') ⇒ (1). ';
+            }
+        }
+    }
+
     .task-list-item-checkbox {
         outline: 1px solid var(--g-color-60);
         width: 1em;
@@ -269,13 +286,31 @@
             font-family: 'Cascadia Code' !important;
             line-height: 1.4;
         }
+
+        &.notation td {
+            border: none !important;
+            padding: 0.15em 0.5em;
+        }
     }
 
-    img:not([width]) {
-        width: auto;
-        max-width: 100%;
-        margin: 1em 0;
+    img {
+        &:not([width]) {
+            width: auto;
+            max-width: 100%;
+            margin: 1em 0;
+        }
+
+        [app-theme=dark] &.auto-invert {
+            filter: invert(1) !important;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            [app-theme=system] &.auto-invert {
+                filter: invert(1) !important;
+            }
+        }
     }
+
 
     hr {
         border: initial;
@@ -349,202 +384,46 @@
         }
     }
 
-    [app-theme=dark] & .auto-invert {
-        filter: invert(1) !important;
-    }
+    .theorem {
+        padding: 0.8em 1.2em;
+        position: relative;
+        page-break-inside: avoid;
 
-    @media (prefers-color-scheme: dark) {
-        [app-theme=system] & .auto-invert {
-            filter: invert(1) !important;
-        }
-    }
-}
-
-[math-env] {
-    padding: 0.8em 1.2em;
-    position: relative;
-    page-break-inside: avoid;
-
-    > [math-env-title] {
-
-        &::before,
-        &::after {
-            font-weight: bold;
+        > * {
+            margin: 0;
         }
 
-        &::after {
-            margin-right: 0.5em;
+        > p {
+            text-indent: 1em;
         }
-    }
 
-    > * {
-        margin: 0;
-    }
+        > ol:not(.implies) {
+            counter-reset: ol-number;
 
-    > p {
-        text-indent: 1em;
-    }
+            > li {
+                counter-increment: ol-number;
 
-    > ol {
-        counter-reset: ol-number;
-
-        > li {
-            counter-increment: ol-number;
-
-            &::marker {
-                content: '(' counter(ol-number) '). ';
+                &::marker {
+                    content: '(' counter(ol-number) '). ';
+                }
             }
         }
-    }
 
-    &::after {
-        border: 1px solid;
-        width: 0.9em;
-        height: 0.9em;
-        display: block;
-        position: absolute;
-        right: 0;
-        bottom: 0.5em;
+        &::after {
+            border: 1px solid;
+            width: 0.9em;
+            height: 0.9em;
+            display: block;
+            position: absolute;
+            right: 0;
+            bottom: 0.5em;
+        }
     }
 }
 
 // text         hsv(h, 0.9, 0.8)
 // border       hsv(h, 0.5, 1)
 // background   hsv(h, 0.05, 1)
-
-/* MathEnv Template
-return (attr.hue === undefined ? `
-[math-env="${name}"] {
-    padding: 0;
-}
-` : `
-[math-env="${name}"] {
-    border-left: 3px solid hsl(${attr.hue}, 100%, 75%);
-    background-color: hsla(${attr.hue}, 100%, 88%, 20%);
-}
-
-[math-env-title="${name}"] {
-    color: hsl(${attr.hue}, 82%, 44%);
-}
-
-html[app-theme="dark"] [math-env-title="${name}"] {
-    color: hsl(${attr.hue}, 82%, 56%);
-}
-
-@media (prefers-color-scheme: dark) {
-    html[app-theme=system] [math-env-title="${name}"] {
-        color: hsl(${attr.hue}, 82%, 56%);
-    }
-}
-`) + (attr.proof ? `
-[math-env="${name}"] {
-    page-break-inside: auto;
-}
-
-[math-env="${name}"]::after {
-    content: "";
-}
-` : '')
-*/
-
-/* MathEnv Environment
-{
-	"axiom": {
-		"text": "公理",
-		"counter": {
-			"level": 1
-		},
-		"hue": 0
-	},
-	"definition": {
-		"text": "定义",
-		"counter": {
-			"level": 2
-		},
-		"hue": 30
-	},
-	"theorem": {
-		"text": "定理",
-		"counter": {
-			"level": 3
-		},
-		"hue": 200
-	},
-	"proposition": {
-		"text": "命题",
-		"counter": {
-			"identifier": "theorem"
-		},
-		"hue": 200
-	},
-	"lemma": {
-		"text": "引理",
-		"counter": {
-			"identifier": "theorem"
-		},
-		"hue": 200
-	},
-	"corollary": {
-		"text": "推论",
-		"counter": {
-			"identifier": "theorem"
-		},
-		"hue": 200
-	},
-	"property": {
-		"text": "性质",
-		"counter": {
-			"identifier": "theorem"
-		},
-		"hue": 200
-	},
-	"problem": {
-		"text": "问题",
-		"counter": {
-			"level": 3
-		},
-		"hue": 120
-	},
-	"example": {
-		"text": "例",
-		"counter": {
-			"level": 3
-		},
-		"hue": 120
-	},
-	"exercise": {
-		"text": "练习",
-		"counter": {
-			"level": 3
-		},
-		"hue": 120
-	},
-	"note": {
-		"text": "笔记",
-		"hue": 120
-	},
-	"conclusion": {
-		"text": "结论",
-		"hue": 120
-	},
-	"assumption": {
-		"text": "假设",
-		"hue": 120
-	},
-	"remark": {
-		"text": "注",
-		"hue": 120
-	},
-	"solution": {
-		"text": "解",
-        "proof": true
-	},
-	"proof": {
-		"text": "证明",
-        "proof": true
-	}
-}
-*/
 
 /*@@ template
 @if $hue
@@ -576,83 +455,4 @@ html[app-theme="dark"] [math-env-title="${name}"] {
         content: "";
     }
 @end
-*/
-
-/*@@ data
-{
-    "axiom": {
-        "text": "公理",
-        "counter": 1,
-        "hue": 0
-    },
-    "definition": {
-        "text": "定义",
-        "counter": 2,
-        "hue": 30
-    },
-    "theorem": {
-        "text": "定理",
-        "counter": 3,
-        "hue": 200
-    },
-    "proposition": {
-        "text": "命题",
-        "counter": "theorem",
-        "hue": 200
-    },
-    "lemma": {
-        "text": "引理",
-        "counter": "theorem",
-        "hue": 200
-    },
-    "corollary": {
-        "text": "推论",
-        "counter": "theorem",
-        "hue": 200
-    },
-    "property": {
-        "text": "性质",
-        "counter": "theorem",
-        "hue": 200
-    },
-    "problem": {
-        "text": "问题",
-        "counter": 3,
-        "hue": 120
-    },
-    "example": {
-        "text": "例",
-        "counter": 3,
-        "hue": 120
-    },
-    "exercise": {
-        "text": "练习",
-        "counter": 3,
-        "hue": 120
-    },
-    "note": {
-        "text": "笔记",
-        "hue": 120
-    },
-    "conclusion": {
-        "text": "结论",
-        "hue": 120
-    },
-    "assumption": {
-        "text": "假设",
-        "hue": 120
-    },
-    "remark": {
-        "text": "注",
-        "hue": 120
-    },
-    "solution": {
-        "text": "解",
-        "proof": true
-    },
-    "proof": {
-        "text": "证明",
-        "proof": true
-    }
-}
 */
