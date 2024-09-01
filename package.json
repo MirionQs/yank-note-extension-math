@@ -14,12 +14,12 @@
   },
   "themes": [
     {
-      "name": "Banana Space",
+      "name": "香蕉空间",
       "css": "./themes/banana-space.css"
     },
     {
-      "name": "Cyb's Note",
-      "css": "./themes/cyb-s-note.css"
+      "name": "多彩笔记",
+      "css": "./themes/colorful-note.css"
     }
   ],
   "files": [
