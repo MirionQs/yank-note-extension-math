@@ -3,7 +3,7 @@ for (const name in env.data) {
     const data = env.get(name)
 
     // background   hsv(h, 0.07, 1)
-    css += data.hue ? `
+    css += data.hue !== undefined ? `
 .theorem[env-name="${name}"] {
     background-color: hsla(${data.hue}, 100%, 86%, 25%);
 }

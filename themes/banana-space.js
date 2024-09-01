@@ -5,7 +5,7 @@ for (const name in env.data) {
     // text         hsv(h, 0.9, 0.8)
     // border       hsv(h, 0.5, 1)
     // background   hsv(h, 0.05, 1)
-    css += data.hue ? `
+    css += data.hue !== undefined ? `
 .theorem[env-name="${name}"] {
     border-left: 3px solid hsl(${data.hue}, 100%, 75%);
     background-color: hsla(${data.hue}, 100%, 88%, 20%);
