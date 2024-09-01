@@ -76,7 +76,7 @@ by Mirion
 
 ## 主题样式
 
-### 香蕉空间 [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557ea5.png)
+### 香蕉空间 [预览](https://pic.imgdb.cn/item/66d42d89d9c307b7e94bf505.png)
 
 仿[香蕉空间](https://www.bananaspace.org/)主题, 支持暗色模式, 定理环境
 
@@ -90,7 +90,7 @@ by Mirion
 | `table.notation` | 记号表格 |
 | `ol.implies` | 蕴含列表 |
 
-### 多彩笔记 [预览](https://pic2.imgdb.cn/item/64586b980d2dde5777557e4a.png)
+### 多彩笔记 [预览](https://pic.imgdb.cn/item/66d42d89d9c307b7e94bf400.png)
 
 支持暗色主题, 定理环境
 
