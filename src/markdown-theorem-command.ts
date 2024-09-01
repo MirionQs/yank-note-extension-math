@@ -115,7 +115,7 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            state.push('', 'div', 1, state.range, [['style', `counter-reset: ${name.replaceAll('@', '-')} ${number - 1}`]])
+            state.push('', 'div', 1, state.range, [['style', `counter-reset: ${state.env.getCounter(name).id} ${number - 1}`]])
             state.push('', 'div', -1)
 
             return true
