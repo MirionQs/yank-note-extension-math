@@ -121,7 +121,7 @@ const defaultGenerator = (env: Environment) => {
         const { id, level, shared } = env.getCounter(name)
 
         if (!shared) {
-            counterReset[level - 1] += name + ' '
+            counterReset[level - 1] += id + ' '
         }
         css += level === 0 ? `
 .theorem[env-name="${name}"] > .theorem-info::before {
@@ -139,9 +139,9 @@ const defaultGenerator = (env: Environment) => {
 `
     }
 
-    for (let i = 2; i <= 6; ++i) {
+    for (let i = 1; i <= 6; ++i) {
         css += `
-.markdown-view .markdown-body h${i} {
+.markdown-view .markdown-body ${i === 1 ? '' : 'h' + i} {
     counter-reset: ${counterReset[i - 1]} !important;
 }
 `
