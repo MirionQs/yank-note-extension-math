@@ -11,22 +11,16 @@ for (const name in env.data) {
     background-color: hsla(${data.hue}, 100%, 88%, 20%);
 }
 
-.theorem[env-name="${name}"] > .theorem-info-before,
-.theorem[env-name="${name}"] > .theorem-info,
-.theorem[env-name="${name}"] > .theorem-info-after {
+.theorem[env-name="${name}"] > .theorem-info {
     color: hsl(${data.hue}, 82%, 44%);
 }
 
-[app-theme=dark] .theorem[env-name="${name}"] > .theorem-info-before,
-[app-theme=dark] .theorem[env-name="${name}"] > .theorem-info,
-[app-theme=dark] .theorem[env-name="${name}"] > .theorem-info-after {
+[app-theme=dark] .theorem[env-name="${name}"] > .theorem-info {
     color: hsl(${data.hue}, 82%, 56%);
 }
 
 @media (prefers-color-scheme: dark) {
-    [app-theme=system] .theorem[env-name="${name}"] > .theorem-info-before,
-    [app-theme=system] .theorem[env-name="${name}"] > .theorem-info,
-    [app-theme=system] .theorem[env-name="${name}"] > .theorem-info-after {
+    [app-theme=system] .theorem[env-name="${name}"] > .theorem-info {
         color: hsl(${data.hue}, 82%, 56%);
     }
 }

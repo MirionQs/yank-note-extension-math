@@ -9,24 +9,29 @@ const defaultStyle = `
     margin: 1em 0;
 }
 
-.theorem-info-before::after,
-.theorem-info-after::before {
-    font-weight: bold;
+.theorem-info {
+    display: inline-block;
+    margin-right: .5em;
 }
 
-.theorem-info-after::before {
-    content: ". ";
-}
-
-.theorem-info-after + p {
+.theorem-info + p {
     display: inline;
 }
 
-.theorem-info:not(.empty)::before {
+.theorem-info::before,
+.theorem-info::after {
+    font-weight: bold;
+}
+
+.theorem-info::after {
+    content: ".";
+}
+
+.theorem-info:not(.empty) > .content::before {
     content: " (";
 }
 
-.theorem-info:not(.empty)::after {
+.theorem-info:not(.empty) > .content::after {
     content: ")";
 }
 `
@@ -115,15 +120,15 @@ const defaultGenerator = (env: Environment) => {
             counterReset[level - 1] += name + ' '
         }
         css += level === 0 ? `
-.theorem[env-name="${name}"] > .theorem-info-before::after {
+.theorem[env-name="${name}"] > .theorem-info::before {
     content: "${data.text}";
 }
 `: `
-.theorem.skip-number[env-name="${name}"] > .theorem-info-before::after {
+.theorem.skip-number[env-name="${name}"] > .theorem-info::before {
     content: "${data.text}";
 }
 
-.theorem:not(.skip-number)[env-name="${name}"] > .theorem-info-before::after {
+.theorem:not(.skip-number)[env-name="${name}"] > .theorem-info::before {
     content: "${data.text} " ${counterContent[level - 1]} counter(${id});
     counter-increment: ${id};
 }

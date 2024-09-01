@@ -393,7 +393,7 @@
         position: relative;
         page-break-inside: avoid;
 
-        > * {
+        > :not(.theorem-info) {
             margin: 0;
         }
 

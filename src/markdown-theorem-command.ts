@@ -73,13 +73,11 @@ const command: Record<string, CommandData> = {
             }
 
             state.push('theorem-open', 'div', 1, state.range, [['class', classDiv], ['env-name', name0]])
-            state.push('theorem-info-before-open', 'span', 1, null, [['class', 'theorem-info-before']])
-            state.push('theorem-info-before-close', 'span', -1)
-            state.push('theorem-info-open', 'span', 1, null, [['class', classInfo]])
+            state.push('theorem-info-open', 'div', 1, null, [['class', classInfo]])
+            state.push('theorem-info-content-open', 'span', 1, null, [['class', 'content']])
             state.push('inline', '', 0).content = info
-            state.push('theorem-info-close', 'span', -1)
-            state.push('theorem-info-after-open', 'span', 1, null, [['class', 'theorem-info-after']])
-            state.push('theorem-info-after-close', 'span', -1)
+            state.push('theorem-info-content-close', 'span', -1)
+            state.push('theorem-info-close', 'div', -1)
 
             return true
         }
