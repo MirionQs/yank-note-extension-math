@@ -123,8 +123,12 @@ const defaultGenerator = (env: Environment) => {
         const { id, level, shared } = env.getCounter(name)
 
         if (!shared) {
-            counterReset[level - 1] += id + ' '
+            if (level > 1) {
+                counterReset[level - 1] += id + ' '
+            }
+            counterReset[0] += id + ' '
         }
+
         css += level === 0 ? `
 .theorem[env-name="${name}"] > .theorem-info::before {
     content: "${data.text}";
