@@ -36,9 +36,9 @@ const pluginRegister = async (ctx: Ctx) => {
             title: '背景图路径',
             group: 'appearance',
             type: 'string',
-            validator: (_schema, value, path) => {
+            validator: (_, value, path) => {
                 if (value !== '' && !(fs.pathExistsSync(value) && fs.statSync(value).isFile())) {
-                    [{ property: settingPath, path, message: '路径无效' }]
+                    return [{ property: settingPath, path, message: '路径无效' }]
                 }
                 return []
             }
