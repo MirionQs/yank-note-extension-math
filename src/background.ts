@@ -5,6 +5,9 @@ const settingPath = 'extension-math.background-path'
 const settingOpacity = 'extension-math.background-opacity'
 const actionToggle = 'extension-math.toggle-background'
 
+const defaultPath = ''
+const defaultOpacity = .3
+
 /**
  * 设置背景
  * @param style HTML样式元素
@@ -36,6 +39,7 @@ const pluginRegister = async (ctx: Ctx) => {
             title: '背景图路径',
             group: 'appearance',
             type: 'string',
+            defaultValue: defaultPath,
             validator: (_, value, path) => {
                 if (value !== '' && !(fs.pathExistsSync(value) && fs.statSync(value).isFile())) {
                     return [{ property: settingPath, path, message: '路径无效' }]
@@ -47,6 +51,7 @@ const pluginRegister = async (ctx: Ctx) => {
             title: '背景图不透明度',
             group: 'appearance',
             type: 'number',
+            defaultValue: defaultOpacity,
             minimum: 0,
             maximum: 1
         }
@@ -64,14 +69,14 @@ const pluginRegister = async (ctx: Ctx) => {
         })
     })
 
-    // 更改背景设置后刷新背景
+    // 更改设置后刷新
     ctx.registerHook('SETTING_CHANGED', ({ changedKeys, settings }) => {
         if (changedKeys.includes(settingPath as any) || changedKeys.includes(settingOpacity as any)) {
             setBackground(style, settings[settingPath], settings[settingOpacity])
         }
     })
 
-    setBackground(style, ctx.setting.getSetting(settingPath, ''), ctx.setting.getSetting(settingOpacity, 0.3))
+    setBackground(style, ctx.setting.getSetting(settingPath, defaultPath), ctx.setting.getSetting(settingOpacity, defaultOpacity))
 }
 
 export default () => registerPlugin({ name: pluginName, register: pluginRegister })
