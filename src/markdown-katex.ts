@@ -17,7 +17,6 @@ const pluginRegister = async (ctx: Ctx) => {
     const fs = ctx.env.nodeRequire('fs-extra')
     const constant = await ctx.api.rpc('return require("./constant")')
     const configPath = ctx.utils.path.join(constant.USER_DIR, 'katex-config.json')
-    let options
 
     // 渲染前读取配置
     // 前言配置 > 文件配置 > 默认配置
@@ -25,17 +24,8 @@ const pluginRegister = async (ctx: Ctx) => {
         const cache = ctx.renderer.getRenderCache(pluginName, cacheOptions, () => {
             return ctx.lib.lodash.merge({}, defaultOpts, fs.readJsonSync(configPath, { throw: false }))
         })
-        options = ctx.lib.lodash.merge({}, cache, env.attributes?.katex)
-    })
-
-    // 注入 LaTeX
-    ctx.registerHook('PLUGIN_HOOK', ({ plugin, type, payload }) => {
-        if (plugin === 'markdown-katex' && type === 'before-render') {
-            ctx.lib.lodash.merge(payload.options, options)
-            if (payload.options.keepDisplayMode && !payload.options.displayMode) {
-                payload.latex = '\\displaystyle ' + payload.latex
-            }
-        }
+        env.attributes ??= {}
+        env.attributes.katex = ctx.lib.lodash.merge({}, cache, env.attributes.katex)
     })
 
     // 命令面板
@@ -48,6 +38,19 @@ const pluginRegister = async (ctx: Ctx) => {
                 ctx.base.openPath(configPath)
             }
         })
+    })
+
+    // 注入 LaTeX
+    ctx.markdown.registerPlugin(md => {
+        const defaultRule = md.renderer.rules.math_inline!
+
+        md.renderer.rules.math_inline = (tokens, index, options, env, self) => {
+            const token = tokens[index]
+            if (env.attributes.katex.keepDisplayMode) {
+                token.content = '\\displaystyle ' + token.content
+            }
+            return defaultRule(tokens, index, options, env, self)
+        }
     })
 
     // 刷新 KaTeX 缓存
