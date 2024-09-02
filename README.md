@@ -68,7 +68,7 @@ by Mirion
 
 添加 KaTeX 配置项 `keepDisplayMode: boolean`, 设置为 `true` 统一以行间模式渲染. 其它配置项参见[官方文档](https://katex.org/docs/options.html).
 
-~~支持来自 Markdown 语法的加粗, 倾斜~~.
+支持来自 Markdown 语法的加粗.
 
 ## 主题样式
 

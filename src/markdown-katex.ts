@@ -42,14 +42,35 @@ const pluginRegister = async (ctx: Ctx) => {
 
     // 注入 LaTeX
     ctx.markdown.registerPlugin(md => {
-        const defaultRule = md.renderer.rules.math_inline!
+        const defaultRenderer = (tokens, index, options, _, __) => md.renderer.renderToken(tokens, index, options)
+        const defaultRule: any = {};
+        [
+            'strong_open',
+            'strong_close',
+            'math_inline'
+        ].forEach(type => defaultRule[type] = md.renderer.rules[type] ?? defaultRenderer)
+
+        let bold = false
+        md.renderer.rules.strong_open = (tokens, index, options, env, self) => {
+            bold = true
+            return defaultRule.strong_open(tokens, index, options, env, self)
+        }
+        md.renderer.rules.strong_close = (tokens, index, options, env, self) => {
+            bold = false
+            return defaultRule.strong_close(tokens, index, options, env, self)
+        }
 
         md.renderer.rules.math_inline = (tokens, index, options, env, self) => {
             const token = tokens[index]
+
+            if (bold) {
+                token.content = '\\bm{' + token.content + '}'
+            }
             if (env.attributes.katex.keepDisplayMode) {
                 token.content = '\\displaystyle ' + token.content
             }
-            return defaultRule(tokens, index, options, env, self)
+
+            return defaultRule.math_inline(tokens, index, options, env, self)
         }
     })
 
