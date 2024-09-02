@@ -62,22 +62,20 @@ const command: Record<string, CommandData> = {
 
             state.stack.push(name)
 
-            let classDiv = 'theorem'
+            let classThm = 'theorem'
             if (skipped) {
-                classDiv += ' skip-number'
+                classThm += ' skip-number'
             }
-
             let classInfo = 'theorem-info'
             if (info === '') {
                 classInfo += ' empty'
             }
-
-            state.push('theorem-open', 'div', 1, { map: state.range, attrs: [['class', classDiv], ['env-name', name0]] })
-            state.push('theorem-info-open', 'div', 1, { attrs: [['class', classInfo]] })
-            state.push('theorem-info-content-open', 'span', 1, { attrs: [['class', 'content']] })
+            state.push('theorem_open', 'div', 1, { map: state.range, attrs: [['class', classThm], ['env-name', name0]] })
+            state.push('theorem_info_open', 'div', 1, { attrs: [['class', classInfo]] })
+            state.push('theorem_info_content_open', 'span', 1, { attrs: [['class', 'content']] })
             state.push('inline', '', 0, { content: info, children: [] })
-            state.push('theorem-info-content-close', 'span', -1)
-            state.push('theorem-info-close', 'div', -1)
+            state.push('theorem_info_content_close', 'span', -1)
+            state.push('theorem_info_close', 'div', -1)
 
             return true
         }
@@ -115,8 +113,8 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            state.push('', 'div', 1, { map: state.range, attrs: [['style', `counter-reset: ${state.env.getCounter(name).id} ${number - 1}`]] })
-            state.push('', 'div', -1)
+            const style = `counter-reset: ${state.env.getCounter(name).id} ${number - 1}`
+            state.push('command_setcounter', 'div', 0, { map: state.range, attrs: [['style', style]] })
 
             return true
         }
