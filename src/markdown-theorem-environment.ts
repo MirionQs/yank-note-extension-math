@@ -1,3 +1,5 @@
+import { ctx } from "@yank-note/runtime-api"
+
 export type EnvironmentData = {
     text: string,
     counter: number | string,
@@ -158,7 +160,7 @@ export default class Environment {
      * 构造一个 Environment
      */
     constructor() {
-        this.data = defaultData
+        this.data = ctx.lib.lodash.cloneDeep(defaultData)
         this.generator = defaultGenerator
     }
 
