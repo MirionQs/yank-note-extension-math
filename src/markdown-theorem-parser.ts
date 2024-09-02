@@ -9,14 +9,14 @@ export default class Parser {
     command: string
 
     /**
-     * 构造一个 Parser
-     * @param state Markdown 状态
-     * @param startLine 初始行数
+     * 绑定状态和起始行
+     * @param mdState 状态
+     * @param startLine 起始行
      */
-    constructor(state: StateBlock, startLine: number) {
-        this.mdState = state
+    bind(mdState: StateBlock, startLine: number) {
+        this.mdState = mdState
         this.line = startLine
-        this.pos = state.bMarks[startLine]
+        this.pos = mdState.bMarks[startLine]
         this.command = ''
     }
 

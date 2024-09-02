@@ -41,7 +41,7 @@ const pluginRegister = async (ctx: Ctx) => {
     // 添加 LaTeX 语法
     ctx.markdown.registerPlugin(md => {
         md.block.ruler.before('paragraph', 'theorem', (mdState, startLine, _, silent) => {
-            state.bind(mdState, startLine)
+            state.parser.bind(mdState, startLine)
 
             // 匹配命令
             const cmd = state.parser.matchCommand()

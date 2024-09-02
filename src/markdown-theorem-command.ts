@@ -72,10 +72,10 @@ const command: Record<string, CommandData> = {
                 classInfo += ' empty'
             }
 
-            state.push('theorem-open', 'div', 1, state.range, [['class', classDiv], ['env-name', name0]])
-            state.push('theorem-info-open', 'div', 1, null, [['class', classInfo]])
-            state.push('theorem-info-content-open', 'span', 1, null, [['class', 'content']])
-            state.push('inline', '', 0).content = info
+            state.push('theorem-open', 'div', 1, { map: state.range, attrs: [['class', classDiv], ['env-name', name0]] })
+            state.push('theorem-info-open', 'div', 1, { attrs: [['class', classInfo]] })
+            state.push('theorem-info-content-open', 'span', 1, { attrs: [['class', 'content']] })
+            state.push('inline', '', 0, { content: info, children: [] })
             state.push('theorem-info-content-close', 'span', -1)
             state.push('theorem-info-close', 'div', -1)
 
@@ -115,7 +115,7 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            state.push('', 'div', 1, state.range, [['style', `counter-reset: ${state.env.getCounter(name).id} ${number - 1}`]])
+            state.push('', 'div', 1, { map: state.range, attrs: [['style', `counter-reset: ${state.env.getCounter(name).id} ${number - 1}`]] })
             state.push('', 'div', -1)
 
             return true
