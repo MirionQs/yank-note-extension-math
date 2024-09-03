@@ -1,4 +1,5 @@
 import { registerPlugin, Ctx } from '@yank-note/runtime-api'
+import { h } from 'vue'
 import Command from './markdown-theorem-command'
 import State from './markdown-theorem-state'
 
@@ -85,6 +86,19 @@ const pluginRegister = async (ctx: Ctx) => {
                 state.apply()
             }
             return ''
+        }
+
+        md.renderer.rules.theorem_info = (tokens, index, _, env) => {
+            const token = tokens[index]
+
+            if (token.content === '') {
+                return h('div', { class: 'theorem-info empty' }, h('span', { class: 'content' }, ''))
+            }
+
+            md.core.ruler.disable('footnote_tail')
+            const nodes = md.renderInline(token.content, env)
+            md.core.ruler.enable('footnote_tail')
+            return h('div', { class: 'theorem-info' }, h('span', { class: 'content' }, nodes)) as any
         }
     })
 }

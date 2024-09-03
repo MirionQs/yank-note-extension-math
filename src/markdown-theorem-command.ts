@@ -64,20 +64,12 @@ const command: Record<string, CommandData> = {
 
             state.stack.push(name)
 
-            let classThm = 'theorem'
+            let classList = 'theorem'
             if (skipped) {
-                classThm += ' skip-number'
+                classList += ' skip-number'
             }
-            let classInfo = 'theorem-info'
-            if (info === '') {
-                classInfo += ' empty'
-            }
-            state.push('theorem_open', 'div', 1, { map: state.range, attrs: [['class', classThm], ['env-name', name0]] })
-            state.push('theorem_info_open', 'div', 1, { attrs: [['class', classInfo]] })
-            state.push('theorem_info_content_open', 'span', 1, { attrs: [['class', 'content']] })
-            state.push('inline', '', 0, { content: info, children: [] })
-            state.push('theorem_info_content_close', 'span', -1)
-            state.push('theorem_info_close', 'div', -1)
+            state.push('theorem_open', 'div', 1, { map: state.range, attrs: [['class', classList], ['env-name', name0]] })
+            state.push('theorem_info', 'div', 0, { content: info })
 
             return true
         }
