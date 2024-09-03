@@ -2,11 +2,11 @@
 
 by Mirion
 
-![示例 1](https://pic.imgdb.cn/item/66d68a9dd9c307b7e90f3bf9.png)
+![示例 1](https://pic.superbed.cc/item/66d6af7bfcada11d374ab587.png)
 
-![示例 2](https://pic.imgdb.cn/item/66d68a9dd9c307b7e90f3c31.png)
+![示例 2](https://pic.superbed.cc/item/66d6af7bfcada11d374ab58b.png)
 
-![示例 3](https://pic.imgdb.cn/item/66d68af0d9c307b7e90f7b88.png)
+![示例 3](https://pic.superbed.cc/item/66d6af7bfcada11d374ab590.png)
 
 ## 实用功能
 
