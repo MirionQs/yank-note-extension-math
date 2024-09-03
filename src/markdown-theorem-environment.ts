@@ -120,7 +120,7 @@ const defaultGenerator = (env: Environment) => {
     let css = ''
     for (const name in env.data) {
         const data = env.get(name)
-        const { id, level, shared } = env.getCounter(name)
+        const { id, level, shared } = env.getCounterInfo(name)
 
         if (level === 0) {
             css += `
@@ -211,7 +211,7 @@ export default class Environment {
      * @param name 环境名
      * @returns 计数器信息
      */
-    getCounter(name: string) {
+    getCounterInfo(name: string) {
         const counter = this.get(name).counter
         return typeof counter === 'number' ? {
             id: name.replaceAll('@', '-'),
