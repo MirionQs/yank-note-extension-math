@@ -100,9 +100,15 @@ const pluginRegister = async (ctx: Ctx) => {
 
     // 添加语法补全项
     ctx.editor.tapSimpleCompletionItems(items => {
+        Object.assign(
+            items.find(i => i.label === '/ \\begin KaTeX Environment')!,
+            { label: '/ \\begin', insertText: '\\begin{$1}\n$2\n\\end{$1}\n' }
+        )
+
         items.push(
-            { label: '/ \\begin', insertText: '\\begin{$1}\n$2\n\\end{$1}\n', block: true },
+            { label: '/ \\end', insertText: '\\end{$1}\n', block: true },
             { label: '/ \\newtheorem', insertText: '\\newtheorem{$1}{$2}[$3]\n\\settheorem{$1}{$4}\n', block: true },
+            { label: '/ \\settheorem', insertText: '\\settheorem{$1}{$2}\n', block: true },
             { label: '/ \\setcounter', insertText: '\\setcounter{$1}{$2}\n', block: true },
         )
     })
