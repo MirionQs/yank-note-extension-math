@@ -303,18 +303,19 @@
             max-width: 100%;
             margin: 1em 0;
         }
+    }
 
-        [app-theme=dark] &.auto-invert {
+    .auto-invert img {
+        [app-theme=dark] & {
             filter: invert(1) !important;
         }
 
         @media (prefers-color-scheme: dark) {
-            [app-theme=system] &.auto-invert {
+            [app-theme=system] & {
                 filter: invert(1) !important;
             }
         }
     }
-
 
     hr {
         border: initial;
