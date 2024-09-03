@@ -97,6 +97,15 @@ const pluginRegister = async (ctx: Ctx) => {
             return h('div', { class: 'theorem-info' }, h('span', { class: 'content' }, nodes)) as any
         }
     })
+
+    // 添加语法补全项
+    ctx.editor.tapSimpleCompletionItems(items => {
+        items.push(
+            { label: '/ \\begin', insertText: '\\begin{$1}\n$2\n\\end{$1}\n', block: true },
+            { label: '/ \\newtheorem', insertText: '\\newtheorem{$1}{$2}[$3]\n\\settheorem{$1}{$4}\n', block: true },
+            { label: '/ \\setcounter', insertText: '\\setcounter{$1}{$2}\n', block: true },
+        )
+    })
 }
 
 export default () => registerPlugin({ name: pluginName, register: pluginRegister })
