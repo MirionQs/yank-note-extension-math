@@ -187,6 +187,21 @@ export default class Environment {
     }
 
     /**
+     * 检查计数器是否有效
+     * @param counter 计数器
+     * @returns 是否有效
+     */
+    isValidCounter(counter: any) {
+        if (typeof counter === 'string') {
+            return this.contains(counter)
+        }
+        if (typeof counter === 'number') {
+            return Number.isInteger(counter) && 0 <= counter && counter <= 6
+        }
+        return false
+    }
+
+    /**
      * 获取指定环境的计数器信息
      * @param name 环境名
      * @returns 计数器信息

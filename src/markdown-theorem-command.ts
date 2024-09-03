@@ -20,25 +20,18 @@ const command: Record<string, CommandData> = {
                 state.error(`环境名 ${name} 必须满足正则表达式 [a-zA-Z@]+`)
                 return false
             }
-            if (shared !== '' && state.env.contains(shared)) {
-                state.error(`要共享计数器的环境 ${shared} 必须存在`)
-                return false
-            }
-            level = parseInt(level)
-            if (!Number.isInteger(level) || level < 0 || level > 6) {
-                state.error(`编号层级 ${level} 必须为 0-6 的整数`)
-                return false
-            }
-
-            let counter = shared
-            if (shared === '') {
-                counter = level
+            const isShared = shared !== ''
+            let counter: number | string
+            if (isShared) {
+                const sharedCounter = state.env.get(shared)?.counter
+                counter = typeof sharedCounter === 'number' ? shared : sharedCounter
             }
             else {
-                const sharedCounter = state.env.get(shared).counter
-                if (typeof sharedCounter === 'string') {
-                    counter = sharedCounter
-                }
+                counter = parseInt(level)
+            }
+            if (!state.env.isValidCounter(counter)) {
+                state.error(isShared ? `要共享计数器的环境 ${counter} 必须存在` : `编号层级 ${counter} 必须为 0-6 的整数`)
+                return false
             }
 
             state.env.data[name] = { text, counter }
@@ -122,11 +115,11 @@ const command: Record<string, CommandData> = {
             try {
                 data = JSON.parse('{' + data + '}')
             } catch {
-                state.error(`要设置的属性 '${data}' 必须是合法的 JSON 表达式`)
+                state.error(`要设置的属性 {${data}} 必须是合法的 JSON 表达式`)
                 return false
             }
-            if (data.text !== undefined || data.counter !== undefined) {
-                state.error(`要设置的属性 '${data}' 不能含有 text 或 counter 项`)
+            if (data.counter !== undefined && !state.env.isValidCounter(data.counter)) {
+                state.error(`要设置的计数器 ${data.counter} 不合法`)
                 return false
             }
 
