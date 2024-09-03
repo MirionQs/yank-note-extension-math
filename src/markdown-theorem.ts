@@ -79,6 +79,13 @@ const pluginRegister = async (ctx: Ctx) => {
 
             return true
         }, { alt: ['paragraph'] })
+
+        md.renderer.rules.apply_env = (tokens, index) => {
+            if (!tokens[index].hidden) {
+                state.apply()
+            }
+            return ''
+        }
     })
 }
 

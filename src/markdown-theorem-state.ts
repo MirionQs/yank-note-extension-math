@@ -1,3 +1,4 @@
+import Token from "@yank-note/runtime-api/types/types/third-party/markdown-it/lib/token"
 import Parser from "./markdown-theorem-parser"
 import Environment from "./markdown-theorem-environment"
 
@@ -7,6 +8,7 @@ export default class State {
     parser: Parser
     stack: string[]
     range: [number, number]
+    lastToken: Token
 
     /**
      * 构造一个 State
@@ -17,6 +19,8 @@ export default class State {
         this.env = new Environment
         this.parser = new Parser
         this.stack = []
+        this.range = [0, 0]
+        this.lastToken = {} as Token
     }
 
     /**
@@ -34,8 +38,8 @@ export default class State {
      * @param props 其它属性
      * @returns 推入的标记
      */
-    push(type: string, tag: string, nesting: -1 | 0 | 1, props: any = {}) {
-        return Object.assign(this.parser.mdState.push(type, tag, nesting), props)
+    push(type: string, tag: string, nesting: Token.Nesting, props: any = {}) {
+        return Object.assign(this.parser.mdState.push(type, tag, nesting), props) as Token
     }
 
     /**

@@ -42,7 +42,9 @@ const command: Record<string, CommandData> = {
             }
 
             state.env.data[name] = { text, counter }
-            state.apply()
+
+            state.lastToken.hidden = true
+            state.lastToken = state.push('apply_env', '', 0)
 
             return true
         }
@@ -92,7 +94,7 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            state.push('theorem-close', 'div', -1)
+            state.push('theorem_close', 'div', -1)
 
             return true
         }
@@ -113,7 +115,7 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            state.push('command_setcounter', 'div', 0, { attrs: [['style', `counter-reset: ${state.env.getCounter(name).id} ${number - 1}`]] })
+            state.push('set_counter', 'div', 0, { attrs: [['style', `counter-reset: ${state.env.getCounter(name).id} ${number - 1}`]] })
 
             return true
         }
@@ -140,7 +142,9 @@ const command: Record<string, CommandData> = {
             }
 
             Object.assign(state.env.get(name), data)
-            state.apply()
+
+            state.lastToken.hidden = true
+            state.lastToken = state.push('apply_env', '', 0)
 
             return true
         }
