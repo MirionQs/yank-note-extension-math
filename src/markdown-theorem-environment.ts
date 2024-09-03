@@ -110,11 +110,11 @@ const defaultData = {
 }
 
 const defaultGenerator = (env: Environment) => {
-    const counterContent = ['']
-    const counterReset = ['']
+    const counterContent = Array(7).fill('')
+    const counterReset = Array(7).fill('')
     for (let i = 2; i <= 6; ++i) {
-        counterContent.push(counterContent[i - 2] + `counter(h${i}counter) "." `)
-        counterReset.unshift(counterReset[0] + `h${8 - i}counter `)
+        counterContent[i] = counterContent[i - 1] + `counter(h${i}counter) "." `
+        counterReset[i - 1] = `h${i}counter `
     }
 
     let css = ''
@@ -122,33 +122,38 @@ const defaultGenerator = (env: Environment) => {
         const data = env.get(name)
         const { id, level, shared } = env.getCounter(name)
 
-        if (!shared) {
-            if (level > 1) {
-                counterReset[level - 1] += id + ' '
-            }
-            counterReset[0] += id + ' '
-        }
-
-        css += level === 0 ? `
+        if (level === 0) {
+            css += `
 .theorem[env-name="${name}"] > .theorem-info::before {
     content: "${data.text}";
 }
-`: `
+`
+            continue
+        }
+
+        if (!shared) {
+            counterReset[level] += id + ' '
+        }
+
+        css += `
 .theorem.skip-number[env-name="${name}"] > .theorem-info::before {
     content: "${data.text}";
 }
 
 .theorem:not(.skip-number)[env-name="${name}"] > .theorem-info::before {
-    content: "${data.text} " ${counterContent[level - 1]} counter(${id});
+    content: "${data.text} " ${counterContent[level]} counter(${id});
     counter-increment: ${id};
 }
 `
     }
 
+    for (let i = 5; i >= 1; --i) {
+        counterReset[i] += counterReset[i + 1]
+    }
     for (let i = 1; i <= 6; ++i) {
         css += `
 .markdown-view .markdown-body ${i === 1 ? '' : 'h' + i} {
-    counter-reset: ${counterReset[i - 1]} !important;
+    counter-reset: ${counterReset[i]} !important;
 }
 `
     }
