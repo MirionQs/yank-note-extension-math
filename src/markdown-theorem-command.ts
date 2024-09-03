@@ -43,9 +43,6 @@ const command: Record<string, CommandData> = {
 
             state.env.data[name] = { text, counter }
 
-            state.lastToken.hidden = true
-            state.lastToken = state.push('apply_env', '', 0)
-
             return true
         }
     },
@@ -134,9 +131,6 @@ const command: Record<string, CommandData> = {
             }
 
             Object.assign(state.env.get(name), data)
-
-            state.lastToken.hidden = true
-            state.lastToken = state.push('apply_env', '', 0)
 
             return true
         }

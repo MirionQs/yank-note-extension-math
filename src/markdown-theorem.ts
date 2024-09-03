@@ -36,7 +36,6 @@ const pluginRegister = async (ctx: Ctx) => {
             return temp
         })
         state = ctx.lib.lodash.cloneDeep(cache)
-        state.apply()
     })
 
     // 添加 LaTeX 语法
@@ -81,12 +80,9 @@ const pluginRegister = async (ctx: Ctx) => {
             return true
         }, { alt: ['paragraph'] })
 
-        md.renderer.rules.apply_env = (tokens, index) => {
-            if (!tokens[index].hidden) {
-                state.apply()
-            }
-            return ''
-        }
+        md.core.ruler.after('block', 'apply_env', () => {
+            state.apply()
+        })
 
         md.renderer.rules.theorem_info = (tokens, index, _, env) => {
             const token = tokens[index]

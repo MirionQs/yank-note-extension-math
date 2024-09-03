@@ -8,7 +8,6 @@ export default class State {
     parser: Parser
     stack: string[]
     range: [number, number]
-    lastToken: Token
 
     /**
      * 构造一个 State
@@ -20,7 +19,6 @@ export default class State {
         this.parser = new Parser
         this.stack = []
         this.range = [0, 0]
-        this.lastToken = {} as Token
     }
 
     /**
