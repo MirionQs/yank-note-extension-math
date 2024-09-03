@@ -113,8 +113,7 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            const style = `counter-reset: ${state.env.getCounter(name).id} ${number - 1}`
-            state.push('command_setcounter', 'div', 0, { map: state.range, attrs: [['style', style]] })
+            state.push('command_setcounter', 'div', 0, { attrs: [['style', `counter-reset: ${state.env.getCounter(name).id} ${number - 1}`]] })
 
             return true
         }
