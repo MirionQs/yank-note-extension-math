@@ -16,29 +16,26 @@ const defaultStyle = `
     margin-right: .5em;
 }
 
+.theorem-info + p {
+    display: inline;
+}
+
 .theorem-info::before,
-.theorem-info::after {
+.theorem-info::after,
+.theorem.skip-number > .theorem-info {
     font-weight: bold;
+}
+
+.theorem:not(.skip-number) > .theorem-info:not(.empty) > .content::before {
+    content: " (";
+}
+
+.theorem:not(.skip-number) > .theorem-info:not(.empty) > .content::after {
+    content: ")";
 }
 
 .theorem-info::after {
     content: ".";
-}
-
-.theorem-info > .content::before {
-    content: " (";
-}
-
-.theorem-info > .content::after {
-    content: ")";
-}
-
-.theorem-info.empty > .content {
-    display: none;
-}
-
-.theorem-info + p {
-    display: inline;
 }
 `
 
@@ -136,7 +133,7 @@ const defaultGenerator = (env: Environment) => {
         }
 
         css += `
-.theorem.skip-number[env-name="${name}"] > .theorem-info::before {
+.theorem.skip-number[env-name="${name}"] > .theorem-info.empty::before {
     content: "${data.text}";
 }
 
@@ -152,7 +149,7 @@ const defaultGenerator = (env: Environment) => {
     }
     for (let i = 1; i <= 6; ++i) {
         css += `
-.markdown-view .markdown-body ${i === 1 ? '' : 'h' + i} {
+.markdown-body ${i === 1 ? '' : 'h' + i} {
     counter-reset: ${counterReset[i]} !important;
 }
 `
