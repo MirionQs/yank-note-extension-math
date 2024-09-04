@@ -97,7 +97,7 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            state.push('set_counter', 'div', 0, { attrs: [['style', `counter-reset: ${state.env.getCounterInfo(name).id} ${number - 1}`]] })
+            state.push('set_counter', 'div', 0, { attrs: [['style', `counter-reset: ${state.env.getCounterInfo(name)!.id} ${number - 1}`]] })
 
             return true
         }
@@ -118,9 +118,11 @@ const command: Record<string, CommandData> = {
                 state.error(`要设置的属性 {${data}} 必须是合法的 JSON 表达式`)
                 return false
             }
-            if (data.counter !== undefined && !state.env.isValidCounter(data.counter)) {
-                state.error(`要设置的计数器 ${data.counter} 不合法`)
-                return false
+            if (data.counter !== undefined) {
+                if (!state.env.isValidCounter(data.counter)) {
+                    state.error(`要设置的计数器 ${data.counter} 不合法`)
+                    return false
+                }
             }
 
             Object.assign(state.env.get(name), data)
@@ -134,7 +136,7 @@ export default class Command {
     /**
      * 获取指定命令的模式
      * @param cmd 命令名
-     * @returns 若存在则返回指定命令的模式，反之返回 `null`
+     * @returns 模式，若命令不存在则返回 `null`
      */
     static getPattern(cmd: string) {
         return command[cmd]?.pattern ?? null
@@ -145,7 +147,7 @@ export default class Command {
      * @param cmd 命令名
      * @param args 命令参数
      * @param state 状态
-     * @returns 命令执行结果，若命令不存在则返回 `false`
+     * @returns 是否执行成功，若命令不存在则返回 `false`
      */
     static execute(cmd: string, args: string[], state: State) {
         return command[cmd]?.execute(args, state) ?? false
