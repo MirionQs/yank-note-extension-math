@@ -30,11 +30,18 @@ const pluginRegister = (ctx: Ctx) => {
             label: 'math: 替换标点符号',
             keybindings: [monaco.KeyMod.Shift | monaco.KeyMod.Alt | monaco.KeyCode.KeyF],
             run: editor => {
-                let content = editor.getValue()
+                let content = editor.getValue().replaceAll('\r\n', '\n')
+
                 replaceList.forEach(([source, target]) => content = content.replaceAll(source, target))
+                content = content.split('\n').map(line => {
+                    const pos = line.search(/\S/)
+                    return pos === -1 ? '' : line.slice(0, pos) + line.slice(pos).trimEnd().replace(/\s+/g, ' ')
+                }).join('\n').replace(/\s*$/, '\n')
+
                 editor.executeEdits('replace-punctuation', [{
                     range: editor.getModel()!.getFullModelRange(),
-                    text: content.replace(/\s*$/g, '\n').replace(/(?<!\s)[^\S\n]+/g, ' ')
+                    text: content,
+                    forceMoveMarkers: true
                 }])
             }
         })
