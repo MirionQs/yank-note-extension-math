@@ -8,20 +8,6 @@ by Mirion
 
 ![示例 3](https://pic.superbed.cc/item/66d6af7bfcada11d374ab590.png)
 
-## 实用功能
-
-### 自定义背景图
-
-外观设置中添加 `背景图路径` 和 `背景图不透明度` 选项.
-
-命令面板中添加 `math: 切换背景图 (Shift+Alt+B)` 选项.
-
-### 中文标点替换
-
-外观设置中添加 `中文标点替换列表` 选项.
-
-命令面板中添加 `math: 替换标点符号 (Shift+Alt+F)` 选项.
-
 ## 语法增强
 
 ### 定理环境
@@ -77,6 +63,14 @@ by Mirion
 添加 KaTeX 配置项 `keepDisplayMode: boolean`, 设置为 `true` 统一以行间模式渲染. 其它配置项参见[官方文档](https://katex.org/docs/options.html).
 
 支持来自 Markdown 语法的加粗.
+
+## 实用功能
+
+### 中文标点替换
+
+外观设置中添加 `中文标点替换列表` 选项.
+
+命令面板中添加 `math: 替换标点符号 (Shift+Alt+F)` 选项.
 
 ## 主题样式
 
