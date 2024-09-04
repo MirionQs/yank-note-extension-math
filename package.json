@@ -5,12 +5,14 @@
   "description": "Yank Note 数学扩展",
   "author": "Mirion",
   "license": "MIT",
+  "keywords": [],
+  "repository": "github:MirionQs/yank-note-extension-math",
   "homepage": "https://github.com/MirionQs/yank-note-extension-math",
   "main": "./dist/index.js",
   "icon": "./icon.png",
   "engines": {
     "node": ">=18.20.2",
-    "yank-note": ">=3.73.1"
+    "yank-note": "^3.73.1"
   },
   "themes": [
     {
