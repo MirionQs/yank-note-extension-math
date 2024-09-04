@@ -212,19 +212,22 @@ export default class Environment {
      * @returns 计数器信息，若不存在则返回 `null`
      */
     getCounterInfo(name: string) {
-        const counter = this.get(name)?.counter
-        if (counter === undefined) {
+        let shared = false
+        while (true) {
+            const counter = this.get(name)?.counter
+            if (typeof counter === 'string') {
+                shared = true
+                name = counter
+                continue
+            }
+            if (typeof counter === 'number') {
+                return {
+                    id: name.replaceAll('@', '-'),
+                    level: counter,
+                    shared
+                }
+            }
             return null
-        }
-
-        return typeof counter === 'number' ? {
-            id: name.replaceAll('@', '-'),
-            level: counter,
-            shared: false
-        } : {
-            id: counter.replaceAll('@', '-'),
-            level: this.get(counter).counter as number,
-            shared: true
         }
     }
 

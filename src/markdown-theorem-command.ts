@@ -20,17 +20,9 @@ const command: Record<string, CommandData> = {
                 state.error(`环境名 ${name} 必须满足正则表达式 [a-zA-Z@]+`)
                 return false
             }
-            const isShared = shared !== ''
-            let counter: number | string
-            if (isShared) {
-                const sharedCounter = state.env.get(shared)?.counter
-                counter = typeof sharedCounter === 'number' ? shared : sharedCounter
-            }
-            else {
-                counter = parseInt(level)
-            }
+            const counter = shared !== '' ? shared : parseInt(level)
             if (!state.env.isValidCounter(counter)) {
-                state.error(isShared ? `要共享计数器的环境 ${counter} 必须存在` : `编号层级 ${counter} 必须为 0-6 的整数`)
+                state.error(typeof counter === 'string' ? `要共享计数器的环境 ${counter} 必须存在` : `编号层级 ${counter} 必须为 0-6 的整数`)
                 return false
             }
 
