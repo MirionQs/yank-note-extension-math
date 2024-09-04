@@ -34,7 +34,6 @@ const pluginRegister = async (ctx: Ctx) => {
             id: actionOpenConfig,
             label: 'math: 打开 KaTeX 配置文件',
             run: () => {
-                fs.ensureFileSync(configPath)
                 ctx.base.openPath(configPath)
             }
         })
@@ -73,6 +72,12 @@ const pluginRegister = async (ctx: Ctx) => {
             return defaultRule.math_inline(tokens, index, options, env, self)
         }
     })
+
+
+    // 确保配置文件存在
+    if (!fs.pathExistsSync(configPath)) {
+        fs.writeFileSync(configPath, '{}')
+    }
 
     // 刷新 KaTeX 缓存
     ctx.view.refresh()
