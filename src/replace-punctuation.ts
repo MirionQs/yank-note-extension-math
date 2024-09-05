@@ -1,25 +1,42 @@
 import { registerPlugin, Ctx } from "@yank-note/runtime-api"
 
 const pluginName = 'extension-math.replace-punctuation'
-const settingList = 'extension-math.replace-list'
+const settingRule = 'extension-math.replace-rule'
 const actionReplace = 'extension-math.replace-punctuation'
 
-const defaultList = '，->, |、->, |。->. |？->? |！->! |；->; |：->: |（-> (|）->) '
+const defaultRule = '，、。？！；：（）=>, |, |. |? |! |; |: | (|) '
 
 const parse = (str: string) => {
-    return str.split('|').map(i => i.split('->')).filter(i => i.length === 2) as [string, string][]
+    const pos = str.indexOf('=>')
+    if (pos === -1) {
+        return null
+    }
+
+    const source = str.slice(0, pos)
+    const target = str.slice(pos + 2).split('|')
+    if (source.length !== target.length) {
+        return null
+    }
+
+    return {
+        regex: new RegExp('[' + source + ']', 'g'),
+        map: Object.fromEntries(source.split('').map((x, i) => [x, target[i]]))
+    }
 }
 
 const pluginRegister = (ctx: Ctx) => {
-    let replaceList: [string, string][] = parse(ctx.setting.getSetting(settingList, defaultList))
+    let rule = parse(ctx.setting.getSetting(settingRule, defaultRule))!
 
     // 设置面板
     ctx.setting.changeSchema(schema => {
-        schema.properties[settingList] = {
-            title: '中文标点替换列表',
+        schema.properties[settingRule] = {
+            title: '标点替换规则',
             group: 'editor',
             type: 'string',
-            defaultValue: defaultList
+            defaultValue: defaultRule,
+            validator: (_, value, path) => {
+                return parse(value) !== null ? [] : [{ property: settingRule, path, message: '格式错误' }]
+            }
         }
     })
 
@@ -30,13 +47,12 @@ const pluginRegister = (ctx: Ctx) => {
             label: 'math: 替换标点符号',
             keybindings: [monaco.KeyMod.Shift | monaco.KeyMod.Alt | monaco.KeyCode.KeyF],
             run: editor => {
-                let content = editor.getValue().replaceAll('\r\n', '\n')
+                let content = editor.getValue()
 
-                replaceList.forEach(([source, target]) => content = content.replaceAll(source, target))
-                content = content.split('\n').map(line => {
-                    const pos = line.search(/\S/)
-                    return pos === -1 ? '' : line.slice(0, pos) + line.slice(pos).trimEnd().replace(/\s+/g, ' ')
-                }).join('\n').replace(/\s*$/, '\n')
+                content = content.replaceAll('\r\n', '\n')
+                    .replace(rule.regex, match => rule.map[match])
+                    .replace(/\s*$/, '\n')
+                    .replace(/[^\S\n]+$/mg, '')
 
                 editor.executeEdits('replace-punctuation', [{
                     range: editor.getModel()!.getFullModelRange(),
@@ -49,8 +65,8 @@ const pluginRegister = (ctx: Ctx) => {
 
     // 更改设置后刷新
     ctx.registerHook('SETTING_CHANGED', ({ changedKeys, settings }) => {
-        if (changedKeys.includes(settingList as any)) {
-            replaceList = parse(settings[settingList])
+        if (changedKeys.includes(settingRule as any)) {
+            rule = parse(settings[settingRule])!
         }
     })
 }
