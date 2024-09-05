@@ -1,7 +1,5 @@
 # Yank Note 数学扩展
 
-by Mirion
-
 ![示例 1](https://pic.superbed.cc/item/66d6af7bfcada11d374ab587.png)
 
 ![示例 2](https://pic.superbed.cc/item/66d6af7bfcada11d374ab58b.png)
@@ -68,7 +66,7 @@ by Mirion
 
 ### 标点替换
 
-外观设置中添加 `标点替换规则` 选项.
+编辑器设置中添加 `标点替换规则` 选项.
 
 命令面板中添加 `math: 替换标点符号 (Shift+Alt+F)` 选项.
 
