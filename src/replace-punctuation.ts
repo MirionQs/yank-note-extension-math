@@ -1,42 +1,49 @@
 import { registerPlugin, Ctx } from "@yank-note/runtime-api"
 
 const pluginName = 'extension-math.replace-punctuation'
-const settingRule = 'extension-math.replace-rule'
+const settingRule = 'extension-math.replace-rules'
 const actionReplace = 'extension-math.replace-punctuation'
 
-const defaultRule = '，、。？！；：（）=>, |, |. |? |! |; |: | (|) '
-
-const parse = (str: string) => {
-    const pos = str.indexOf('=>')
-    if (pos === -1) {
-        return null
-    }
-
-    const source = str.slice(0, pos)
-    const target = str.slice(pos + 2).split('|')
-    if (source.length !== target.length) {
-        return null
-    }
-
-    return {
-        regex: new RegExp('[' + source + ']', 'g'),
-        map: Object.fromEntries(source.split('').map((x, i) => [x, target[i]]))
-    }
-}
+const defaultRules = [
+    { match: '，', replace: ', ' },
+    { match: '、', replace: ', ' },
+    { match: '。', replace: '. ' },
+    { match: '？', replace: '? ' },
+    { match: '！', replace: '! ' },
+    { match: '；', replace: '; ' },
+    { match: '：', replace: ': ' },
+    { match: '（', replace: '( ' },
+    { match: '）', replace: ') ' },
+]
 
 const pluginRegister = (ctx: Ctx) => {
-    let rule = parse(ctx.setting.getSetting(settingRule, defaultRule))!
-
     // 设置面板
     ctx.setting.changeSchema(schema => {
+        schema.groups.push({ label: '标点替换' as any, value: 'punctuation' as any })
         schema.properties[settingRule] = {
             title: '标点替换规则',
-            group: 'editor',
-            type: 'string',
-            defaultValue: defaultRule,
-            validator: (_, value, path) => {
-                return parse(value) !== null ? [] : [{ property: settingRule, path, message: '格式错误' }]
-            }
+            group: 'punctuation',
+            type: 'array',
+            format: 'table',
+            defaultValue: defaultRules,
+            items: {
+                type: 'object',
+                title: '规则',
+                properties: {
+                    match: {
+                        type: 'string',
+                        title: '匹配',
+                        defaultValue: '',
+                        maxLength: 10,
+                    },
+                    replace: {
+                        type: 'string',
+                        title: '替换为',
+                        defaultValue: '',
+                        maxLength: 10,
+                    },
+                }
+            },
         }
     })
 
@@ -48,9 +55,12 @@ const pluginRegister = (ctx: Ctx) => {
             keybindings: [monaco.KeyMod.Shift | monaco.KeyMod.Alt | monaco.KeyCode.KeyF],
             run: editor => {
                 let content = editor.getValue()
+                const rules = ctx.setting.getSetting(settingRule, defaultRules)
+                const regex = new RegExp(rules.map(x => ctx.lib.lodash.escapeRegExp(x.match)).join('|'), 'g')
+                const ruleMap: Record<string, (typeof defaultRules)[0]> = ctx.lib.lodash.keyBy(rules, 'match')
 
                 content = content.replaceAll('\r\n', '\n')
-                    .replace(rule.regex, match => rule.map[match])
+                    .replace(regex, match => ruleMap[match].replace)
                     .replace(/\s*$/, '\n')
                     .replace(/[^\S\n]+$/mg, '')
 
@@ -61,13 +71,6 @@ const pluginRegister = (ctx: Ctx) => {
                 }])
             }
         })
-    })
-
-    // 更改设置后刷新
-    ctx.registerHook('SETTING_CHANGED', ({ changedKeys, settings }) => {
-        if (changedKeys.includes(settingRule as any)) {
-            rule = parse(settings[settingRule])!
-        }
     })
 }
 
