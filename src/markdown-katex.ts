@@ -73,7 +73,6 @@ const pluginRegister = async (ctx: Ctx) => {
         }
     })
 
-
     // 确保配置文件存在
     if (!fs.pathExistsSync(configPath)) {
         fs.writeFileSync(configPath, '{}')
