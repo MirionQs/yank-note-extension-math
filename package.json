@@ -1,6 +1,6 @@
 {
   "name": "yank-note-extension-math",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "displayName": "数学扩展",
   "description": "面向数学用户的 Yank Note 扩展",
   "author": "Mirion",
