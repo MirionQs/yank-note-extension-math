@@ -4,7 +4,12 @@ const pluginName = 'extension-math.replace-punctuation'
 const settingRule = 'extension-math.replace-rules'
 const actionReplace = 'extension-math.replace-punctuation'
 
-const defaultRules = [
+type Rule = {
+    match: string,
+    replace: string
+}
+
+const defaultRules: Rule[] = [
     { match: '，', replace: ', ' },
     { match: '、', replace: ', ' },
     { match: '。', replace: '. ' },
@@ -12,7 +17,7 @@ const defaultRules = [
     { match: '！', replace: '! ' },
     { match: '；', replace: '; ' },
     { match: '：', replace: ': ' },
-    { match: '（', replace: '( ' },
+    { match: '（', replace: ' (' },
     { match: '）', replace: ') ' },
 ]
 
@@ -57,10 +62,10 @@ const pluginRegister = (ctx: Ctx) => {
                 let content = editor.getValue()
                 const rules = ctx.setting.getSetting(settingRule, defaultRules)
                 const regex = new RegExp(rules.map(x => ctx.lib.lodash.escapeRegExp(x.match)).join('|'), 'g')
-                const ruleMap: Record<string, (typeof defaultRules)[0]> = ctx.lib.lodash.keyBy(rules, 'match')
+                const map = ctx.lib.lodash.keyBy(rules, 'match') as Record<string, Rule>
 
                 content = content.replaceAll('\r\n', '\n')
-                    .replace(regex, match => ruleMap[match].replace)
+                    .replace(regex, match => map[match].replace)
                     .replace(/\s*$/, '\n')
                     .replace(/[^\S\n]+$/mg, '')
 
