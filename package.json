@@ -17,11 +17,11 @@
   "themes": [
     {
       "name": "香蕉空间",
-      "css": "./themes/banana-space.css"
+      "css": "./themes/banana-space.min.css"
     },
     {
       "name": "多彩笔记",
-      "css": "./themes/colorful-note.css"
+      "css": "./themes/colorful-note.min.css"
     }
   ],
   "files": [

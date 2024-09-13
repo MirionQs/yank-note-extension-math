@@ -22,8 +22,10 @@ const pluginRegister = async (ctx: Ctx) => {
             else {
                 cssPath = ctx.utils.path.join(constant.USER_THEME_DIR, cssPath)
             }
-            const dataPath = cssPath.slice(0, -3) + 'json'
-            const genPath = cssPath.slice(0, -3) + 'js'
+
+            const prefix = cssPath.slice(0, cssPath.endsWith('.min.css') ? -8 : -4)
+            const dataPath = prefix + '.json'
+            const genPath = prefix + '.js'
 
             const temp = new State(style)
             if (fs.pathExistsSync(dataPath) && fs.statSync(dataPath).isFile()) {
