@@ -305,6 +305,7 @@
         }
     }
 
+    img.auto-invert,
     .auto-invert img {
         [app-theme=dark] & {
             filter: invert(1) !important;
