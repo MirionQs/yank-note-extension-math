@@ -71,8 +71,7 @@ const pluginRegister = (ctx: Ctx) => {
 
                 editor.executeEdits('replace-punctuation', [{
                     range: editor.getModel()!.getFullModelRange(),
-                    text: content,
-                    forceMoveMarkers: true
+                    text: content
                 }])
             }
         })
