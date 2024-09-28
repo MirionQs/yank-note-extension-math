@@ -278,6 +278,7 @@
         > code {
             font-family: CMUTypewriter, SourceHanSerif !important;
             padding: initial;
+            white-space: pre-wrap !important;
 
             .hljs-ln-numbers {
                 box-shadow: none !important;

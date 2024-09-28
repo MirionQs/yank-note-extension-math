@@ -230,6 +230,7 @@
         > code {
             font-family: 'Cascadia Code' !important;
             padding: initial;
+            white-space: pre-wrap !important;
 
             .hljs-ln-numbers {
                 box-shadow: none !important;
