@@ -72,6 +72,7 @@
     h1 {
         font-size: 2.2em;
         font-weight: normal;
+        page-break-before: always;
 
         + p {
             font-size: 1.2em;
