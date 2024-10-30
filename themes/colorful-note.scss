@@ -458,7 +458,9 @@
             font-family: CMUSerif, SourceHanSerif;
         }
 
-        > :not(.theorem-info) {
+        > *,
+        > ol > li > *,
+        > ul > li > * {
             margin: 0;
         }
 
