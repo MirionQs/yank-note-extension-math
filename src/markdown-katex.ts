@@ -1,8 +1,11 @@
 import { registerPlugin, Ctx } from "@yank-note/runtime-api"
 
 const pluginName = 'extension-math.markdown-katex'
+const settingKeepDisplay = 'extension-math.keep-display'
 const actionOpenConfig = 'extension-math.open-katex-config'
 const cacheOptions = 'extension-math.katex-options'
+
+const defaultKeepDisplay = false
 
 const defaultOpts = {
     output: 'html',
@@ -26,6 +29,24 @@ const pluginRegister = async (ctx: Ctx) => {
         })
         env.attributes ??= {}
         env.attributes.katex = ctx.lib.lodash.merge({}, cache, env.attributes.katex)
+    })
+
+    // 设置面板
+    ctx.setting.changeSchema(schema => {
+        schema.properties[settingKeepDisplay] = {
+            title: '默认以行间模式渲染公式',
+            group: 'render',
+            type: 'boolean',
+            format: 'checkbox',
+            defaultValue: defaultKeepDisplay
+        }
+    })
+
+    // 更改设置后刷新
+    ctx.registerHook('SETTING_CHANGED', ({ changedKeys }) => {
+        if (changedKeys.includes(settingKeepDisplay as any)) {
+            ctx.view.refresh()
+        }
     })
 
     // 命令面板
@@ -65,7 +86,7 @@ const pluginRegister = async (ctx: Ctx) => {
             if (bold) {
                 token.content = '\\bm{' + token.content + '}'
             }
-            if (env.attributes.katex.keepDisplayMode) {
+            if (ctx.setting.getSetting(settingKeepDisplay)) {
                 token.content = '\\displaystyle ' + token.content
             }
 

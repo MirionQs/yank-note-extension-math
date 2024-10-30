@@ -56,9 +56,9 @@
 
 ### KaTeX 增强
 
-命令面板中添加 `math: 打开 KaTeX 配置文件` 和 ~~`math: 嵌入/移除嵌入的 KaTeX 配置`~~ 选项.
+渲染设置中添加 `默认以行间模式渲染公式` 选项.
 
-添加 KaTeX 配置项 `keepDisplayMode: boolean`, 设置为 `true` 统一以行间模式渲染. 其它配置项参见[官方文档](https://katex.org/docs/options.html).
+命令面板中添加 `math: 打开 KaTeX 配置文件` 和 ~~`math: 嵌入/移除嵌入的 KaTeX 配置`~~ 选项.
 
 支持来自 Markdown 语法的加粗.
 
@@ -74,7 +74,7 @@
 
 ### 香蕉空间 [预览](https://pic.imgdb.cn/item/66d42d89d9c307b7e94bf505.png)
 
-仿[香蕉空间](https://www.bananaspace.org/)主题, 支持暗色模式, 定理环境
+仿[香蕉空间](https://www.bananaspace.org/)主题, 支持暗色模式, 定理环境.
 
 添加下列样式
 
@@ -88,7 +88,7 @@
 
 ### 多彩笔记 [预览](https://pic.imgdb.cn/item/66d42d89d9c307b7e94bf400.png)
 
-支持暗色主题, 定理环境
+支持暗色主题, 定理环境.
 
 添加下列样式
 
