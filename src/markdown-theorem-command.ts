@@ -44,14 +44,18 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
-            state.stack.push(rawName)
-
             let classList = 'theorem'
             if (skipped) {
                 classList += ' skip-number'
             }
 
-            state.openToken = state.push('theorem_open', 'div', 1, { map: state.range, attrs: [['class', classList], ['env-name', name]] })
+            const attrs = {
+                map: state.range,
+                attrs: [['class', classList], ['env-name', name]],
+                meta: { rawName }
+            }
+
+            state.stack.push(state.push('theorem_open', 'div', 1, attrs))
             state.push('theorem_info', 'div', 0, { content: info })
 
             return true
@@ -61,15 +65,16 @@ const command: Record<string, CommandData> = {
     '\\end': {
         pattern: 1,
         execute: (args, state) => {
-            let name = args[0].trim() as any
+            let rawName = args[0].trim() as any
 
-            const last = state.stack.pop()
-            if (last !== name) {
-                state.error(`开始环境 '${last}' 与结束环境 '${name}' 不一致`)
+            const openToken = state.stack.pop()!
+            if (openToken.meta.rawName !== rawName) {
+                state.error(`开始环境 '${openToken}' 与结束环境 '${rawName}' 不一致`)
                 return false
             }
 
-            state.openToken.meta = { closeTokenIndex: state.tokens().length }
+            openToken.meta.closeTokenIndex = state.tokens().length
+
             state.push('theorem_close', 'div', -1)
 
             return true

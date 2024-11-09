@@ -6,8 +6,7 @@ export default class State {
     style: HTMLStyleElement
     env: Environment
     parser: Parser
-    stack: string[]
-    openToken: Token
+    stack: Token[]
     range: [number, number]
 
     /**
