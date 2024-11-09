@@ -7,6 +7,7 @@ export default class State {
     env: Environment
     parser: Parser
     stack: string[]
+    openToken: Token
     range: [number, number]
 
     /**
@@ -38,6 +39,14 @@ export default class State {
      */
     push(type: string, tag: string, nesting: Token.Nesting, props: any = {}) {
         return Object.assign(this.parser.mdState.push(type, tag, nesting), props) as Token
+    }
+
+    /**
+     * 返回标记列表
+     * @returns 标记列表
+     */
+    tokens() {
+        return this.parser.mdState.tokens
     }
 
     /**

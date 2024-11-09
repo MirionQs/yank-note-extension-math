@@ -35,22 +35,23 @@ const command: Record<string, CommandData> = {
     '\\begin': {
         pattern: [1, ''],
         execute: (args, state) => {
-            let [name, info] = args.map(i => i.trim()) as any
+            let [rawName, info] = args.map(i => i.trim()) as any
 
-            const skipped = name.slice(-1) === '*'
-            const name0 = skipped ? name.slice(0, -1) : name
-            if (!state.env.contains(name0)) {
-                state.error(`未知环境 '${name0}'`)
+            const skipped = rawName.slice(-1) === '*'
+            const name = skipped ? rawName.slice(0, -1) : rawName
+            if (!state.env.contains(name)) {
+                state.error(`未知环境 '${name}'`)
                 return false
             }
 
-            state.stack.push(name)
+            state.stack.push(rawName)
 
             let classList = 'theorem'
             if (skipped) {
                 classList += ' skip-number'
             }
-            state.push('theorem_open', 'div', 1, { map: state.range, attrs: [['class', classList], ['env-name', name0]] })
+
+            state.openToken = state.push('theorem_open', 'div', 1, { map: state.range, attrs: [['class', classList], ['env-name', name]] })
             state.push('theorem_info', 'div', 0, { content: info })
 
             return true
@@ -68,6 +69,7 @@ const command: Record<string, CommandData> = {
                 return false
             }
 
+            state.openToken.meta = { closeTokenIndex: state.tokens().length }
             state.push('theorem_close', 'div', -1)
 
             return true

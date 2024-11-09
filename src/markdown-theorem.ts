@@ -1,5 +1,6 @@
 import { registerPlugin, Ctx } from '@yank-note/runtime-api'
 import { h } from 'vue'
+import { parseInfo, getAttrs, applyAttrs, InfoPos } from 'markdown-it-attributes'
 import Command from './markdown-theorem-command'
 import State from './markdown-theorem-state'
 
@@ -42,6 +43,7 @@ const pluginRegister = async (ctx: Ctx) => {
 
     // 添加 LaTeX 语法
     ctx.markdown.registerPlugin(md => {
+        // 解析
         md.block.ruler.before('paragraph', 'theorem', (mdState, startLine, _, silent) => {
             state.parser.bind(mdState, startLine)
 
@@ -86,6 +88,22 @@ const pluginRegister = async (ctx: Ctx) => {
             state.apply()
         })
 
+        // 渲染
+        const attrOpts = { leftDelimiter: '{', rightDelimiter: '}', allowedAttributes: [] }
+        md.renderer.rules.theorem_open = (tokens, index, options) => {
+            const openToken = tokens[index]
+            const attrToken = tokens[openToken.meta.closeTokenIndex + 2]
+
+            if (attrToken !== undefined && attrToken.type === 'inline' && attrToken.hidden) {
+                const info = parseInfo(attrOpts, attrToken.content)
+                if (info !== null && info.pos === InfoPos.WHOLE) {
+                    applyAttrs(attrOpts, openToken, getAttrs(info.exp))
+                }
+            }
+
+            return md.renderer.renderToken(tokens, index, options)
+        }
+
         md.renderer.rules.theorem_info = (tokens, index, _, env) => {
             const token = tokens[index]
 
@@ -96,6 +114,7 @@ const pluginRegister = async (ctx: Ctx) => {
             md.core.ruler.disable('footnote_tail')
             const nodes = md.renderInline(token.content, env)
             md.core.ruler.enable('footnote_tail')
+
             return h('div', { class: 'theorem-info' }, h('span', { class: 'content' }, nodes)) as any
         }
     })
