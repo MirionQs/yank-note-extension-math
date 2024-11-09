@@ -67,7 +67,11 @@ const command: Record<string, CommandData> = {
         execute: (args, state) => {
             let rawName = args[0].trim() as any
 
-            const openToken = state.stack.pop()!
+            const openToken = state.stack.pop()
+            if (openToken === undefined) {
+                state.error('开始环境不存在')
+                return false
+            }
             if (openToken.meta.rawName !== rawName) {
                 state.error(`开始环境 '${openToken}' 与结束环境 '${rawName}' 不一致`)
                 return false
