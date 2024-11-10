@@ -34,7 +34,7 @@ const pluginRegister = async (ctx: Ctx) => {
     // 设置面板
     ctx.setting.changeSchema(schema => {
         schema.properties[settingKeepDisplay] = {
-            title: '默认以行间模式渲染公式',
+            title: 'math: 默认以行间模式渲染公式',
             group: 'render',
             type: 'boolean',
             format: 'checkbox',
