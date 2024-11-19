@@ -64,7 +64,7 @@
     h6 {
         margin: 1em 0;
 
-        &:not(.show-number) {
+        &.skip-number {
             @include skip-number;
         }
     }
@@ -86,7 +86,7 @@
         font-weight: normal;
         page-break-before: always;
 
-        &::before {
+        &.show-number::before {
             content: counter(h2counter) !important;
             font-weight: bold;
             border-bottom: 4px solid #ffd000;
@@ -102,7 +102,7 @@
     h3 {
         font-size: 1.4em;
 
-        &::before {
+        &.show-number::before {
             content: counter(h2counter) '.' counter(h3counter) !important;
             margin-right: 1em;
         }

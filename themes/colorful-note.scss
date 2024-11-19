@@ -104,7 +104,7 @@
             margin-right: 1em;
         }
 
-        &:not(.show-number) {
+        &.skip-number {
             @include skip-number;
         }
     }
@@ -126,7 +126,7 @@
         text-align: center;
         page-break-before: always;
 
-        &::before {
+        &.show-number::before {
             content: counter(h2counter) !important;
         }
 
@@ -154,7 +154,7 @@
         margin-left: -0.5em;
         padding-left: 0.5em;
 
-        &::before {
+        &.show-number::before {
             content: counter(h2counter) '.' counter(h3counter) !important;
         }
     }
@@ -162,7 +162,7 @@
     h4 {
         font-size: 13.5pt;
 
-        &::before {
+        &.show-number::before {
             content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter) !important;
         }
     }
@@ -170,7 +170,7 @@
     h5 {
         font-size: 13pt;
 
-        &::before {
+        &.show-number::before {
             content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter) '.' counter(h5counter) !important;
         }
     }
@@ -178,7 +178,7 @@
     h6 {
         font-size: 12.5pt;
 
-        &::before {
+        &.show-number::before {
             content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter) '.' counter(h5counter) '.' counter(h6counter) !important;
         }
     }
