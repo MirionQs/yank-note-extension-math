@@ -357,13 +357,23 @@
 
     img.auto-invert,
     .auto-invert img {
-        [app-theme=dark] & {
-            filter: invert(1) !important;
+
+        [app-theme=dark] &,
+        [app-theme=dark] &:hover {
+            filter: invert(1);
         }
 
         @media (prefers-color-scheme: dark) {
-            [app-theme=system] & {
-                filter: invert(1) !important;
+
+            [app-theme=system] &,
+            [app-theme=system] &:hover {
+                filter: invert(1);
+            }
+        }
+
+        @media print {
+            & {
+                filter: none !important;
             }
         }
     }
