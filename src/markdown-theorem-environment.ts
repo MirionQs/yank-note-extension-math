@@ -121,7 +121,7 @@ const defaultGenerator = (env: Environment) => {
 
         if (level === 0) {
             css += `
-.theorem[env-name="${name}"] > .theorem-info::before {
+.theorem:not(.skip-number)[env-name="${name}"] > .theorem-info::before {
     content: "${data.text}";
 }
 `
